@@ -34,7 +34,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 .fg{display:flex;align-items:center;gap:5px}
 .fl{font-size:12px;color:var(--gray-600);font-weight:500;white-space:nowrap}
 select,input[type=date]{font-family:'Poppins',sans-serif;font-size:12px;padding:5px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--black);cursor:pointer;outline:none}
-select:focus,input[type=date]:focus{border-color:var(--yellow)}
+select:focus,input[type=date]:focus{border-color:var(--accent-fg)}
 .btn-reset{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;padding:5px 10px;background:var(--black);color:var(--white);border:none;border-radius:var(--radius-sm);cursor:pointer}
 .last-upd{margin-left:auto;font-size:12px;color:var(--gray-400)}
 
@@ -100,7 +100,7 @@ tbody tr:hover td{background:var(--gray-50)}
 .tr-sub{display:none}
 .tr-sub td{padding-left:24px}
 .tr-ciudad-subtotal td{border-top:1px solid var(--gray-200);background:var(--gray-50) !important}
-.tog{display:inline-block;transition:transform .18s;margin-right:5px;color:var(--yellow);font-size:12px}
+.tog{display:inline-block;transition:transform .18s;margin-right:5px;color:var(--accent-fg);font-size:12px}
 .tog.open{transform:rotate(90deg)}
 
 /* CIUDAD TABLE specifics */
@@ -128,7 +128,7 @@ tbody tr:hover td{background:var(--gray-50)}
 .fac-badge{background:var(--yellow);color:var(--black);font-size:12px;font-weight:700;padding:2px 7px;border-radius:999px}
 .search-wrap{display:flex;justify-content:flex-end;padding:8px 12px;background:var(--white);border-bottom:1px solid var(--gray-100)}
 .search-wrap input{font-family:'Poppins',sans-serif;font-size:12px;padding:5px 10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);width:180px;outline:none}
-.search-wrap input:focus{border-color:var(--yellow)}
+.search-wrap input:focus{border-color:var(--accent-fg)}
 
 /* MES a MES */
 .mes-section{margin-bottom:20px}
@@ -143,7 +143,7 @@ tbody tr:hover td{background:var(--gray-50)}
 /* LOADING */
 #loading{position:fixed;inset:0;background:rgba(10,10,10,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:12px}
 .ld-logo img{height:36px}
-.spinner{width:28px;height:28px;border:3px solid #222;border-top-color:var(--yellow);border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:28px;height:28px;border:3px solid #222;border-top-color:var(--accent-fg);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #ld-msg{color:var(--fg-muted);font-size:12px}
 

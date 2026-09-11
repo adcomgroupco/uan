@@ -97,8 +97,8 @@ h1,h2,h3{font-weight:800;line-height:1.15;letter-spacing:-.005em;color:var(--ink
 .mstats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .mstat{padding:8px}
 .mstat .val{font-size:49px;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.mstat.bad .val{color:var(--red)}
-.mstat.good .val{color:var(--green)}
+.mstat.bad .val{color:var(--neg)}
+.mstat.good .val{color:var(--pos)}
 .mstat .lbl{font-size:14px;color:var(--ash);margin-top:10px;line-height:1.5;max-width:220px;margin-left:auto;margin-right:auto}
 .mstats .mstat{background:var(--black);border-radius:var(--radius);padding:28px 24px 24px;position:relative;overflow:hidden;text-align:left}
 .mstats .mstat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--yellow)}
@@ -131,7 +131,7 @@ h1,h2,h3{font-weight:800;line-height:1.15;letter-spacing:-.005em;color:var(--ink
 .mpanel-row .name{font-size:14.5px;font-weight:500;color:var(--ivory);white-space:nowrap}
 .mpanel-row .stat{font-size:13px;color:var(--ash);font-weight:400;text-align:right;white-space:nowrap}
 .mpanel-row.priority .name{color:var(--ink);font-weight:600}
-.mpanel-row.priority .stat{color:var(--red);font-weight:600}
+.mpanel-row.priority .stat{color:var(--neg);font-weight:600}
 @media(max-width:640px){
   .mpanel{padding:22px 18px}
   .mpanel-row{grid-template-columns:9px minmax(0,1fr) auto;column-gap:10px}
@@ -164,7 +164,7 @@ table.mtable.mtable-center{margin-left:auto;margin-right:auto;table-layout:fixed
 table.mtable.mtable-center th,table.mtable.mtable-center td{text-align:center}
 table.mtable.mtable-center th:first-child,table.mtable.mtable-center td:first-child{text-align:left}
 .malert{background:rgba(239,107,111,.08);border:1px solid rgba(239,107,111,.2);border-radius:var(--r-cards);padding:16px 18px;margin:16px 0;font-size:13.5px;color:var(--ash);line-height:1.6}
-.malert b{color:var(--red)}
+.malert b{color:var(--neg)}
 
 .mbar-row{display:flex;align-items:center;gap:12px;margin:10px 0}
 .mbar-label{width:90px;font-size:13px;font-weight:600;color:var(--ivory);flex-shrink:0}
@@ -177,8 +177,8 @@ table.mtable.mtable-center th:first-child,table.mtable.mtable-center td:first-ch
 .mring-block .cap{font-size:12px;color:var(--slate);margin-top:8px}
 .mring-val{font-size:16px;font-weight:600;fill:var(--ink);font-family:'Poppins',sans-serif}
 .mring-arrow{text-align:center}
-.mring-arrow .arr{font-size:20px;color:var(--red);display:block}
-.mring-arrow .delta{font-size:13px;font-weight:600;color:var(--red)}
+.mring-arrow .arr{font-size:20px;color:var(--neg);display:block}
+.mring-arrow .delta{font-size:13px;font-weight:600;color:var(--neg)}
 
 .mfunnel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
 .mfunnel-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px}
@@ -187,7 +187,7 @@ table.mtable.mtable-center th:first-child,table.mtable.mtable-center td:first-ch
 .mfstep.bottleneck{outline:1.5px solid var(--red);outline-offset:1px}
 .mfstep .p{opacity:.75}
 .mfunnel-final{margin-top:8px;text-align:center;font-size:12px;font-weight:600;color:var(--ash)}
-.mfunnel-final b{color:var(--red)}
+.mfunnel-final b{color:var(--neg)}
 .mfunnel-card .mfstep{color:var(--ink) !important;background:#f2f3fa !important}
 .mfunnel-card .mfstep:nth-of-type(2){background:#f2f3fa !important}
 .mfunnel-card .mfstep:nth-of-type(3){background:#e8eaf7 !important}
@@ -205,7 +205,7 @@ table.mtable.mtable-center th:first-child,table.mtable.mtable-center td:first-ch
 /* ---------- CARD GRID (Efecto Imán) ---------- */
 .mgrid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:32px 0 48px}
 .mflow-card{background:var(--graphite);border-radius:var(--r-cards);padding:24px 20px}
-.mflow-card .rank{width:30px;height:30px;border-radius:50%;background:var(--black);color:var(--yellow);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.mflow-card .rank{width:30px;height:30px;border-radius:50%;background:var(--black);color:var(--accent-fg);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .mflow-card:first-child .rank{background:var(--yellow);color:var(--black)}
 .mflow-card .t{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.35}
 .mflow-card .d{font-size:13px;color:var(--ash);line-height:1.55}
@@ -241,7 +241,7 @@ table.mtable.mtable-center th:first-child,table.mtable.mtable-center td:first-ch
 .mseg-head{padding:20px 24px;position:relative;overflow:hidden;color:#fff}
 .mseg-head.a{background:var(--black)}
 .mseg-head.b{background:linear-gradient(135deg,#2E1A47,#180F26)}
-.mseg-head .tag{font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:6px;position:relative;z-index:1}
+.mseg-head .tag{font-size:12px;font-weight:700;color:var(--accent-fg);margin-bottom:6px;position:relative;z-index:1}
 .mseg-head.b .tag{color:#c9a8f5}
 .mseg-head h3{font-size:21px;font-weight:800;color:#fff;position:relative;z-index:1}
 .mseg-head .sub{font-size:var(--fs-body-min);opacity:.72;margin-top:4px;color:#fff;position:relative;z-index:1;max-width:var(--measure)}
@@ -678,7 +678,7 @@ table.mtable.mtable-center th:first-child,table.mtable.mtable-center td:first-ch
     </div>
 
     <div class="mseg-card reveal">
-      <div class="mseg-head a">
+      <div class="mseg-head a" data-roles="tinta">
         <div class="tag">Pregrado</div><h3>Vertical 1 &mdash; "La prueba, no la promesa"</h3><div class="sub">Bachilleres (16-18) explorando programa, con padres que co-deciden y buscan seguridad institucional</div>
         <div class="big-letter">1</div>
       </div>
@@ -689,7 +689,7 @@ table.mtable.mtable-center th:first-child,table.mtable.mtable-center td:first-ch
     </div>
 
     <div class="mseg-card reveal">
-      <div class="mseg-head a">
+      <div class="mseg-head a" data-roles="tinta">
         <div class="tag">Pregrado</div><h3>Vertical 2 &mdash; "Cerca de ti, sin bajar el nivel"</h3><div class="sub">Aspirante y familia en ciudades intermedias (Neiva, Duitama, Ibagué, Popayán)</div>
         <div class="big-letter">2</div>
       </div>
