@@ -159,7 +159,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </nav>
 
 <div class="hero">
-  <div><h1 id="heroTitle">Forecast Digital</h1><p>Universidad Antonio Nariño · Inversión, Leads y Matrículas por sede, medio y programa</p></div>
+  <div><h1 id="heroTitle">Forecast Digital</h1><p>Universidad Antonio Nariño · Inversión, Leads y Matrículas por ciudad, medio y programa</p></div>
   <div class="hero-stats">
     <div class="hero-stat"><div class="hval" id="hP">—</div><div class="hlbl">Presupuesto</div></div>
     <div class="hero-stat"><div class="hval" id="hL">—</div><div class="hlbl">Leads</div></div>
@@ -183,7 +183,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" onclick="switchTab('medios',this)">Por medio</button>
     <button class="tab" onclick="switchTab('meses',this)">Por mes</button>
     <button class="tab" onclick="switchTab('facultades',this)">Por facultad</button>
-    <button class="tab" onclick="switchTab('sedes',this)">Por sede</button>
     <button class="tab" onclick="switchTab('programas',this)">Por programa</button>
   </div>
 
@@ -197,7 +196,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <!-- KPIs top -->
         <div class="resumen-kpis">
           <div class="rkpi"><div class="rlbl">Presupuesto total</div><div class="rval" id="rP">—</div><div class="rsub">COP</div></div>
-          <div class="rkpi"><div class="rlbl">Leads proyectados</div><div class="rval" id="rL">—</div><div class="rsub">Total sedes</div></div>
+          <div class="rkpi"><div class="rlbl">Leads proyectados</div><div class="rval" id="rL">—</div><div class="rsub">Total ciudades</div></div>
           <div class="rkpi"><div class="rlbl">Matrículas forecast</div><div class="rval" id="rM">—</div><div style="margin-top:6px"><span style="font-size:18px;font-weight:700;color:var(--uan-dark)" id="rMeta">—</span><span style="font-size:var(--fs-min);color:var(--fg-muted)"> meta total</span></div><div style="font-size:var(--fs-min);color:var(--fg-muted);margin-top:2px" id="rMsub">de — meta</div></div>
           <div class="rkpi"><div class="rlbl">CPL promedio</div><div class="rval" id="rCPL">—</div><div class="rsub">Costo por lead</div></div>
           <div class="rkpi"><div class="rlbl">Participación</div><div class="rval" id="rC">—</div><div class="rsub">vs meta matrículas</div></div>
@@ -334,16 +333,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       </div>
     </div>
 
-    <!-- SEDES -->
-    <div id="panel-sedes" class="panel">
-      <div id="sp-sedes" class="spin-wrap"><div class="spinner"></div><p>Cargando...</p></div>
-      <div id="ct-sedes" style="display:none">
-        <div class="chart-box full" style="margin-bottom:1rem"><div class="chart-title">Presupuesto Top 10 sedes</div><div style="position:relative;height:320px"><canvas id="cSedes"></canvas></div></div>
-        <div class="sec-title">Detalle por sede</div>
-        <div class="tbl-wrap"><table class="tbl" id="tblSedes"></table></div>
-      </div>
-    </div>
-
     <!-- PROGRAMAS -->
     <div id="panel-programas" class="panel">
       <div id="sp-programas" class="spin-wrap"><div class="spinner"></div><p>Cargando...</p></div>
@@ -387,7 +376,7 @@ var PERIODOS_CON_DATA=new Set();
 // Filtro activo. 'todos' = agregado de todos los periodos.
 var FILTERS={periodo:'todos'};
 // Datasets derivados (ya filtrados por FILTERS.periodo) que consumen las funciones render*
-var ciudadesData=[],mediosData=[],mesData={},facultadesData=[],sedesData=[],programasData=[];
+var ciudadesData=[],mediosData=[],mesData={},facultadesData=[],programasData=[];
 // Meses detectados dinámicamente en la data filtrada (columna "Mes" de la pestaña Anual por mes)
 var MES_KEYS=[],MES_LABELS={};
 var MES_ABR={ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12};
@@ -497,7 +486,7 @@ function buildPeriodoChips(){
 
 function loadAll(){
   setSyncing(true);
-  ['resumen','ciudades','medios','meses','facultades','sedes','programas'].forEach(function(p){show(p,false)});
+  ['resumen','ciudades','medios','meses','facultades','programas'].forEach(function(p){show(p,false)});
   Promise.all([fetchCSV(URLS.medio),fetchCSV(URLS.mes),fetchCSV(URLS.programa)]).then(function(res){
     processData(res[0],res[1],res[2]);
     setSyncing(false);
@@ -520,14 +509,14 @@ function processData(medio,mes,programa){
   RAW_PROGRAMA=[];
   programa.forEach(function(r){
     var periodo=(col(r,['Periodo','periodo'])||'').trim();
-    var ciudad=r['Ciudad']||'',sede=r['Sede']||'',fac=r['Facultad']||'';
+    var ciudad=r['Ciudad']||'',fac=r['Facultad']||'';
     var met=r['Metodología']||r['Metodologia']||'',prog=r['Nombre programa']||'';
     var pres=parseNum(r['Presupuesto']),cpl=parseNum(r['CPL']),leads=parseNum(r['Leads']);
     var mat=parseNum(r['Matriculas']),meta=parseNum(r['Meta Matriculas']),pct=parseNum(r['% Cum']);
     if(pct>0&&pct<=1)pct*=100;
     if(!ciudad||!prog)return;
     var nivel=(r['Nivel']||r['nivel']||'').trim();
-    RAW_PROGRAMA.push({periodo:periodo,ciudad:ciudad,sede:sede,facultad:fac,metodologia:met,nivel:nivel,programa:prog,presupuesto:pres,cpl:cpl,leads:leads,matriculas:mat,meta:meta,pct_cum:pct});
+    RAW_PROGRAMA.push({periodo:periodo,ciudad:ciudad,facultad:fac,metodologia:met,nivel:nivel,programa:prog,presupuesto:pres,cpl:cpl,leads:leads,matriculas:mat,meta:meta,pct_cum:pct});
     if(periodo)PERIODOS_CON_DATA.add(periodo)
   });
 
@@ -547,7 +536,7 @@ function processData(medio,mes,programa){
   updatePeriodoLabels();
   computeAggregates();
 
-  ['resumen','ciudades','medios','meses','facultades','sedes','programas'].forEach(function(p){show(p,true)});
+  ['resumen','ciudades','medios','meses','facultades','programas'].forEach(function(p){show(p,true)});
   Object.keys(CH).forEach(function(k){if(CH[k]){CH[k].destroy();delete CH[k]}});
   renderAll()
 }
@@ -563,16 +552,13 @@ function computeAggregates(){
   mediosData.forEach(function(r){if(!cMap[r.ciudad])cMap[r.ciudad]={ciudad:r.ciudad,presupuesto:0};cMap[r.ciudad].presupuesto+=r.presupuesto});
 
   programasData=programa;
-  var facMap={},sedeMap={},cMapP={};
+  var facMap={},cMapP={};
   programasData.forEach(function(r){
-    var ciudad=r.ciudad,sede=r.sede,fac=r.facultad,pres=r.presupuesto,leads=r.leads,mat=r.matriculas,meta=r.meta;
+    var ciudad=r.ciudad,fac=r.facultad,pres=r.presupuesto,leads=r.leads,mat=r.matriculas,meta=r.meta;
     if(!cMapP[ciudad])cMapP[ciudad]={presupuesto:0,leads:0,matriculas:0,meta:0};
     cMapP[ciudad].presupuesto+=pres;cMapP[ciudad].leads+=leads;cMapP[ciudad].matriculas+=mat;cMapP[ciudad].meta+=meta;
     if(!facMap[fac])facMap[fac]={facultad:fac,presupuesto:0,leads:0,matriculas:0,meta:0};
     facMap[fac].presupuesto+=pres;facMap[fac].leads+=leads;facMap[fac].matriculas+=mat;facMap[fac].meta+=meta;
-    var sk=ciudad+(sede&&sede!='NA'?' - '+sede:'');
-    if(!sedeMap[sk])sedeMap[sk]={sede:sk,presupuesto:0,leads:0,matriculas:0,meta:0};
-    sedeMap[sk].presupuesto+=pres;sedeMap[sk].leads+=leads;sedeMap[sk].matriculas+=mat;sedeMap[sk].meta+=meta
   });
 
   ciudadesData=Object.keys(cMap).map(function(c){
@@ -582,7 +568,6 @@ function computeAggregates(){
   }).filter(function(c){return c.presupuesto>0}).sort(function(a,b){return b.presupuesto-a.presupuesto});
 
   facultadesData=Object.values(facMap).map(function(f){f.pct_cum=f.meta>0?f.matriculas/f.meta*100:0;return f}).sort(function(a,b){return b.presupuesto-a.presupuesto});
-  sedesData=Object.values(sedeMap).map(function(s){s.pct_cum=s.meta>0?s.matriculas/s.meta*100:0;return s}).sort(function(a,b){return b.presupuesto-a.presupuesto});
 
   // MES: agregación con claves de mes dinámicas (distintas ciudades pueden tener distintos meses según el periodo)
   mesData={};
@@ -675,7 +660,6 @@ function renderAll(){
   renderMedios();
   renderMeses();
   renderFacultades();
-  renderSedes();
   renderProgramas()
 }
 
@@ -930,28 +914,6 @@ function renderFacultades(){
   var rows=facultadesData.map(function(f){return '<tr><td><strong>'+f.facultad+'</strong></td><td>'+fmtM(f.presupuesto)+'</td><td>'+fmt(f.leads)+'</td><td>'+f.matriculas.toFixed(1)+'</td><td>'+f.meta+'</td><td>'+pbar(f.pct_cum)+'</td></tr>'}).join('');
   rows+='<tr class="tr-grand"><td><strong>TOTAL</strong></td><td>'+fmtM(totFP)+'</td><td>'+fmt(totFL)+'</td><td>'+totFM.toFixed(1)+'</td><td>'+totFMeta+'</td><td>'+pbar(totFPct)+'</td></tr>';
   document.getElementById('tblFac').innerHTML='<thead><tr><th>Facultad</th><th>Presupuesto</th><th>Leads</th><th>Matrículas</th><th>Meta</th><th>% Participación</th></tr></thead><tbody>'+rows+'</tbody>'
-}
-
-// ===== SEDES =====
-function renderSedes(){
-  if(!sedesData.length){
-    if(CH.sedes){CH.sedes.destroy();delete CH.sedes}
-    document.getElementById('tblSedes').innerHTML='<tbody><tr><td style="padding:14px;color:var(--fg-muted)">Sin datos para este periodo.</td></tr></tbody>';
-    return
-  }
-  var top10=sedesData.slice(0,10);
-  if(CH.sedes)CH.sedes.destroy();
-  CH.sedes=new Chart(document.getElementById('cSedes'),{type:'bar',indexAxis:'y',
-    data:{labels:top10.map(function(s){return s.sede.length>28?s.sede.slice(0,28)+'…':s.sede}),datasets:[{label:'Presupuesto',data:top10.map(function(s){return s.presupuesto}),backgroundColor:LIGHT,borderColor:BLUE,borderWidth:1.5,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(v){return fmtM(v.raw)}}}},scales:{x:{ticks:{callback:function(v){return fmtM(v)},font:{size:10}}},y:{ticks:{font:{size:11}}}}}});
-  var totSP=sedesData.reduce(function(a,s){return a+s.presupuesto},0);
-  var totSL=sedesData.reduce(function(a,s){return a+s.leads},0);
-  var totSM=sedesData.reduce(function(a,s){return a+s.matriculas},0);
-  var totSMeta=sedesData.reduce(function(a,s){return a+s.meta},0);
-  var totSPct=totSMeta>0?totSM/totSMeta*100:0;
-  var rows=sedesData.map(function(s){return '<tr><td><strong>'+s.sede+'</strong></td><td>'+fmtM(s.presupuesto)+'</td><td>'+fmt(s.leads)+'</td><td>'+s.matriculas.toFixed(1)+'</td><td>'+s.meta+'</td><td>'+pbar(s.pct_cum)+'</td></tr>'}).join('');
-  rows+='<tr class="tr-grand"><td><strong>TOTAL</strong></td><td>'+fmtM(totSP)+'</td><td>'+fmt(totSL)+'</td><td>'+totSM.toFixed(1)+'</td><td>'+totSMeta+'</td><td>'+pbar(totSPct)+'</td></tr>';
-  document.getElementById('tblSedes').innerHTML='<thead><tr><th>Sede</th><th>Presupuesto</th><th>Leads</th><th>Matrículas</th><th>Meta</th><th>% Participación</th></tr></thead><tbody>'+rows+'</tbody>'
 }
 
 // ===== PROGRAMAS =====
