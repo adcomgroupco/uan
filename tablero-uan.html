@@ -79,29 +79,44 @@ select:focus,input[type=date]:focus{border-color:var(--accent-fg)}
 .canal-pct{font-size:13px;font-weight:700;color:var(--gray-600)}
 
 /* TABLES SHARED */
+/* Todo lo de tabla va prefijado con .tscroll: assets/css/adcom.css trae un
+   componente "tabla" propio con selectores sin clase (table{min-width:620px},
+   thead th + th{text-align:right;padding-inline:18px 0}, tbody td{text-align:right})
+   pensado para su propio patrón (th = rótulo de fila, td = dato). Sin el prefijo,
+   esas reglas -por tener más elementos en el selector- ganan la especificidad y
+   todas las tablas terminan con la primera columna alineada a la derecha, los
+   encabezados corridos respecto a los valores y la última columna cortada. */
 .tcard{background:var(--white);border-radius:var(--r-md);border:1px solid var(--gray-200);margin-bottom:20px;overflow:hidden}
 .thead-black{background:var(--black)}
 .tscroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{font-weight:600;padding:9px 11px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:1px solid var(--rule-strong)}
-thead th.r{text-align:right}
-thead th.sortable{cursor:pointer;user-select:none}
-thead th.sortable:hover{background:#222}
-thead th.sort-act{color:var(--accent-fg)}
-tbody tr{border-bottom:1px solid var(--gray-100)}
-tbody tr:last-child{border-bottom:none}
-tbody td{padding:7px 11px;color:var(--gray-600);white-space:nowrap}
-tbody td.r{text-align:right}
-tbody tr:hover td{background:var(--gray-50)}
-.tr-total td{font-weight:700;color:var(--black);background:var(--gray-50) !important;border-top:2px solid var(--gray-200) !important}
-.tr-mes{cursor:pointer;background:var(--gray-50)}
-.tr-mes td{font-weight:600;color:var(--black)}
-.tr-mes:hover td{background:var(--gray-100) !important}
-.tr-sub{display:none}
-.tr-sub td{padding-left:24px}
-.tr-ciudad-subtotal td{border-top:1px solid var(--gray-200);background:var(--gray-50) !important}
+.tscroll table{width:100%;min-width:0;border-collapse:collapse;font-size:12px}
+.tscroll thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
+.tscroll thead th{font-weight:700;padding:9px 12px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:0}
+.tscroll thead th.r{text-align:right}
+.tscroll thead th.sortable{cursor:pointer;user-select:none}
+.tscroll thead th.sortable:hover{color:var(--black)}
+.tscroll thead th.sort-act{color:var(--black)}
+.tscroll tbody tr{border-bottom:1px solid var(--gray-100)}
+.tscroll tbody tr:last-child{border-bottom:none}
+.tscroll tbody td{padding:8px 12px;color:var(--gray-600);white-space:nowrap;text-align:left;vertical-align:middle;border-top:0}
+.tscroll tbody td.r{text-align:right;font-variant-numeric:tabular-nums}
+.tscroll tbody tr:hover td{background:var(--gray-50)}
+.tscroll .tr-total td{font-weight:700;color:var(--black);background:var(--gray-50) !important;border-top:2px solid var(--gray-200) !important}
+.tscroll .tr-mes{cursor:pointer;background:var(--gray-50)}
+.tscroll .tr-mes td{font-weight:600;color:var(--black)}
+.tscroll .tr-mes:hover td{background:var(--gray-100) !important}
+.tscroll .tr-sub{display:none}
+.tscroll .tr-sub td{padding-left:24px}
+.tscroll .tr-ciudad-subtotal td{border-top:1px solid var(--gray-200);background:var(--gray-50) !important}
 .tog{display:inline-block;transition:transform .18s;margin-right:5px;color:var(--accent-fg);font-size:12px}
 .tog.open{transform:rotate(90deg)}
+/* RESPONSIVE TABLAS: la de programas/facultad llega a 8-9 columnas con nowrap.
+   A 12px y el relleno normal solo cabe entera en pantallas anchas (>=1600px);
+   se reduce tipografía/relleno en cascada para que quepa sin recortar en
+   laptops típicas (1366-1440), dejando el scroll de .tscroll como último recurso. */
+@media(max-width:1700px){.tscroll thead th,.tscroll tbody td{font-size:11px;padding:7px 9px}}
+@media(max-width:1450px){.tscroll thead th,.tscroll tbody td{font-size:10px;padding:6px 7px}}
+@media(max-width:1300px){.tscroll thead th,.tscroll tbody td{font-size:9px;padding:4px 6px}.tscroll thead th{white-space:normal}}
 
 /* CIUDAD TABLE specifics */
 .inv-bar-cell{display:flex;align-items:center;justify-content:flex-end;gap:8px}
@@ -118,8 +133,8 @@ tbody tr:hover td{background:var(--gray-50)}
 .clr-red{color:#dc2626;font-weight:600}
 .tr-ciudad{cursor:pointer}
 .tr-ciudad-sub{display:none;background:#fafafa}
-.tr-ciudad-sub td{padding-left:28px;font-size:12px}
-.tr-ciudad-sub:hover td{background:#f0f0f0 !important}
+.tscroll .tr-ciudad-sub td{padding-left:28px}
+.tscroll .tr-ciudad-sub:hover td{background:#f0f0f0 !important}
 
 /* FAC TABLE header section */
 .fac-section{margin-bottom:20px}
