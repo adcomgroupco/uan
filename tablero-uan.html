@@ -14,145 +14,104 @@
 :root{
   --black:#050505;--white:#fcfcfa;--yellow:#ffd400;
   --gray-50:var(--ground);--gray-100:var(--sunken);--gray-200:var(--rule);--gray-400:var(--fg-muted);--gray-600:var(--fg-secondary);
-  --sidebar:230px;--r-sm:8px;--r-md:12px
+  --sidebar:230px;--r-sm:8px;--r-md:12px;
+  --c-pos:#15803d;--c-mid:#b45309;--c-neg:#b91c1c
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;overflow-x:hidden}
-
-/* SIDEBAR */
-/* El riel de navegación (antes .sidebar/.nav-item a mano) ahora es
-   .app-shell del sistema: adcom/sistema/DESIGN.md, "El menú lateral". */
-
-/* MAIN */
 .main{flex:1;display:flex;flex-direction:column;min-width:0}
 
 /* TOPBAR */
-.topbar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:10px 20px;position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.topbar-title{font-size:12px;font-weight:700;color:var(--black);margin-right:4px;white-space:nowrap}
+.topbar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:10px 20px;position:sticky;top:0;z-index:50;display:flex;flex-direction:column;gap:8px}
+.tb-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar-title{font-size:12px;font-weight:700;margin-right:4px;white-space:nowrap}
 .f-sep{width:1px;height:18px;background:var(--gray-200)}
 .fg{display:flex;align-items:center;gap:5px}
 .fl{font-size:12px;color:var(--gray-600);font-weight:500;white-space:nowrap}
-select,input[type=date]{font-family:'Poppins',sans-serif;font-size:12px;padding:5px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--black);cursor:pointer;outline:none}
-select:focus,input[type=date]:focus{border-color:var(--accent-fg)}
+select,input[type=date],input[type=search]{font-family:'Poppins',sans-serif;font-size:12px;padding:5px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--black);outline:none}
+select{cursor:pointer;max-width:220px}
+select:focus,input:focus{border-color:var(--accent-fg)}
+.qbtn{font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;padding:4px 10px;border:1px solid var(--gray-200);background:var(--white);border-radius:999px;cursor:pointer;color:var(--gray-600)}
+.qbtn:hover{border-color:var(--black);color:var(--black)}
+.qbtn.on{background:var(--black);color:var(--white);border-color:var(--black)}
 .btn-reset{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;padding:5px 10px;background:var(--black);color:var(--white);border:none;border-radius:var(--radius-sm);cursor:pointer}
+.chk{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray-600);cursor:pointer;white-space:nowrap}
 .last-upd{margin-left:auto;font-size:12px;color:var(--gray-400)}
 
 /* CONTENT */
-.content{padding:18px 20px}
-.sec-title{font-size:12px;font-weight:700;color:var(--black);margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.sec-title span{display:inline-block;width:3px;height:13px;background:var(--yellow);border-radius:0}
+.content{padding:18px 20px;min-width:0}
+.sec-title{font-size:13px;font-weight:700;margin:4px 0 10px;display:flex;align-items:center;gap:7px;scroll-margin-top:110px}
+.sec-title>span:first-child{display:inline-block;width:3px;height:13px;background:var(--yellow);flex-shrink:0}
+.sec-note{font-size:12px;color:var(--gray-400);font-weight:400;margin-left:6px}
+.card{background:var(--white);border-radius:var(--r-md);border:1px solid var(--gray-200)}
 
-/* KPI GRID */
+/* KPIs */
 .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
-.kpi-card{background:var(--white);border-radius:var(--r-md);padding:14px;border:1px solid var(--gray-200)}
+.kpi-card{padding:14px}
 .kpi-label{font-size:12px;color:var(--gray-600);font-weight:600;margin-bottom:3px}
-.kpi-value{font-size:20px;font-weight:700;line-height:1.1}
+.kpi-value{font-size:20px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
 .kpi-sub{font-size:12px;color:var(--gray-400);margin-top:3px}
-.kpi-bwrap{margin-top:7px}
-.kpi-brow{display:flex;justify-content:space-between;font-size:12px;color:var(--gray-600);margin-bottom:2px}
+.kpi-bwrap{margin-top:8px}
+.kpi-brow{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-600);margin-bottom:3px}
 .kpi-bar{height:4px;background:var(--gray-200);border-radius:999px;overflow:hidden}
 .kpi-bfill{height:100%;border-radius:999px}
-.bg-green{background:#16a34a} .bg-orange{background:#d97706} .bg-red{background:#dc2626} .bg-yellow{background:var(--yellow)}
+.bg-pos{background:var(--c-pos)} .bg-mid{background:var(--c-mid)} .bg-neg{background:var(--c-neg)}
+.t-pos{color:var(--c-pos);font-weight:600} .t-mid{color:var(--c-mid);font-weight:600} .t-neg{color:var(--c-neg);font-weight:600} .t-mute{color:var(--gray-400)}
 
-/* NIVEL CARDS */
-.nivel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
-.nivel-card{background:var(--white);border-radius:var(--r-md);padding:16px;border:1px solid var(--gray-200)}
-.nivel-tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;margin-bottom:10px}
-.tag-pre{background:#FFF8E1;color:#92400E}
-.tag-pos{background:#EDE9FE;color:#4C1D95}
-.nivel-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px}
-.nm-label{font-size:12px;color:var(--gray-400);font-weight:500;margin-bottom:2px}
-.nm-value{font-size:16px;font-weight:700;color:var(--black)}
-.nivel-cumpl{font-size:12px;color:var(--gray-600);margin-bottom:4px}
+/* EMBUDO */
+.funnel{padding:16px 18px;margin-bottom:20px;display:grid;grid-template-columns:1fr;gap:9px}
+.f-row{display:grid;grid-template-columns:150px 1fr 190px;align-items:center;gap:12px}
+.f-lbl{font-size:12px;font-weight:600;color:var(--gray-600)}
+.f-track{height:22px;background:var(--gray-100);border-radius:6px;overflow:hidden}
+.f-fill{height:100%;background:var(--yellow);border-radius:6px;min-width:2px}
+.f-fill.dark{background:var(--black)}
+.f-val{font-size:12px;font-variant-numeric:tabular-nums;display:flex;justify-content:space-between;gap:8px}
+.f-val b{font-size:14px}
 
-/* CANAL CARDS */
-.canal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
-.canal-card{background:var(--white);border-radius:var(--r-md);padding:14px;border:1px solid var(--gray-200);display:flex;align-items:center;gap:12px}
-.canal-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ci-fb{background:#e7f0fd} .ci-go{background:#fce8e6} .ci-li{background:#e8f2fc}
-.canal-icon svg{width:18px;height:18px}
-.canal-info{flex:1}
-.canal-name{font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:1px}
-.canal-inv{font-size:17px;font-weight:700}
-.canal-sub{font-size:12px;color:var(--gray-400);margin-top:1px}
-.canal-pct{font-size:13px;font-weight:700;color:var(--gray-600)}
+/* NIVEL / MEDIO */
+.two-col{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.nivel-card{padding:16px}
+.nivel-tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;margin-bottom:12px}
+.tag-pre{background:#FFF8E1;color:#92400E} .tag-pos{background:#EDE9FE;color:#4C1D95}
+.nm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 10px}
+.nm-label{font-size:11px;color:var(--gray-400);font-weight:500}
+.nm-value{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.chart-card{padding:14px;margin-bottom:20px}
+.chart-wrap{height:260px;position:relative}
 
-/* TABLES SHARED */
-/* Todo lo de tabla va prefijado con .tscroll: assets/css/adcom.css trae un
-   componente "tabla" propio con selectores sin clase (table{min-width:620px},
-   thead th + th{text-align:right;padding-inline:18px 0}, tbody td{text-align:right})
-   pensado para su propio patrón (th = rótulo de fila, td = dato). Sin el prefijo,
-   esas reglas -por tener más elementos en el selector- ganan la especificidad y
-   todas las tablas terminan con la primera columna alineada a la derecha, los
-   encabezados corridos respecto a los valores y la última columna cortada. */
-.tcard{background:var(--white);border-radius:var(--r-md);border:1px solid var(--gray-200);margin-bottom:20px;overflow:hidden}
-.thead-black{background:var(--black)}
+/* TABLAS */
+.tcard{margin-bottom:20px;overflow:hidden}
+.tbar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--gray-100);flex-wrap:wrap}
+.tbar .sp{flex:1}
+.tbtn{font-family:'Poppins',sans-serif;font-size:12px;padding:4px 10px;border:1px solid var(--gray-200);background:var(--white);border-radius:var(--radius-sm);cursor:pointer}
 .tscroll{overflow-x:auto}
 .tscroll table{width:100%;min-width:0;border-collapse:collapse;font-size:12px}
 .tscroll thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
-.tscroll thead th{font-weight:700;padding:9px 12px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:0}
+.tscroll thead th{font-weight:700;padding:9px 10px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:0;position:sticky;top:0;background:var(--gray-50)}
 .tscroll thead th.r{text-align:right}
 .tscroll thead th.sortable{cursor:pointer;user-select:none}
-.tscroll thead th.sortable:hover{color:var(--black)}
-.tscroll thead th.sort-act{color:var(--black)}
+.tscroll thead th.sortable:hover,.tscroll thead th.sort-act{color:var(--black)}
+.tscroll thead th.grp{border-left:1px solid var(--gray-200)}
 .tscroll tbody tr{border-bottom:1px solid var(--gray-100)}
-.tscroll tbody tr:last-child{border-bottom:none}
-.tscroll tbody td{padding:8px 12px;color:var(--gray-600);white-space:nowrap;text-align:left;vertical-align:middle;border-top:0}
+.tscroll tbody td{padding:7px 10px;color:var(--gray-600);white-space:nowrap;text-align:left;vertical-align:middle;border-top:0}
 .tscroll tbody td.r{text-align:right;font-variant-numeric:tabular-nums}
+.tscroll tbody td.grp{border-left:1px solid var(--gray-100)}
 .tscroll tbody tr:hover td{background:var(--gray-50)}
 .tscroll .tr-total td{font-weight:700;color:var(--black);background:var(--gray-50) !important;border-top:2px solid var(--gray-200) !important}
-.tscroll .tr-mes{cursor:pointer;background:var(--gray-50)}
-.tscroll .tr-mes td{font-weight:600;color:var(--black)}
-.tscroll .tr-mes:hover td{background:var(--gray-100) !important}
-.tscroll .tr-sub{display:none}
-.tscroll .tr-sub td{padding-left:24px}
-.tscroll .tr-ciudad-subtotal td{border-top:1px solid var(--gray-200);background:var(--gray-50) !important}
-.tog{display:inline-block;transition:transform .18s;margin-right:5px;color:var(--accent-fg);font-size:12px}
+.lv1 td{font-weight:600;color:var(--black)}
+.lv1{cursor:pointer}
+.lv2{cursor:pointer;background:#fafafa}
+.lv2 td:first-child{padding-left:30px}
+.lv3 td:first-child{padding-left:56px;color:var(--gray-600)}
+.lv2 td:first-child,.lv2 td{font-weight:500}
+.hidden{display:none}
+.tog{display:inline-block;transition:transform .18s;margin-right:6px;color:var(--accent-fg);font-size:11px;width:9px}
 .tog.open{transform:rotate(90deg)}
-/* RESPONSIVE TABLAS: la de programas/facultad llega a 8-9 columnas con nowrap.
-   A 12px y el relleno normal solo cabe entera en pantallas anchas (>=1600px);
-   se reduce tipografía/relleno en cascada para que quepa sin recortar en
-   laptops típicas (1366-1440), dejando el scroll de .tscroll como último recurso. */
-@media(max-width:1700px){.tscroll thead th,.tscroll tbody td{font-size:11px;padding:7px 9px}}
-@media(max-width:1450px){.tscroll thead th,.tscroll tbody td{font-size:10px;padding:6px 7px}}
-@media(max-width:1300px){.tscroll thead th,.tscroll tbody td{font-size:9px;padding:4px 6px}.tscroll thead th{white-space:normal}}
-
-/* CIUDAD TABLE specifics */
-.inv-bar-cell{display:flex;align-items:center;justify-content:flex-end;gap:8px}
-.inv-bar-bg{width:80px;height:5px;background:var(--gray-200);border-radius:999px;overflow:hidden;flex-shrink:0}
-.inv-bar-fill{height:100%;background:var(--yellow);border-radius:999px}
-.badge-canal{display:inline-block;font-size:12px;font-weight:700;padding:1px 5px;border-radius:0;margin-right:2px}
-.bc-fb{background:#e7f0fd;color:var(--fg)}
-.bc-go{background:#fce8e6;color:var(--fg)}
-.pct-inline{display:inline-flex;align-items:center;gap:5px}
-.pct-bg{width:36px;height:4px;background:var(--gray-200);border-radius:999px;overflow:hidden}
-.pct-fill{height:100%;border-radius:999px}
-.clr-green{color:var(--pos);font-weight:600}
-.clr-orange{color:var(--fg-muted);font-weight:600}
-.clr-red{color:#dc2626;font-weight:600}
-.tr-ciudad{cursor:pointer}
-.tr-ciudad-sub{display:none;background:#fafafa}
-.tscroll .tr-ciudad-sub td{padding-left:28px}
-.tscroll .tr-ciudad-sub:hover td{background:#f0f0f0 !important}
-
-/* FAC TABLE header section */
-.fac-section{margin-bottom:20px}
-.fac-section-header{background:var(--black);padding:9px 14px;border-radius:var(--r-md) var(--r-md) 0 0;display:flex;align-items:center;justify-content:space-between}
-.fac-section-title{font-size:12px;font-weight:600;color:var(--white)}
-.fac-badge{background:var(--yellow);color:var(--black);font-size:12px;font-weight:700;padding:2px 7px;border-radius:999px}
-.search-wrap{display:flex;justify-content:flex-end;padding:8px 12px;background:var(--white);border-bottom:1px solid var(--gray-100)}
-.search-wrap input{font-family:'Poppins',sans-serif;font-size:12px;padding:5px 10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);width:180px;outline:none}
-.search-wrap input:focus{border-color:var(--accent-fg)}
-
-/* MES a MES */
-.mes-section{margin-bottom:20px}
-
-/* CHARTS DIARIOS */
-.charts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.chart-card{background:var(--white);border-radius:var(--r-md);padding:14px;border:1px solid var(--gray-200)}
-.chart-title{font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:8px}
-.chart-wrap{height:200px;position:relative}
-@media(max-width:1200px){.charts-grid{grid-template-columns:1fr}}
+.nv{display:inline-block;font-size:10px;font-weight:700;padding:0 5px;border-radius:999px;margin-left:6px;vertical-align:1px}
+.nv-pre{background:#FFF8E1;color:#92400E} .nv-pos{background:#EDE9FE;color:#4C1D95} .nv-gen{background:var(--gray-100);color:var(--gray-600)}
+.foot-note{font-size:11px;color:var(--gray-400);padding:8px 12px;border-top:1px solid var(--gray-100);line-height:1.5}
+@media(max-width:1700px){.tscroll thead th,.tscroll tbody td{font-size:11px;padding:6px 8px}}
+@media(max-width:1450px){.tscroll thead th,.tscroll tbody td{font-size:10px;padding:5px 6px}.lv2 td:first-child{padding-left:22px}.lv3 td:first-child{padding-left:40px}}
 
 /* LOADING */
 #loading{position:fixed;inset:0;background:rgba(10,10,10,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:12px}
@@ -161,7 +120,8 @@ select:focus,input[type=date]:focus{border-color:var(--accent-fg)}
 @keyframes spin{to{transform:rotate(360deg)}}
 #ld-msg{color:var(--fg-muted);font-size:12px}
 
-@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.nivel-grid,.canal-grid{grid-template-columns:1fr}}
+@media(max-width:1300px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.nm-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.f-row{grid-template-columns:100px 1fr 150px}.content{padding:14px 16px}}
 </style>
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
 </head>
@@ -182,113 +142,68 @@ select:focus,input[type=date]:focus{border-color:var(--accent-fg)}
   </div>
   <div class="app-sidebar-nav">
     <span class="app-sidebar-nav-title">Secciones</span>
-    <a href="#" class="active" onclick="scrollTo(0,0)"><b></b>KPIs</a>
+    <a href="#sec-kpi" class="active"><b></b>Resumen</a>
+    <a href="#sec-embudo"><b></b>Embudo</a>
     <a href="#sec-nivel"><b></b>Por nivel</a>
-    <a href="#sec-canales"><b></b>Canales</a>
-    <a href="#sec-diario"><b></b>Diario</a>
-    <a href="#sec-mes"><b></b>Mes a mes</a>
-    <a href="#sec-ciudad"><b></b>Por ciudad</a>
-    <a href="#sec-fac"><b></b>Por facultad</a>
-    <a href="#sec-prog"><b></b>Por programa</a>
+    <a href="#sec-medio"><b></b>Por medio</a>
+    <a href="#sec-semana"><b></b>Semana a semana</a>
+    <a href="#sec-detalle"><b></b>Ciudad · facultad · programa</a>
   </div>
-  <div class="app-sidebar-foot">Actualizado: <span id="last-upd-side">—</span></div>
+  <div class="app-sidebar-foot">Datos al: <span id="last-upd-side">—</span></div>
 </nav>
 
 <div class="main">
   <div class="topbar">
-    <span class="topbar-title">Tablero Pauta</span>
-    <div class="f-sep"></div>
-    <div class="fg"><span class="fl">Desde</span><input type="date" id="f-desde" onchange="applyFilters()"></div>
-    <div class="fg"><span class="fl">Hasta</span><input type="date" id="f-hasta" onchange="applyFilters()"></div>
-    <div class="f-sep"></div>
-    <div class="fg"><span class="fl">Nivel</span>
-      <select id="f-nivel" onchange="cascadeFilters('nivel')">
-        <option value="">Todos</option>
-      </select>
+    <div class="tb-row">
+      <span class="topbar-title">Tablero Pauta UAN</span>
+      <div class="f-sep"></div>
+      <div class="fg"><span class="fl">Desde</span><input type="date" id="f-desde" onchange="onDate()"></div>
+      <div class="fg"><span class="fl">Hasta</span><input type="date" id="f-hasta" onchange="onDate()"></div>
+      <div class="f-sep"></div>
+      <div id="quick" class="fg"></div>
+      <span class="last-upd" id="last-upd"></span>
     </div>
-    <div class="fg"><span class="fl">Ciudad</span>
-      <select id="f-ciudad" onchange="cascadeFilters('ciudad')">
-        <option value="">Todas</option>
-      </select>
+    <div class="tb-row">
+      <div class="fg"><span class="fl">Nivel</span><select id="f-nivel" onchange="onSel('nivel')"><option value="">Pregrado y posgrado</option><option>Pregrado</option><option>Posgrado</option></select></div>
+      <div class="fg"><span class="fl">Medio</span><select id="f-medio" onchange="onSel('medio')"><option value="">Todos</option></select></div>
+      <div class="fg"><span class="fl">Ciudad</span><select id="f-ciudad" onchange="onSel('ciudad')"><option value="">Todas</option></select></div>
+      <div class="fg"><span class="fl">Facultad</span><select id="f-facultad" onchange="onSel('facultad')"><option value="">Todas</option></select></div>
+      <div class="fg"><span class="fl">Programa</span><select id="f-programa" onchange="onSel('programa')"><option value="">Todos</option></select></div>
+      <label class="chk" title="Reparte la inversión de anuncios generales entre los programas de la misma ciudad y facultad según sus leads CRM"><input type="checkbox" id="f-repartir" checked onchange="render()">Repartir anuncios generales</label>
+      <button class="btn-reset" onclick="resetFilters()">↺ Reset</button>
     </div>
-    <div class="fg"><span class="fl">Facultad</span>
-      <select id="f-facultad" onchange="applyFilters()">
-        <option value="">Todas</option>
-      </select>
-    </div>
-    <div class="fg"><span class="fl">Canal</span>
-      <select id="f-canal" onchange="applyFilters()">
-        <option value="">Todos</option>
-      </select>
-    </div>
-    <button class="btn-reset" onclick="resetFilters()">↺ Reset</button>
-    <span class="last-upd" id="last-upd"></span>
   </div>
 
   <div class="content">
-    <div class="sec-title"><span></span>KPIs Generales</div>
+    <div class="sec-title" id="sec-kpi"><span></span>Resumen del rango<span class="sec-note" id="rango-note"></span></div>
     <div class="kpi-grid" id="kpi-grid"></div>
 
-    <div class="sec-title" id="sec-nivel"><span></span>Resumen por Nivel</div>
-    <div class="nivel-grid" id="nivel-grid"></div>
+    <div class="sec-title" id="sec-embudo"><span></span>Embudo<span class="sec-note">matrículas contadas en la fecha en que entró el lead</span></div>
+    <div class="card funnel" id="funnel"></div>
 
-    <div class="sec-title" id="sec-canales"><span></span>Inversión por Canal</div>
-    <div class="canal-grid" id="canal-grid"></div>
+    <div class="sec-title" id="sec-nivel"><span></span>Por nivel</div>
+    <div class="two-col" id="nivel-grid"></div>
 
-    <div class="sec-title" id="sec-diario"><span></span>Evolución Diaria</div>
-    <div class="charts-grid">
-      <div class="chart-card"><div class="chart-title">Inversión por día</div><div class="chart-wrap"><canvas id="chart-inv-dia"></canvas></div></div>
-      <div class="chart-card"><div class="chart-title">Leads por día</div><div class="chart-wrap"><canvas id="chart-leads-dia"></canvas></div></div>
-      <div class="chart-card"><div class="chart-title">CPL por día</div><div class="chart-wrap"><canvas id="chart-cpl-dia"></canvas></div></div>
-    </div>
+    <div class="sec-title" id="sec-medio"><span></span>Por medio<span class="sec-note">el medio del CRM sale del canal del aspirante</span></div>
+    <div class="card tcard"><div class="tscroll"><table><thead id="medio-head"></thead><tbody id="medio-body"></tbody></table></div></div>
 
-    <div class="sec-title" id="sec-mes"><span></span>Inversión Mes a Mes</div>
-    <div class="tcard mes-section">
-      <div class="tscroll">
-        <table>
-          <thead><tr>
-            <th>Mes</th><th class="r">Inversión Total</th><th class="r">Facebook</th><th class="r">Google</th><th class="r">LinkedIn</th><th class="r">Leads</th><th class="r">CPL</th>
-          </tr></thead>
-          <tbody id="body-mes"></tbody>
-        </table>
+    <div class="sec-title" id="sec-semana"><span></span>Semana a semana<span class="sec-note" id="semana-note"></span></div>
+    <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-sem"></canvas></div></div>
+    <div class="card tcard"><div class="tscroll"><table><thead id="sem-head"></thead><tbody id="sem-body"></tbody></table></div></div>
+
+    <div class="sec-title" id="sec-detalle"><span></span>Ciudad · facultad · programa</div>
+    <div class="card tcard">
+      <div class="tbar">
+        <button class="tbtn" onclick="expandAll(true)">Expandir todo</button>
+        <button class="tbtn" onclick="expandAll(false)">Contraer</button>
+        <span class="sp"></span>
+        <input type="search" id="q" placeholder="Buscar programa, ciudad o facultad" oninput="renderDetalle()" style="width:240px">
       </div>
-    </div>
-
-    <div class="sec-title" id="sec-ciudad"><span></span>Resultados por Ciudad</div>
-    <div class="tcard">
-      <div class="tscroll">
-        <table>
-          <thead><tr>
-            <th class="sortable" onclick="sortCiudad('ciudad')">Ciudad</th>
-            <th class="r sortable" onclick="sortCiudad('inv')">Inversión</th>
-            <th class="r">% Total</th>
-            <th>Plataforma</th>
-            <th class="r sortable" onclick="sortCiudad('leads')">Leads</th>
-            <th class="r sortable" onclick="sortCiudad('meta')">Meta</th>
-            <th class="r sortable" onclick="sortCiudad('pct')">Cumpl. Leads</th>
-            <th class="r sortable" onclick="sortCiudad('cpl')">CPL</th>
-          </tr></thead>
-          <tbody id="body-ciudad"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="sec-title" id="sec-fac"><span></span>Resultados por Facultad</div>
-    <div id="fac-container"></div>
-
-    <div class="sec-title" id="sec-prog"><span></span>Resultados por Sede, Facultad y Programa</div>
-    <div class="tcard">
-      <div class="tscroll">
-        <table>
-          <thead><tr>
-            <th class="sortable" onclick="sortProg('nom')">Sede / Facultad / Programa</th>
-            <th class="r sortable" onclick="sortProg('inv')">Inversión</th>
-            <th class="r">% Total</th>
-            <th class="r sortable" onclick="sortProg('leads')">Leads</th>
-            <th class="r sortable" onclick="sortProg('cpl')">CPL</th>
-          </tr></thead>
-          <tbody id="body-prog"></tbody>
-        </table>
+      <div class="tscroll"><table><thead id="det-head"></thead><tbody id="det-body"></tbody></table></div>
+      <div class="foot-note">
+        <b>Leads CRM</b>: posibles aspirantes con fuente "Digital - Pauta", por fecha de creación. <b>Admisiones y matrículas</b>: las que vienen de un lead de pauta, en la fecha del lead.
+        <b>Metas</b>: se prorratean a los días del rango elegido. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
+        Con "Repartir anuncios generales" activo, la inversión de anuncios sin programa se reparte entre los programas de la misma ciudad y facultad según sus leads CRM.
       </div>
     </div>
   </div>
@@ -296,662 +211,281 @@ select:focus,input[type=date]:focus{border-color:var(--accent-fg)}
 
 <script>
 const SHEET_ID = '1xD4bQUbtp3Dqc71jGaxsMQOZMSEPoiycce1lstj5DLE';
-const URL_RG   = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=1846504808`;
-const URL_META = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=577768057`;
-const MESES_ES = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const GV = (gid, extra) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}${extra||''}`;
+const URL_CRUCE = GV(1948876709, '&range=A:M&headers=1');
+const URL_CTRL  = GV(1948876709, '&range=O1:Q80&headers=0');
+const URL_META  = GV(577768057);
+const GENERAL = 'Anuncio General';
+const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
-let RAW_RG=[], RAW_META=[], FILTERED=[];
-let ciudadSort={col:'inv',dir:-1}, facSort={Pregrado:{col:'inv',dir:-1},Posgrado:{col:'inv',dir:-1}}, progSort={col:'inv',dir:-1};
+let RAW = [], METAS = [], PERIODOS = {}, FAC_BY_PROG = {}, DISP = {};
+let SORT = {col: 'inv', dir: -1}, OPEN = {}, CHART = null, QUICK = '';
 
-// ── PARSERS ──────────────────────────────────────────────────────────────────
-function parseInv(v){
-  const c=String(v).replace(/[$\s]/g,'').replace(/\./g,'').replace(',','.');
-  return parseFloat(c)||0
-}
-function parseLeads(v){
-  const c=String(v).replace(/[$\s]/g,'').replace(',','.');
-  return Math.round(parseFloat(c)||0)
-}
-function parseFecha(v){
-  const m=String(v).match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
-  if(m){const y=m[3],mo=m[2].padStart(2,'0'),d=m[1].padStart(2,'0');return{mes:y+'-'+mo,full:y+'-'+mo+'-'+d}}
-  const iso=String(v).match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
-  if(iso){const y=iso[1],mo=iso[2].padStart(2,'0'),d=iso[3].padStart(2,'0');return{mes:y+'-'+mo,full:y+'-'+mo+'-'+d}}
-  return{mes:'',full:''}
-}
-function fCOP(n){return n&&!isNaN(n)&&n!==0?'$'+Math.round(n).toLocaleString('es-CO'):'—'}
-function fN(n){return n&&!isNaN(n)&&n!==0?Math.round(n).toLocaleString('es-CO'):'—'}
-function fMes(m){const p=m.split('-');return MESES_ES[parseInt(p[1])]+' '+p[0]}
-function norm(s){return String(s||'').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
-function pctColor(p){return p>=80?'clr-green':p>=50?'clr-orange':'clr-red'}
-function barClass(p){return p>=80?'bg-green':p>=50?'bg-orange':'bg-red'}
-function ss(id){document.getElementById(id)&&document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+// ── Parsers y formato ─────────────────────────────────────────────────────────
+function num(v){ const s = String(v ?? '').replace(/[$\s%]/g,''); if(!s) return 0;
+  return parseFloat(s.indexOf(',') >= 0 ? s.replace(/\./g,'').replace(',','.') : s.replace(/\./g,'')) || 0 }
+function iso(v){ const m = String(v||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  const i = String(v||'').match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  return i ? `${i[1]}-${i[2].padStart(2,'0')}-${i[3].padStart(2,'0')}` : '' }
+function per(v){ const s = String(v||'').trim(); const m = s.match(/^(\d{4})-0?(\d{1,2})$/); return m ? m[1]+'-'+(+m[2]) : s }
+function norm(s){ return String(s||'').trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'') }
+const STOP = new Set(['EN','DE','Y','LA','LAS','DEL','E','EL','LOS','HIBRIDO','PRES','DIST','VIRT']);
+function pkey(s){ return norm(s).replace(/\bING\.?\s/g,'INGENIERIA ').replace(/[^A-Z ]/g,' ').split(/\s+/).filter(w => w && !STOP.has(w)).sort().join(' ') }
+function disp(s){ // muestra la versión con tildes de un mismo nombre
+  const k = norm(s), t = x => (String(x).match(/[^\x00-\x7F]/g)||[]).length;
+  if(!DISP[k] || t(s) > t(DISP[k])) DISP[k] = String(s).trim(); return k }
+const D = k => DISP[k] || k;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fCOP = n => (n && isFinite(n)) ? '$' + Math.round(n).toLocaleString('es-CO') : '—';
+const fN = n => (n && isFinite(n)) ? (Math.abs(n) < 10 && n % 1 ? n.toLocaleString('es-CO',{maximumFractionDigits:1}) : Math.round(n).toLocaleString('es-CO')) : '—';
+const fP = n => (n === null || !isFinite(n)) ? '—' : (n*100).toLocaleString('es-CO',{maximumFractionDigits:1}) + '%';
+const div = (a,b) => b ? a/b : null;
+const fDate = s => { const p = s.split('-'); return `${+p[2]} ${MESES[+p[1]]}` };
+function days(a,b){ return Math.round((Date.parse(b) - Date.parse(a)) / 864e5) + 1 }
+function addDays(s,n){ const d = new Date(Date.parse(s) + n*864e5); return d.toISOString().slice(0,10) }
+function weekStart(s){ const d = new Date(Date.parse(s)); const w = (d.getUTCDay() + 6) % 7; return addDays(s, -w) }
+const todayISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10) };
+function cls(p){ return p === null ? 't-mute' : p >= .8 ? 't-pos' : p >= .5 ? 't-mid' : 't-neg' }
+function bgc(p){ return p >= .8 ? 'bg-pos' : p >= .5 ? 'bg-mid' : 'bg-neg' }
+function difCls(d){ return d === null ? 't-mute' : Math.abs(d) <= .1 ? 't-pos' : Math.abs(d) <= .25 ? 't-mid' : 't-neg' }
 
-// ── LOAD ─────────────────────────────────────────────────────────────────────
-let done=0,rendered=false;
-function tryRender(){
-  if(++done===2&&!rendered){rendered=true;buildFilters();applyFilters();
-    document.getElementById('loading').style.display='none';
-    const t=new Date().toLocaleString('es-CO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-    document.getElementById('last-upd').textContent='Act: '+t;
-    document.getElementById('last-upd-side').textContent=t
-  }
-}
-Papa.parse(URL_RG,{download:true,header:false,skipEmptyLines:true,complete:r=>{
-  let rows=r.data;
-  if(rows.length&&/date|fecha/i.test(String(rows[0][0])))rows.shift();
-  RAW_RG=rows.map(row=>({
-    fecha:parseFecha(row[0]),
-    inv:parseInv(row[4]),
-    leads:parseLeads(row[5]),
-    canal:String(row[6]||'').trim(),
-    ciudad:String(row[7]||'').trim().toUpperCase(),
-    facultad:String(row[9]||'').trim(),
-    nivel:String(row[10]||'').trim(),
-    prog:String(row[11]||'').trim(),
-  })).filter(r=>r.fecha.full);
-  tryRender()
-}});
-Papa.parse(URL_META,{download:true,header:false,skipEmptyLines:true,complete:r=>{
-  let rows=r.data;
-  if(rows.length&&/periodo/i.test(String(rows[0][0])))rows.shift();
-  RAW_META=rows.map(row=>({
-    fIni:parseFecha(row[1]).full,
-    fFin:parseFecha(row[2]).full,
-    ciudad:String(row[3]||'').trim().toUpperCase(),
-    facultad:String(row[5]||'').trim(),
-    nivel:String(row[6]||'').trim(),
-    presup:parseInv(row[10]),
-    leads_meta:parseLeads(row[12]),
-    mat_meta:parseLeads(row[15]),
-  }));
-  tryRender()
-}});
+// ── Carga ────────────────────────────────────────────────────────────────────
+let pend = 3;
+function done(){ if(--pend) return; prepare(); document.getElementById('loading').style.display = 'none' }
+function fail(msg){ document.getElementById('ld-msg').textContent = msg }
+Papa.parse(URL_CRUCE, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer CRUCE_UAN'), complete: r => {
+  const rows = r.data; if(rows.length && /fecha/i.test(rows[0][0])) rows.shift();
+  RAW = rows.map(x => ({ d: iso(x[0]), per: per(x[1]), medio: String(x[3]||'').trim() || 'Otro',
+    ciu: disp(x[4]), niv: String(x[5]||'').trim(), facRaw: String(x[6]||'').trim(), prog: String(x[7]||'').trim(),
+    inv: num(x[8]), lp: num(x[9]), lc: num(x[10]), adm: num(x[11]), mat: num(x[12]) }))
+    .filter(x => x.d && (x.niv === 'Pregrado' || x.niv === 'Posgrado' || x.niv === 'General'));  // fuera educación continua / ETDH
+  done() }});
+Papa.parse(URL_META, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer METAS'), complete: r => {
+  const rows = r.data; if(rows.length && /periodo/i.test(rows[0][0])) rows.shift();
+  METAS = rows.map(x => ({ per: per(x[0]), ini: iso(x[1]), fin: iso(x[2]), ciu: disp(x[3]), fac: disp(x[5]), niv: String(x[6]||'').trim(),
+    prog: String(x[8]||'').trim(), ppto: num(x[10]), lm: num(x[12]), mm: num(x[15]) }))
+    .filter(m => m.ini && m.fin && m.prog);
+  METAS.forEach(m => { PERIODOS[m.per] = PERIODOS[m.per] || [m.ini, m.fin];
+    if(m.ini < PERIODOS[m.per][0]) PERIODOS[m.per][0] = m.ini; if(m.fin > PERIODOS[m.per][1]) PERIODOS[m.per][1] = m.fin;
+    FAC_BY_PROG[pkey(m.prog)] = FAC_BY_PROG[pkey(m.prog)] || m.fac });
+  done() }});
+Papa.parse(URL_CTRL, {download:true, header:false, skipEmptyLines:true, error:() => done(), complete: r => {
+  const row = r.data.find(x => /actualizaci/i.test(x[0]||'')); const t = row ? row[1] : '';
+  document.getElementById('last-upd').textContent = t ? 'Cruce actualizado: ' + t : '';
+  document.getElementById('last-upd-side').textContent = t || '—';
+  done() }});
 
-// ── FILTERS ───────────────────────────────────────────────────────────────────
-function fillSel(id,opts,sel=''){
-  const el=document.getElementById(id);
-  const first=el.options[0];el.innerHTML='';el.appendChild(first);
-  opts.forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o;if(o===sel)op.selected=true;el.appendChild(op)})
-}
-function buildFilters(){
-  fillSel('f-nivel',[...new Set(RAW_RG.map(r=>r.nivel).filter(Boolean))].sort());
-  fillSel('f-ciudad',[...new Set(RAW_RG.map(r=>r.ciudad).filter(Boolean))].sort());
-  fillSel('f-facultad',[...new Set(RAW_RG.map(r=>r.facultad).filter(Boolean))].sort());
-  fillSel('f-canal',[...new Set(RAW_RG.map(r=>r.canal).filter(Boolean))].sort());
-  const fs=RAW_RG.map(r=>r.fecha.full).filter(Boolean).sort();
-  if(fs.length){document.getElementById('f-desde').value=fs[0];document.getElementById('f-hasta').value=fs[fs.length-1]}
-}
-function cascadeFilters(changed){
-  const nivel=document.getElementById('f-nivel').value;
-  const ciudad=document.getElementById('f-ciudad').value;
-  let pool=RAW_RG;
-  if(nivel)pool=pool.filter(r=>r.nivel===nivel);
-  if(changed==='nivel'){
-    const cs=[...new Set(pool.map(r=>r.ciudad).filter(Boolean))].sort();
-    fillSel('f-ciudad',cs,ciudad)
-  }
-  if(ciudad)pool=pool.filter(r=>r.ciudad===ciudad);
-  const fs=[...new Set(pool.map(r=>r.facultad).filter(Boolean))].sort();
-  const cf=document.getElementById('f-facultad').value;
-  fillSel('f-facultad',fs,fs.includes(cf)?cf:'');
-  applyFilters()
-}
-function resetFilters(){
-  ['f-nivel','f-ciudad','f-facultad','f-canal'].forEach(id=>document.getElementById(id).value='');
-  buildFilters();applyFilters()
-}
-function applyFilters(){
-  const desde=document.getElementById('f-desde').value;
-  const hasta=document.getElementById('f-hasta').value;
-  const nivel=document.getElementById('f-nivel').value;
-  const ciudad=document.getElementById('f-ciudad').value;
-  const facultad=document.getElementById('f-facultad').value;
-  const canal=document.getElementById('f-canal').value;
-  FILTERED=RAW_RG.filter(r=>{
-    if(desde&&r.fecha.full<desde)return false;
-    if(hasta&&r.fecha.full>hasta)return false;
-    if(nivel&&r.nivel!==nivel)return false;
-    if(ciudad&&r.ciudad!==ciudad)return false;
-    if(facultad&&r.facultad!==facultad)return false;
-    if(canal&&r.canal!==canal)return false;
-    return true
-  });
-  renderAll(desde,hasta)
+function prepare(){
+  RAW.forEach(r => { r.fac = r.prog === GENERAL ? disp(r.facRaw || 'General') : disp(r.facRaw || FAC_BY_PROG[pkey(r.prog)] || '(Sin facultad)'); r.pk = pkey(r.prog) });
+  // selects fijos
+  fill('f-medio', [...new Set(RAW.map(r => r.medio))].sort(), '');
+  // atajos de fecha
+  const q = [['sem','Esta semana'],['semAnt','Semana pasada'],['mes','Este mes']].concat(Object.keys(PERIODOS).sort().map(p => ['P'+p, p]));
+  document.getElementById('quick').innerHTML = q.map(([k,l]) => `<button class="qbtn" data-q="${k}" onclick="setQuick('${k}')">${l}</button>`).join('');
+  const hoy = todayISO(), act = Object.keys(PERIODOS).find(p => PERIODOS[p][0] <= hoy && PERIODOS[p][1] >= hoy);
+  setQuick(act ? 'P'+act : 'mes');
 }
 
-// ── METAS HELPER (by facultad+nivel, con overlap de fechas) ──────────────────
-// ciudad_f: si está activo, solo suma metas de esa ciudad
-function getMetas(facultad,nivel,fDesde,fHasta,ciudad_f){
-  const kF=norm(facultad),kN=norm(nivel);
-  return RAW_META.filter(m=>{
-    if(norm(m.facultad)!==kF||norm(m.nivel)!==kN)return false;
-    if(ciudad_f&&norm(m.ciudad)!==norm(ciudad_f))return false;
-    if(fDesde&&fHasta&&m.fIni&&m.fFin){if(m.fFin<fDesde||m.fIni>fHasta)return false}
-    return true
-  }).reduce((a,m)=>({leads_meta:a.leads_meta+m.leads_meta,presup:a.presup+m.presup,mat_meta:a.mat_meta+m.mat_meta}),{leads_meta:0,presup:0,mat_meta:0})
+// ── Filtros ──────────────────────────────────────────────────────────────────
+function fill(id, opts, sel, labelFn){ const el = document.getElementById(id), first = el.options[0].outerHTML;
+  el.innerHTML = first + opts.map(o => `<option value="${esc(o)}"${o===sel?' selected':''}>${esc(labelFn ? labelFn(o) : o)}</option>`).join('');
+  if(sel && !opts.includes(sel)) el.value = '' }
+function setQuick(k){
+  const hoy = todayISO(); let a, b = hoy;
+  if(k === 'sem'){ a = weekStart(hoy) }
+  else if(k === 'semAnt'){ a = addDays(weekStart(hoy), -7); b = addDays(a, 6) }
+  else if(k === 'mes'){ a = hoy.slice(0,8) + '01' }
+  else { const p = PERIODOS[k.slice(1)]; a = p[0]; b = p[1] < hoy ? p[1] : hoy }
+  document.getElementById('f-desde').value = a; document.getElementById('f-hasta').value = b;
+  QUICK = k; cascade(); render() }
+function onDate(){ QUICK = ''; cascade(); render() }
+function onSel(which){ cascade(which); render() }
+function F(){ const g = id => document.getElementById(id).value;
+  return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), medio: g('f-medio'), ciu: g('f-ciudad'), fac: g('f-facultad'), prog: g('f-programa'), rep: document.getElementById('f-repartir').checked } }
+function cascade(){
+  const f = F(), base = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && r.prog !== GENERAL && (!f.niv || r.niv === f.niv));
+  fill('f-ciudad', [...new Set(base.map(r => r.ciu))].sort(), f.ciu, D);
+  const b2 = base.filter(r => !f.ciu || r.ciu === f.ciu);
+  fill('f-facultad', [...new Set(b2.map(r => r.fac))].sort(), f.fac, D);
+  const b3 = b2.filter(r => !f.fac || r.fac === f.fac);
+  fill('f-programa', [...new Set(b3.map(r => r.pk))].sort((x,y) => x.localeCompare(y)), f.prog, k => (b3.find(r => r.pk === k) || {}).prog || k);
 }
-// metas por facultad+nivel+ciudad especifica (drop de ciudad en tabla facultad)
-function getMetasFacCiudad(facultad,nivel,ciudad,fDesde,fHasta){
-  const kF=norm(facultad),kN=norm(nivel),kC=norm(ciudad);
-  return RAW_META.filter(m=>{
-    if(norm(m.facultad)!==kF||norm(m.nivel)!==kN||norm(m.ciudad)!==kC)return false;
-    if(fDesde&&fHasta&&m.fIni&&m.fFin){if(m.fFin<fDesde||m.fIni>fHasta)return false}
-    return true
-  }).reduce((a,m)=>({leads_meta:a.leads_meta+m.leads_meta,presup:a.presup+m.presup}),{leads_meta:0,presup:0})
-}
-function getMetasCiudad(ciudad,fDesde,fHasta){
-  const kC=norm(ciudad);
-  return RAW_META.filter(m=>{
-    if(norm(m.ciudad)!==kC)return false;
-    if(fDesde&&fHasta&&m.fIni&&m.fFin){if(m.fFin<fDesde||m.fIni>fHasta)return false}
-    return true
-  }).reduce((a,m)=>({leads_meta:a.leads_meta+m.leads_meta,presup:a.presup+m.presup}),{leads_meta:0,presup:0})
-}
-// ciudad + nivel
-function getMetasCiudadNivel(ciudad,nivel,fDesde,fHasta){
-  const kC=norm(ciudad),kN=norm(nivel);
-  return RAW_META.filter(m=>{
-    if(norm(m.ciudad)!==kC||norm(m.nivel)!==kN)return false;
-    if(fDesde&&fHasta&&m.fIni&&m.fFin){if(m.fFin<fDesde||m.fIni>fHasta)return false}
-    return true
-  }).reduce((a,m)=>({leads_meta:a.leads_meta+m.leads_meta,presup:a.presup+m.presup}),{leads_meta:0,presup:0})
-}
+function resetFilters(){ ['f-nivel','f-medio','f-ciudad','f-facultad','f-programa'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; prepare() }
 
-// ── RENDER ALL ────────────────────────────────────────────────────────────────
-function renderAll(desde,hasta){
-  const inv=FILTERED.reduce((a,r)=>a+r.inv,0);
-  const leads=FILTERED.reduce((a,r)=>a+r.leads,0);
-  const cpl=leads>0?inv/leads:0;
+// ── Cálculo ──────────────────────────────────────────────────────────────────
+const Z = () => ({inv:0, invG:0, lp:0, lc:0, adm:0, mat:0, ppto:0, lm:0, mm:0});
+function add(a, b){ for(const k in a) a[k] += b[k] || 0; return a }
+function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpm: div(e.inv, e.mat),
+  conv: div(e.mat, e.lc), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto) } }
 
-  // global metas: sum of all unique facultad+nivel combos in filtered
-  const fKeys=new Set(FILTERED.map(r=>norm(r.facultad)+'||'+norm(r.nivel)));
-  let gPresup=0,gLeadsMeta=0;
-  const nivel_f=document.getElementById('f-nivel').value;
-  const ciudad_f=document.getElementById('f-ciudad').value;
-  const fac_f=document.getElementById('f-facultad').value;
-
-  // Use unique fac+nivel combos from filtered data
-  fKeys.forEach(k=>{
-    const [f,n]=k.split('||');
-    // find original cased versions
-    const sample=FILTERED.find(r=>norm(r.facultad)===f&&norm(r.nivel)===n);
-    if(!sample)return;
-    // filter metas also by ciudad if ciudad filter active
-    const pool=RAW_META.filter(m=>{
-      if(norm(m.facultad)!==norm(sample.facultad)||norm(m.nivel)!==norm(sample.nivel))return false;
-      if(ciudad_f&&norm(m.ciudad)!==norm(ciudad_f))return false;
-      if(desde&&hasta&&m.fIni&&m.fFin){if(m.fFin<desde||m.fIni>hasta)return false}
-      return true
-    });
-    pool.forEach(m=>{gPresup+=m.presup;gLeadsMeta+=m.leads_meta})
-  });
-  // deduplicate meta rows (same row could match multiple fac+nivel)
-  // simpler: collect unique meta row indices
-  const metaIdxSeen=new Set();
-  let gPresup2=0,gLeadsMeta2=0;
-  RAW_META.forEach((m,i)=>{
-    if(!fKeys.has(norm(m.facultad)+'||'+norm(m.nivel)))return;
-    if(ciudad_f&&norm(m.ciudad)!==norm(ciudad_f))return;
-    if(desde&&hasta&&m.fIni&&m.fFin){if(m.fFin<desde||m.fIni>hasta)return}
-    if(metaIdxSeen.has(i))return;
-    metaIdxSeen.add(i);
-    gPresup2+=m.presup; gLeadsMeta2+=m.leads_meta
-  });
-
-  const pctPresup=gPresup2>0?Math.min(inv/gPresup2*100,200):null;
-  const pctLeads=gLeadsMeta2>0?Math.min(leads/gLeadsMeta2*100,200):null;
-
-  renderKPIs(inv,leads,cpl,pctPresup,gPresup2,pctLeads,gLeadsMeta2);
-  renderNivel(desde,hasta,ciudad_f);
-  renderCanales();
-  renderDiario();
-  renderMes();
-  renderCiudad(desde,hasta);
-  renderFacultad(desde,hasta,ciudad_f);
-  renderPrograma()
-}
-
-// ── GRAFICAS DIARIAS ────────────────────────────────────────────────────────
-let chartsDia={};
-function renderDiario(){
-  const byDay={};
-  FILTERED.forEach(r=>{
-    const d=r.fecha.full;if(!d)return;
-    if(!byDay[d])byDay[d]={inv:0,leads:0};
-    byDay[d].inv+=r.inv;byDay[d].leads+=r.leads
-  });
-  const days=Object.keys(byDay).sort();
-  const labels=days.map(d=>{const p=d.split('-');return p[2]+'/'+p[1]});
-  const invData=days.map(d=>Math.round(byDay[d].inv));
-  const leadsData=days.map(d=>byDay[d].leads);
-  const cplData=days.map(d=>byDay[d].leads>0?Math.round(byDay[d].inv/byDay[d].leads):0);
-
-  const baseOpts={
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      x:{ticks:{color:'#9CA3AF',font:{family:'Poppins',size:8},maxRotation:0,autoSkip:true,maxTicksLimit:10},grid:{display:false}},
-      y:{ticks:{color:'#9CA3AF',font:{family:'Poppins',size:8}},grid:{color:'#F0F1F4'}}
+// Filas del rango + nivel/medio/ciudad (sin facultad/programa) -> entradas por ciudad·nivel·facultad·programa
+function entradas(f){
+  const base = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio) && (!f.ciu || r.ciu === f.ciu));
+  const E = {}, get = (ciu, niv, fac, prog, pk) => { const k = [ciu, niv, pk].join('|');
+    return E[k] = E[k] || { ...Z(), ciu, niv, fac, prog, pk } };
+  const pools = {};
+  base.forEach(r => {
+    if(r.prog === GENERAL){ const k = [r.ciu, r.niv, r.fac].join('|'); pools[k] = pools[k] || {ciu:r.ciu, niv:r.niv, fac:r.fac, inv:0, lp:0}; pools[k].inv += r.inv; pools[k].lp += r.lp; return }
+    const e = get(r.ciu, r.niv, r.fac, r.prog, r.pk); e.inv += r.inv; e.lp += r.lp; e.lc += r.lc; e.adm += r.adm; e.mat += r.mat });
+  const list = Object.values(E);
+  Object.values(pools).forEach(g => {
+    const nac = g.ciu === 'COLOMBIA' || g.niv === 'General';
+    const okNiv = e => (g.niv !== 'Pregrado' && g.niv !== 'Posgrado') || e.niv === g.niv;
+    let c = [];
+    if(f.rep){
+      if(!nac && g.fac !== 'GENERAL') c = list.filter(e => e.ciu === g.ciu && okNiv(e) && e.fac === g.fac && e.lc > 0);
+      if(!c.length && !nac) c = list.filter(e => e.ciu === g.ciu && okNiv(e) && e.lc > 0);
+      if(!c.length && nac) c = list.filter(e => okNiv(e) && e.lc > 0);
     }
-  };
-  function mk(id,data,color,fmt){
-    if(chartsDia[id]){chartsDia[id].destroy()}
-    const ctx=document.getElementById(id).getContext('2d');
-    chartsDia[id]=new Chart(ctx,{
-      type:'line',
-      data:{labels,datasets:[{data,borderColor:color,backgroundColor:color+'14',fill:true,tension:.3,pointRadius:0,borderWidth:2}]},
-      options:{...baseOpts,plugins:{...baseOpts.plugins,tooltip:{callbacks:{label:c=>fmt(c.raw)}}}}
-    })
-  }
-  mk('chart-inv-dia',invData,'#ffd400',v=>' Inversión: '+fCOP(v));
-  mk('chart-leads-dia',leadsData,'#16a34a',v=>' Leads: '+fN(v));
-  mk('chart-cpl-dia',cplData,'#0A66C2',v=>' CPL: '+fCOP(v))
-}
-
-// ── KPIs ──────────────────────────────────────────────────────────────────────
-function kpiBar(pct,label,metaFmt){
-  if(pct===null)return'';
-  const c=barClass(pct);
-  return `<div class="kpi-bwrap"><div class="kpi-brow"><span>${label}</span><span>${pct.toFixed(0)}%${metaFmt?' · Meta: '+metaFmt:''}</span></div><div class="kpi-bar"><div class="kpi-bfill ${c}" style="width:${Math.min(pct,100)}%"></div></div></div>`
-}
-function renderKPIs(inv,leads,cpl,pctP,presup,pctL,leadsMeta){
-  document.getElementById('kpi-grid').innerHTML=`
-    <div class="kpi-card"><div class="kpi-label">Inversión Total</div><div class="kpi-value">${fCOP(inv)}</div>${kpiBar(pctP,'vs Presupuesto',fCOP(presup))}</div>
-    <div class="kpi-card"><div class="kpi-label">Leads Plataforma</div><div class="kpi-value">${fN(leads)}</div>${kpiBar(pctL,'vs Meta',fN(leadsMeta))}</div>
-    <div class="kpi-card"><div class="kpi-label">CPL</div><div class="kpi-value">${fCOP(cpl)}</div><div class="kpi-sub">Costo por Lead</div></div>
-    <div class="kpi-card"><div class="kpi-label">Ciudades</div><div class="kpi-value">${new Set(FILTERED.map(r=>r.ciudad)).size}</div><div class="kpi-sub">con inversión</div></div>
-    <div class="kpi-card"><div class="kpi-label">Facultades</div><div class="kpi-value">${new Set(FILTERED.map(r=>r.facultad)).size}</div><div class="kpi-sub">con inversión</div></div>`
-}
-
-// ── NIVEL ─────────────────────────────────────────────────────────────────────
-function renderNivel(desde,hasta,ciudad_f){
-  const niveles=['Pregrado','Posgrado'];
-  const tags={Pregrado:'tag-pre',Posgrado:'tag-pos'};
-  let html='';
-  niveles.forEach(nv=>{
-    const rows=FILTERED.filter(r=>r.nivel===nv);
-    const inv=rows.reduce((a,r)=>a+r.inv,0);
-    const leads=rows.reduce((a,r)=>a+r.leads,0);
-    const cpl=leads>0?inv/leads:0;
-    // metas por nivel: sum unique fac combos
-    const facKeys=new Set(rows.map(r=>norm(r.facultad)));
-    let presup=0,lmeta=0;
-    const seen=new Set();
-    RAW_META.forEach((m,i)=>{
-      if(norm(m.nivel)!==norm(nv))return;
-      if(ciudad_f&&norm(m.ciudad)!==norm(ciudad_f))return;
-      if(desde&&hasta&&m.fIni&&m.fFin){if(m.fFin<desde||m.fIni>hasta)return}
-      if(!facKeys.has(norm(m.facultad)))return;
-      if(seen.has(i))return;
-      seen.add(i);presup+=m.presup;lmeta+=m.leads_meta
-    });
-    const pct=lmeta>0?(leads/lmeta*100):null;
-    const pctP=presup>0?(inv/presup*100):null;
-    html+=`<div class="nivel-card">
-      <span class="nivel-tag ${tags[nv]||''}">${nv}</span>
-      <div class="nivel-metrics">
-        <div><div class="nm-label">Inversión</div><div class="nm-value">${fCOP(inv)}</div></div>
-        <div><div class="nm-label">Leads</div><div class="nm-value">${fN(leads)}</div></div>
-        <div><div class="nm-label">CPL</div><div class="nm-value">${fCOP(cpl)}</div></div>
-      </div>
-      <div class="nivel-cumpl">Cumplimiento leads vs. meta (${lmeta>0?fN(lmeta):'—'})</div>
-      ${kpiBar(pct,'',null)}
-      ${presup>0?'<div style="font-size:12px;color:var(--gray-400);margin-top:4px">Presupuesto: '+fCOP(presup)+' · Ej. '+( pctP?pctP.toFixed(1)+'%':'—')+ '</div>':''}</div>`
+    if(!c.length){ const e = get(g.ciu, g.niv, g.fac, GENERAL, 'GENERAL|' + g.fac); e.inv += g.inv; e.invG += g.inv; e.lp += g.lp; return }
+    const t = c.reduce((a, e) => a + e.lc, 0);
+    c.forEach(e => { const s = e.lc / t; e.inv += g.inv * s; e.invG += g.inv * s; e.lp += g.lp * s });
   });
-  document.getElementById('nivel-grid').innerHTML=html
+  // metas prorrateadas al rango
+  METAS.forEach(m => {
+    if(f.niv && m.niv !== f.niv) return; if(f.ciu && m.ciu !== f.ciu) return;
+    const a = m.ini > f.desde ? m.ini : f.desde, b = m.fin < f.hasta ? m.fin : f.hasta; if(a > b) return;
+    const s = days(a, b) / days(m.ini, m.fin), pk = pkey(m.prog);
+    const e = get(m.ciu, m.niv, m.fac, m.prog, pk);
+    e.ppto += m.ppto * s; e.lm += m.lm * s; e.mm += m.mm * s });
+  return Object.values(E).filter(e => (!f.fac || e.fac === f.fac) && (!f.prog || e.pk === f.prog));
+}
+function filasRango(f){ // filas diarias con todos los filtros (para semana y medio; sin reparto)
+  return RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio) &&
+    (!f.ciu || r.ciu === f.ciu) && (!f.fac || r.fac === f.fac) && (!f.prog || r.pk === f.prog)) }
+
+// ── Render ───────────────────────────────────────────────────────────────────
+let ENT = [];
+function render(){
+  const f = F(); if(!f.desde || !f.hasta) return;
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.toggle('on', b.dataset.q === QUICK));
+  ENT = entradas(f);
+  const T = M(ENT.reduce((a, e) => add(a, e), Z()));
+  document.getElementById('rango-note').textContent = `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
+  renderKPIs(T); renderFunnel(T); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
 }
 
-// ── CANALES ───────────────────────────────────────────────────────────────────
-function renderCanales(){
-  const byC={};
-  FILTERED.forEach(r=>{if(!byC[r.canal])byC[r.canal]={inv:0,leads:0};byC[r.canal].inv+=r.inv;byC[r.canal].leads+=r.leads});
-  const invT=FILTERED.reduce((a,r)=>a+r.inv,0);
-  const icons={
-    Facebook:`<svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.5h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/></svg>`,
-    Google:`<svg viewBox="0 0 24 24"><path fill="#EA4335" d="M5.27 9.76A7.08 7.08 0 0112 4.9c1.7 0 3.23.62 4.42 1.63l3.3-3.3A11.95 11.95 0 0012 0C7.37 0 3.37 2.69 1.38 6.63l3.89 3.13z"/><path fill="#34A853" d="M16.04 18.01A7.03 7.03 0 0112 19.1c-2.97 0-5.5-1.84-6.63-4.47l-3.93 3.05A11.95 11.95 0 0012 24c3.24 0 6.18-1.22 8.41-3.21l-4.37-2.78z"/><path fill="#FBBC05" d="M19.1 12c0-.66-.07-1.31-.18-1.94H12v3.76h3.99a3.41 3.41 0 01-1.46 2.22l4.36 2.78A11.93 11.93 0 0019.1 12z"/><path fill="#4285F4" d="M5.37 14.63A7.13 7.13 0 014.9 12c0-.92.17-1.81.47-2.63L1.38 6.24A11.94 11.94 0 000 12c0 1.97.47 3.82 1.3 5.46l4.07-2.83z"/></svg>`,
-    LinkedIn:`<svg viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>`,
-  };
-  const cls={Facebook:'ci-fb',Google:'ci-go',LinkedIn:'ci-li'};
-  document.getElementById('canal-grid').innerHTML=Object.entries(byC).sort((a,b)=>b[1].inv-a[1].inv).map(([c,d])=>{
-    const pct=invT>0?(d.inv/invT*100).toFixed(1):0;
-    return `<div class="canal-card"><div class="canal-icon ${cls[c]||''}">${icons[c]||''}</div><div class="canal-info"><div class="canal-name">${c}</div><div class="canal-inv">${fCOP(d.inv)}</div><div class="canal-sub">${fN(d.leads)} leads · CPL ${fCOP(d.leads>0?d.inv/d.leads:0)}</div></div><div class="canal-pct">${pct}%</div></div>`
-  }).join('')
+function bar(p, lbl){ if(p === null) return '';
+  return `<div class="kpi-bwrap"><div class="kpi-brow"><span>${lbl}</span><span class="${cls(p)}">${fP(p)}</span></div><div class="kpi-bar"><div class="kpi-bfill ${bgc(p)}" style="width:${Math.min(p*100,100)}%"></div></div></div>` }
+function renderKPIs(T){
+  const k = (l, v, sub, extra) => `<div class="card kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div>${sub ? `<div class="kpi-sub">${sub}</div>` : ''}${extra || ''}</div>`;
+  const cplMeta = div(T.ppto, T.lm);
+  document.getElementById('kpi-grid').innerHTML = [
+    k('Inversión', fCOP(T.inv), T.invG ? `${fCOP(T.invG)} de anuncios generales repartidos` : 'presupuesto meta ' + fCOP(T.ppto), bar(T.cumI, 'Ejecución vs presupuesto ' + fCOP(T.ppto))),
+    k('Leads plataforma', fN(T.lp), 'CPL plataforma ' + fCOP(T.cplP)),
+    k('Leads CRM', fN(T.lc), `<span class="${difCls(T.dif)}">${T.dif === null ? '' : (T.dif > 0 ? '+' : '') + fP(T.dif) + ' vs plataforma'}</span>`, bar(T.cumL, 'Meta ' + fN(T.lm))),
+    k('CPL CRM', fCOP(T.cplC), cplMeta ? 'CPL meta ' + fCOP(cplMeta) : ''),
+    k('Admisiones', fN(T.adm), fP(div(T.adm, T.lc)) + ' de los leads CRM'),
+    k('Matrículas', fN(T.mat), fP(T.conv) + ' de los leads CRM', bar(T.cumM, 'Meta ' + fN(T.mm))),
+    k('Costo por matrícula', fCOP(T.cpm), T.mm ? 'meta ' + fCOP(div(T.ppto, T.mm)) : ''),
+    k('Ciudades', new Set(ENT.filter(e => e.inv || e.lc).map(e => e.ciu)).size, 'con inversión o leads'),
+    k('Programas', new Set(ENT.filter(e => (e.inv || e.lc) && e.prog !== GENERAL).map(e => e.ciu + e.pk)).size, 'ciudad · programa activos'),
+    k('Meta de matrículas del rango', fN(T.mm), 'prorrateada a los días elegidos'),
+  ].join('');
+}
+function renderFunnel(T){
+  const steps = [['Leads plataforma', T.lp, ''], ['Leads CRM', T.lc, T.lp ? fP(div(T.lc, T.lp)) + ' de plataforma' : ''],
+    ['Admisiones', T.adm, fP(div(T.adm, T.lc)) + ' de leads CRM'], ['Matrículas', T.mat, fP(div(T.mat, T.adm)) + ' de admisiones']];
+  const mx = Math.max(...steps.map(s => s[1]), 1);
+  document.getElementById('funnel').innerHTML = steps.map(([l, v, c], i) => `<div class="f-row"><div class="f-lbl">${l}</div>
+    <div class="f-track"><div class="f-fill${i === 3 ? ' dark' : ''}" style="width:${Math.max(v/mx*100, .4)}%"></div></div>
+    <div class="f-val"><b>${fN(v)}</b><span class="t-mute">${c}</span></div></div>`).join('') +
+    `<div class="f-row"><div class="f-lbl">Costo</div><div class="f-val" style="grid-column:2/4;justify-content:flex-start;gap:22px">
+      <span>CPL plataforma <b>${fCOP(T.cplP)}</b></span><span>CPL CRM <b>${fCOP(T.cplC)}</b></span><span>Costo por admisión <b>${fCOP(div(T.inv, T.adm))}</b></span><span>Costo por matrícula <b>${fCOP(T.cpm)}</b></span></div></div>`;
+}
+function renderNivel(){
+  const card = (niv, tag) => { const e = M(ENT.filter(x => x.niv === niv).reduce((a, x) => add(a, x), Z()));
+    const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`;
+    return `<div class="card nivel-card"><span class="nivel-tag ${tag}">${niv}</span><div class="nm-grid">
+      ${it('Inversión', fCOP(e.inv))}${it('Leads plataforma', fN(e.lp))}${it('Leads CRM', fN(e.lc))}${it('CRM vs plat.', e.dif === null ? '—' : (e.dif > 0 ? '+' : '') + fP(e.dif), difCls(e.dif))}
+      ${it('CPL CRM', fCOP(e.cplC))}${it('Admisiones', fN(e.adm))}${it('Matrículas', fN(e.mat))}${it('Costo / matrícula', fCOP(e.cpm))}
+      ${it('Meta leads', fN(e.lm))}${it('Cumpl. leads', fP(e.cumL), cls(e.cumL))}${it('Meta matrículas', fN(e.mm))}${it('Cumpl. matrículas', fP(e.cumM), cls(e.cumM))}
+    </div></div>` };
+  document.getElementById('nivel-grid').innerHTML = card('Pregrado', 'tag-pre') + card('Posgrado', 'tag-pos');
+}
+const COLS_BASE = [['inv','Inversión','cop'],['lp','Leads plat.','n'],['lc','Leads CRM','n'],['dif','CRM vs plat.','dif'],['cplP','CPL plat.','cop'],['cplC','CPL CRM','cop'],
+  ['adm','Admisiones','n'],['mat','Matrículas','n'],['cpm','Costo / mat.','cop'],['conv','Lead → mat.','pct']];
+const COLS_META = [['lm','Meta leads','n',1],['cumL','Cumpl. leads','cum'],['mm','Meta mat.','n'],['cumM','Cumpl. mat.','cum']];
+function cell(e, [k, , t, grp]){ const v = e[k], g = grp ? ' grp' : '';
+  if(t === 'cop') return `<td class="r${g}">${fCOP(v)}</td>`;
+  if(t === 'n') return `<td class="r${g}">${fN(v)}</td>`;
+  if(t === 'pct') return `<td class="r${g}">${fP(v)}</td>`;
+  if(t === 'dif') return `<td class="r${g} ${difCls(v)}">${v === null ? '—' : (v > 0 ? '+' : '') + fP(v)}</td>`;
+  if(t === 'cum') return `<td class="r${g} ${cls(v)}">${fP(v)}</td>` }
+function head(first, cols, sortable){ return '<tr><th>' + first + '</th>' + cols.map(c => {
+  const act = SORT.col === c[0]; return `<th class="r${c[3] ? ' grp' : ''}${sortable ? ' sortable' : ''}${sortable && act ? ' sort-act' : ''}"${sortable ? ` onclick="sortBy('${c[0]}')"` : ''}>${c[1]}${sortable && act ? (SORT.dir > 0 ? ' ↑' : ' ↓') : ''}</th>` }).join('') + '</tr>' }
+function groupRows(rows, keyFn){ const g = {}; rows.forEach(r => { const k = keyFn(r); g[k] = g[k] || Z(); add(g[k], r) }); return g }
+
+function renderMedio(f){
+  const rows = filasRango(f), g = groupRows(rows, r => r.medio);
+  const order = ['Facebook','Google','LinkedIn','Landing','Otro'];
+  const ks = Object.keys(g).sort((a, b) => (order.indexOf(a) + 1 || 9) - (order.indexOf(b) + 1 || 9));
+  const lbl = {Landing:'Landing (CRM)', Otro:'Otros canales (CRM)'};
+  document.getElementById('medio-head').innerHTML = head('Medio', COLS_BASE, false);
+  const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
+  document.getElementById('medio-body').innerHTML = ks.map(k => '<tr><td>' + (lbl[k] || k) + '</td>' + COLS_BASE.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
+    '<tr class="tr-total"><td>Total</td>' + COLS_BASE.map(c => cell(T, c)).join('') + '</tr>';
+}
+function renderSemana(f){
+  const rows = filasRango(f), g = groupRows(rows, r => weekStart(r.d)), ks = Object.keys(g).sort();
+  document.getElementById('semana-note').textContent = (f.fac || f.prog) ? 'con filtro de facultad o programa la inversión es solo la directa del programa' : 'semanas de lunes a domingo';
+  const lab = k => { const e = addDays(k, 6); return `${fDate(k)} – ${fDate(e)}` };
+  document.getElementById('sem-head').innerHTML = head('Semana', COLS_BASE, false);
+  const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
+  document.getElementById('sem-body').innerHTML = ks.slice().reverse().map(k => '<tr><td>' + lab(k) + '</td>' + COLS_BASE.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
+    '<tr class="tr-total"><td>Total</td>' + COLS_BASE.map(c => cell(T, c)).join('') + '</tr>';
+  const css = getComputedStyle(document.body), fg = css.getPropertyValue('--fg-muted').trim() || '#888';
+  const data = { labels: ks.map(k => fDate(k)), datasets: [
+    { type:'bar', label:'Inversión', data: ks.map(k => Math.round(g[k].inv)), backgroundColor:'rgba(255,212,0,.55)', yAxisID:'y1', order:3 },
+    { type:'line', label:'Leads plataforma', data: ks.map(k => g[k].lp), borderColor:'#9ca3af', backgroundColor:'#9ca3af', tension:.25, yAxisID:'y', order:1 },
+    { type:'line', label:'Leads CRM', data: ks.map(k => g[k].lc), borderColor:'#111', backgroundColor:'#111', tension:.25, yAxisID:'y', order:0 },
+    { type:'line', label:'Matrículas', data: ks.map(k => g[k].mat), borderColor:'#16a34a', backgroundColor:'#16a34a', borderDash:[4,3], tension:.25, yAxisID:'y', order:2 } ] };
+  const opts = { responsive:true, maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
+    plugins:{ legend:{labels:{boxWidth:10, font:{family:'Poppins', size:11}, color:fg}},
+      tooltip:{callbacks:{label: c => c.dataset.label + ': ' + (c.dataset.yAxisID === 'y1' ? fCOP(c.raw) : fN(c.raw))}} },
+    scales:{ x:{ticks:{color:fg, font:{size:10}}, grid:{display:false}},
+      y:{position:'left', beginAtZero:true, ticks:{color:fg, font:{size:10}}, title:{display:true, text:'Leads', color:fg, font:{size:10}}},
+      y1:{position:'right', beginAtZero:true, grid:{display:false}, ticks:{color:fg, font:{size:10}, callback: v => '$' + (v/1e6).toLocaleString('es-CO') + 'M'}} } };
+  if(CHART) CHART.destroy();
+  CHART = new Chart(document.getElementById('chart-sem'), { data, options: opts });
 }
 
-// ── MES A MES ─────────────────────────────────────────────────────────────────
-function renderMes(){
-  const mm={};
-  FILTERED.forEach(r=>{
-    const m=r.fecha.mes;if(!m)return;
-    if(!mm[m])mm[m]={inv:0,fb:0,go:0,li:0,leads:0};
-    mm[m].inv+=r.inv;mm[m].leads+=r.leads;
-    if(r.canal==='Facebook')mm[m].fb+=r.inv;
-    if(r.canal==='Google')mm[m].go+=r.inv;
-    if(r.canal==='LinkedIn')mm[m].li+=r.inv
-  });
-  const meses=Object.keys(mm).sort();
-  let rows='',tI=0,tFB=0,tGO=0,tLI=0,tL=0;
-  meses.forEach(m=>{
-    const d=mm[m];tI+=d.inv;tFB+=d.fb;tGO+=d.go;tLI+=d.li;tL+=d.leads;
-    rows+=`<tr class="tr-mes" onclick="togMes('${m}')"><td><span class="tog" id="ti-${m}">▶</span>${fMes(m)}</td><td class="r">${fCOP(d.inv)}</td><td class="r">${fCOP(d.fb)}</td><td class="r">${fCOP(d.go)}</td><td class="r">${fCOP(d.li)}</td><td class="r">${fN(d.leads)}</td><td class="r">${fCOP(d.leads>0?d.inv/d.leads:0)}</td></tr>`;
-    const cc={};
-    FILTERED.filter(r=>r.fecha.mes===m).forEach(r=>{if(!cc[r.canal])cc[r.canal]={inv:0,leads:0};cc[r.canal].inv+=r.inv;cc[r.canal].leads+=r.leads});
-    Object.entries(cc).sort((a,b)=>b[1].inv-a[1].inv).forEach(([c,cd])=>{
-      rows+=`<tr class="tr-sub" data-mes="${m}"><td style="padding-left:24px">${c}</td><td class="r">${fCOP(cd.inv)}</td><td class="r">${c==='Facebook'?fCOP(cd.inv):'—'}</td><td class="r">${c==='Google'?fCOP(cd.inv):'—'}</td><td class="r">${c==='LinkedIn'?fCOP(cd.inv):'—'}</td><td class="r">${fN(cd.leads)}</td><td class="r">${fCOP(cd.leads>0?cd.inv/cd.leads:0)}</td></tr>`
-    })
-  });
-  rows+=`<tr class="tr-total"><td>TOTAL</td><td class="r">${fCOP(tI)}</td><td class="r">${fCOP(tFB)}</td><td class="r">${fCOP(tGO)}</td><td class="r">${fCOP(tLI)}</td><td class="r">${fN(tL)}</td><td class="r">${fCOP(tL>0?tI/tL:0)}</td></tr>`;
-  document.getElementById('body-mes').innerHTML=rows
+function sortBy(col){ SORT.dir = SORT.col === col ? -SORT.dir : -1; SORT.col = col; renderDetalle() }
+function sorter(a, b){ const x = a.m[SORT.col], y = b.m[SORT.col];
+  if(x === null && y === null) return 0; if(x === null) return 1; if(y === null) return -1; return SORT.dir * (x - y) }
+function renderDetalle(){
+  const cols = COLS_BASE.concat(COLS_META), q = norm(document.getElementById('q').value);
+  document.getElementById('det-head').innerHTML = head('Ciudad / facultad / programa', cols, true);
+  const ents = ENT.filter(e => !q || norm(e.prog + ' ' + D(e.ciu) + ' ' + D(e.fac)).includes(q));
+  const tree = {};
+  ents.forEach(e => { const c = tree[e.ciu] = tree[e.ciu] || {t: Z(), facs: {}}; add(c.t, e);
+    const fa = c.facs[e.fac] = c.facs[e.fac] || {t: Z(), progs: []}; add(fa.t, e); fa.progs.push(e) });
+  const nvTag = n => n === 'Pregrado' ? '<span class="nv nv-pre">PRE</span>' : n === 'Posgrado' ? '<span class="nv nv-pos">POS</span>' : '<span class="nv nv-gen">GRAL</span>';
+  const cityNm = c => c === 'COLOMBIA' ? 'Nacional (campañas sin ciudad)' : D(c);
+  let h = '';
+  Object.entries(tree).map(([k, v]) => ({k, v, m: M(v.t)})).sort(sorter).forEach(({k, v, m}) => {
+    const cid = 'c_' + k.replace(/\W/g, '_'), oc = q ? true : !!OPEN[cid];
+    h += `<tr class="lv1" onclick="tog('${cid}')"><td><span class="tog${oc ? ' open' : ''}" id="t-${cid}">▶</span>${esc(cityNm(k))}</td>` + cols.map(c => cell(m, c)).join('') + '</tr>';
+    Object.entries(v.facs).map(([fk, fv]) => ({fk, fv, m: M(fv.t)})).sort(sorter).forEach(({fk, fv, m}) => {
+      const fid = cid + '__' + fk.replace(/\W/g, '_'), of = q ? true : !!OPEN[fid];
+      h += `<tr class="lv2${oc ? '' : ' hidden'}" data-p="${cid}" onclick="tog('${fid}')"><td><span class="tog${of ? ' open' : ''}" id="t-${fid}">▶</span>${esc(D(fk))}</td>` + cols.map(c => cell(m, c)).join('') + '</tr>';
+      fv.progs.map(e => ({e, m: M(e)})).sort(sorter).forEach(({e, m}) => {
+        const nm = e.prog === GENERAL ? 'Anuncios generales (sin programa)' : e.prog;
+        h += `<tr class="lv3${oc && of ? '' : ' hidden'}" data-p="${fid}" data-c="${cid}"><td>${esc(nm)}${nvTag(e.niv)}</td>` + cols.map(c => cell(m, c)).join('') + '</tr>' }) }) });
+  const T = M(ents.reduce((a, e) => add(a, e), Z()));
+  h += '<tr class="tr-total"><td>Total</td>' + cols.map(c => cell(T, c)).join('') + '</tr>';
+  document.getElementById('det-body').innerHTML = h;
 }
-function togMes(m){
-  const ic=document.getElementById('ti-'+m);ic.classList.toggle('open');
-  document.querySelectorAll(`tr.tr-sub[data-mes="${m}"]`).forEach(r=>r.style.display=ic.classList.contains('open')?'table-row':'none')
+function tog(id){
+  OPEN[id] = !OPEN[id]; const ic = document.getElementById('t-' + id); if(ic) ic.classList.toggle('open', OPEN[id]);
+  document.querySelectorAll(`tr[data-p="${id}"]`).forEach(tr => {
+    tr.classList.toggle('hidden', !OPEN[id]);
+    if(tr.classList.contains('lv2')){ const sub = tr.querySelector('.tog').id.slice(2);
+      document.querySelectorAll(`tr[data-p="${sub}"]`).forEach(x => x.classList.toggle('hidden', !(OPEN[id] && OPEN[sub]))) } });
 }
-
-// ── CIUDAD ────────────────────────────────────────────────────────────────────
-function renderCiudad(desde,hasta){
-  const cm={};
-  FILTERED.forEach(r=>{
-    if(!cm[r.ciudad])cm[r.ciudad]={inv:0,fb:0,go:0,leads:0};
-    cm[r.ciudad].inv+=r.inv;cm[r.ciudad].leads+=r.leads;
-    if(r.canal==='Facebook')cm[r.ciudad].fb+=r.inv;
-    if(r.canal==='Google')cm[r.ciudad].go+=r.inv
-  });
-  const invT=Object.values(cm).reduce((a,v)=>a+v.inv,0);
-  // enrich with metas
-  const cities=Object.keys(cm).map(c=>{
-    const meta=getMetasCiudad(c,desde,hasta);
-    const pct=meta.leads_meta>0?(cm[c].leads/meta.leads_meta*100):null;
-    return{ciudad:c,...cm[c],meta:meta.leads_meta,presup:meta.presup,pct:pct||0,cpl:cm[c].leads>0?cm[c].inv/cm[c].leads:0}
-  });
-  const s=ciudadSort;
-  cities.sort((a,b)=>s.dir*(b[s.col]-a[s.col]));
-
-  const maxInv=Math.max(...cities.map(c=>c.inv));
-  let rows='';
-  cities.forEach(c=>{
-    const pctInv=invT>0?(c.inv/invT*100).toFixed(1):0;
-    const fbPct=c.inv>0?Math.round(c.fb/c.inv*100):0;
-    const goPct=c.inv>0?Math.round(c.go/c.inv*100):0;
-    const pctDisp=c.pct>0?c.pct.toFixed(1)+'%':'—';
-    const pctCls=c.pct>0?pctColor(c.pct):'';
-    const barW=maxInv>0?(c.inv/maxInv*100).toFixed(1):0;
-    const cid=c.ciudad.replace(/[^a-zA-Z0-9]/g,'_');
-    rows+=`<tr class="tr-ciudad" onclick="togCiudad('${cid}')">
-      <td><span class="tog" id="tic-${cid}">▶</span>${c.ciudad}</td>
-      <td class="r"><div class="inv-bar-cell"><div class="inv-bar-bg"><div class="inv-bar-fill" style="width:${barW}%"></div></div>${fCOP(c.inv)}</div></td>
-      <td class="r">${pctInv}%</td>
-      <td><span class="badge-canal bc-fb">FB ${fbPct}%</span><span class="badge-canal bc-go">GG ${goPct}%</span></td>
-      <td class="r">${fN(c.leads)}</td>
-      <td class="r">${c.meta>0?fN(c.meta):'—'}</td>
-      <td class="r"><span class="${pctCls}">${pctDisp}</span></td>
-      <td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(c.cpl)}</td>
-    </tr>`;
-    // sub rows por nivel para esa ciudad
-    const nivM={};
-    FILTERED.filter(r=>r.ciudad===c.ciudad).forEach(r=>{
-      if(!nivM[r.nivel])nivM[r.nivel]={inv:0,fb:0,go:0,leads:0};
-      nivM[r.nivel].inv+=r.inv;nivM[r.nivel].leads+=r.leads;
-      if(r.canal==='Facebook')nivM[r.nivel].fb+=r.inv;
-      if(r.canal==='Google')nivM[r.nivel].go+=r.inv
-    });
-    const nivEntries=Object.entries(nivM).sort((a,b)=>b[1].inv-a[1].inv);
-    let subInvT=0,subLeadsT=0,subMetaT=0;
-    nivEntries.forEach(([nv,nd])=>{
-      const nmeta=getMetasCiudadNivel(c.ciudad,nv,desde,hasta);
-      const npct=nmeta.leads_meta>0?(nd.leads/nmeta.leads_meta*100):null;
-      const nfbP=nd.inv>0?Math.round(nd.fb/nd.inv*100):0;
-      const ngoP=nd.inv>0?Math.round(nd.go/nd.inv*100):0;
-      const npctDisp=npct!==null?npct.toFixed(1)+'%':'—';
-      const npctCls=npct!==null?pctColor(npct):'';
-      subInvT+=nd.inv;subLeadsT+=nd.leads;subMetaT+=nmeta.leads_meta;
-      rows+=`<tr class="tr-ciudad-sub" data-cid="${cid}">
-        <td style="padding-left:28px">${nv}</td>
-        <td class="r">${fCOP(nd.inv)}</td>
-        <td class="r">${nd.inv>0?(nd.inv/c.inv*100).toFixed(1)+'%':'—'}</td>
-        <td><span class="badge-canal bc-fb">FB ${nfbP}%</span><span class="badge-canal bc-go">GG ${ngoP}%</span></td>
-        <td class="r">${fN(nd.leads)}</td>
-        <td class="r">${nmeta.leads_meta>0?fN(nmeta.leads_meta):'—'}</td>
-        <td class="r"><span class="${npctCls}">${npctDisp}</span></td>
-        <td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(nd.leads>0?nd.inv/nd.leads:0)}</td>
-      </tr>`
-    });
-    if(nivEntries.length>1){
-      const stPct=subMetaT>0?(subLeadsT/subMetaT*100):null;
-      const stPctDisp=stPct!==null?stPct.toFixed(1)+'%':'—';
-      const stCls=stPct!==null?pctColor(stPct):'';
-      rows+=`<tr class="tr-ciudad-sub tr-ciudad-subtotal" data-cid="${cid}">
-        <td style="padding-left:28px;font-weight:700;color:var(--black)">Total ${c.ciudad}</td>
-        <td class="r" style="font-weight:700;color:var(--black)">${fCOP(subInvT)}</td>
-        <td class="r" style="font-weight:700;color:var(--black)">100%</td>
-        <td>—</td>
-        <td class="r" style="font-weight:700;color:var(--black)">${fN(subLeadsT)}</td>
-        <td class="r" style="font-weight:700;color:var(--black)">${subMetaT>0?fN(subMetaT):'—'}</td>
-        <td class="r"><span class="${stCls}" style="font-weight:700">${stPctDisp}</span></td>
-        <td class="r" style="color:var(--accent-fg);font-weight:700">${fCOP(subLeadsT>0?subInvT/subLeadsT:0)}</td>
-      </tr>`
-    }
-  });
-  // total row
-  const tLeads=cities.reduce((a,c)=>a+c.leads,0);
-  const tMeta=cities.reduce((a,c)=>a+c.meta,0);
-  const tPct=tMeta>0?(tLeads/tMeta*100).toFixed(1)+'%':'—';
-  rows+=`<tr class="tr-total"><td>TOTAL</td><td class="r">${fCOP(invT)}</td><td class="r">100%</td><td>—</td><td class="r">${fN(tLeads)}</td><td class="r">${tMeta>0?fN(tMeta):'—'}</td><td class="r">${tPct}</td><td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(tLeads>0?invT/tLeads:0)}</td></tr>`;
-  document.getElementById('body-ciudad').innerHTML=rows
-}
-function togCiudad(cid){
-  const ic=document.getElementById('tic-'+cid);ic.classList.toggle('open');
-  document.querySelectorAll(`tr.tr-ciudad-sub[data-cid="${cid}"]`).forEach(r=>r.style.display=ic.classList.contains('open')?'table-row':'none')
-}
-function sortCiudad(col){
-  ciudadSort.dir=ciudadSort.col===col?ciudadSort.dir*-1:-1;ciudadSort.col=col;
-  const desde=document.getElementById('f-desde').value;
-  const hasta=document.getElementById('f-hasta').value;
-  renderCiudad(desde,hasta)
-}
-
-// ── FACULTAD ──────────────────────────────────────────────────────────────────
-function renderFacultad(desde,hasta,ciudad_f){
-  const fmap={};
-  FILTERED.forEach(r=>{
-    const k=r.facultad+'||'+r.nivel;
-    if(!fmap[k])fmap[k]={facultad:r.facultad,nivel:r.nivel,inv:0,fb:0,go:0,leads:0};
-    fmap[k].inv+=r.inv;fmap[k].leads+=r.leads;
-    if(r.canal==='Facebook')fmap[k].fb+=r.inv;
-    if(r.canal==='Google')fmap[k].go+=r.inv
-  });
-
-  const container=document.getElementById('fac-container');
-  container.innerHTML='';
-  ['Pregrado','Posgrado'].forEach(nv=>{
-    const rows=Object.values(fmap).filter(r=>r.nivel===nv).map(r=>{
-      const m=getMetas(r.facultad,r.nivel,desde,hasta,ciudad_f);
-      return{...r,leads_meta:m.leads_meta,presup:m.presup,cpl:r.leads>0?r.inv/r.leads:0,pct:m.leads_meta>0?(r.leads/m.leads_meta*100):null}
-    });
-    if(!rows.length)return;
-    const s=facSort[nv]||{col:'inv',dir:-1};
-    rows.sort((a,b)=>s.dir*(b[s.col]-a[s.col]));
-
-    const tI=rows.reduce((a,r)=>a+r.inv,0);
-    const tL=rows.reduce((a,r)=>a+r.leads,0);
-    const tM=rows.reduce((a,r)=>a+r.leads_meta,0);
-    const tP=rows.reduce((a,r)=>a+r.presup,0);
-
-    const secId='fac-'+nv;
-    const div=document.createElement('div');
-    div.className='fac-section';
-    div.id=secId;
-    const th=(col,lbl,isR)=>{const act=s.col===col;return `<th class="${isR?'r ':''} sortable${act?' sort-act':''}" onclick="sortFac('${nv}','${col}')">${lbl}${act?(s.dir>0?' ↑':' ↓'):''}</th>`};
-    div.innerHTML=`
-      <div class="fac-section-header">
-        <span class="fac-section-title">${nv}</span>
-        <span class="fac-badge">${rows.length} facultades</span>
-      </div>
-      <div class="tcard" style="border-radius:0 0 var(--r-md) var(--r-md);border-top:none;">
-        <div class="tscroll"><table id="tbl-fac-${nv}">
-          <thead><tr>
-            ${th('facultad','Facultad',false)}
-            ${th('inv','Inversión',true)}
-            ${th('leads','Leads',true)}
-            ${th('leads_meta','Meta',true)}
-            <th class="r">Cumpl.</th>
-            ${th('cpl','CPL',true)}
-          </tr></thead>
-          <tbody id="tbody-fac-${nv}">
-          ${rows.map((r,ri)=>{
-            const pctDisp=r.pct!==null?r.pct.toFixed(1)+'%':'—';
-            const pctCls=r.pct!==null?pctColor(r.pct):'';
-            const pctBar=r.pct!==null?`<div class="pct-inline"><div class="pct-bg"><div class="pct-fill ${barClass(r.pct)}" style="width:${Math.min(r.pct,100)}%"></div></div><span class="${pctCls}">${pctDisp}</span></div>`:'—';
-            const facId='fac_'+nv.replace(/[^a-zA-Z]/g,'')+'_'+ri;
-            // build city sub-rows for this facultad+nivel
-            const cityData={};
-            FILTERED.filter(f=>f.facultad===r.facultad&&f.nivel===r.nivel).forEach(f=>{
-              if(!cityData[f.ciudad])cityData[f.ciudad]={inv:0,leads:0};
-              cityData[f.ciudad].inv+=f.inv;cityData[f.ciudad].leads+=f.leads
-            });
-            const cityRows=Object.entries(cityData).sort((a,b)=>b[1].inv-a[1].inv).map(([c,cd])=>{
-              const cm=getMetasFacCiudad(r.facultad,r.nivel,c,desde,hasta);
-              const cp=cm.leads_meta>0?(cd.leads/cm.leads_meta*100):null;
-              return `<tr class="tr-fac-city" data-fid="${facId}" style="display:none">
-                <td style="padding-left:24px;font-size:12px;color:var(--gray-400)">${c}</td>
-                <td class="r" style="font-size:12px">${fCOP(cd.inv)}</td>
-                <td class="r" style="font-size:12px">${fN(cd.leads)}</td>
-                <td class="r" style="font-size:12px">${cm.leads_meta>0?fN(cm.leads_meta):'—'}</td>
-                <td class="r">${cp!==null?`<div class="pct-inline"><div class="pct-bg"><div class="pct-fill ${barClass(cp)}" style="width:${Math.min(cp,100)}%"></div></div><span class="${pctColor(cp)}" style="font-size:12px">${cp.toFixed(1)}%</span></div>`:'—'}</td>
-                <td class="r" style="font-size:12px;color:var(--accent-fg);font-weight:600">${fCOP(cd.leads>0?cd.inv/cd.leads:0)}</td>
-              </tr>`
-            }).join('');
-            return `<tr data-fac="${r.facultad.toLowerCase()}" onclick="togFacCity('${facId}')" style="cursor:pointer">
-              <td><span class="tog" id="tif-${facId}" style="font-size:12px;margin-right:5px;color:var(--accent-fg)">▶</span>${r.facultad}</td>
-              <td class="r">${fCOP(r.inv)}</td>
-              <td class="r">${fN(r.leads)}</td>
-              <td class="r">${r.leads_meta>0?fN(r.leads_meta):'—'}</td>
-              <td class="r">${pctBar}</td>
-              <td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(r.cpl)}</td>
-            </tr>${cityRows}`
-          }).join('')}
-          <tr class="tr-total"><td>TOTAL</td><td class="r">${fCOP(tI)}</td><td class="r">${fN(tL)}</td><td class="r">${tM>0?fN(tM):'—'}</td><td class="r">${tM>0?(tL/tM*100).toFixed(1)+'%':'—'}</td><td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(tL>0?tI/tL:0)}</td></tr>
-          </tbody>
-        </table></div>
-      </div>`;
-    container.appendChild(div)
-  })
-}
-function togFacCity(fid){
-  const ic=document.getElementById('tif-'+fid);
-  if(!ic)return;
-  ic.classList.toggle('open');
-  const show=ic.classList.contains('open');
-  document.querySelectorAll(`tr.tr-fac-city[data-fid="${fid}"]`).forEach(r=>r.style.display=show?'table-row':'none')
-}
-function sortFac(nv,col){
-  const s=facSort[nv]||{col:'inv',dir:-1};
-  facSort[nv]={col,dir:s.col===col?s.dir*-1:-1};
-  const desde=document.getElementById('f-desde').value;
-  const hasta=document.getElementById('f-hasta').value;
-  renderFacultad(desde,hasta,document.getElementById('f-ciudad').value)
-}
-
-// ── SEDE / FACULTAD / PROGRAMA ────────────────────────────────────────────────
-// "Sede" no existe como campo propio en el registro (Sede==Ciudad en el 100% de
-// las filas de la hoja), así que se reutiliza r.ciudad como Sede.
-function idify(s){return String(s).replace(/[^a-zA-Z0-9]/g,'_')}
-function progLabel(p){
-  if(!p)return'(Sin especificar)';
-  return p
-}
-function renderPrograma(){
-  const sedeMap={};
-  FILTERED.forEach(r=>{
-    const sede=r.ciudad, fac=r.facultad||'(Sin facultad)', prog=progLabel(r.prog);
-    if(!sedeMap[sede])sedeMap[sede]={inv:0,leads:0,facs:{}};
-    sedeMap[sede].inv+=r.inv;sedeMap[sede].leads+=r.leads;
-    const facs=sedeMap[sede].facs;
-    if(!facs[fac])facs[fac]={inv:0,leads:0,progs:{}};
-    facs[fac].inv+=r.inv;facs[fac].leads+=r.leads;
-    const progs=facs[fac].progs;
-    if(!progs[prog])progs[prog]={inv:0,leads:0};
-    progs[prog].inv+=r.inv;progs[prog].leads+=r.leads
-  });
-
-  const invT=Object.values(sedeMap).reduce((a,s)=>a+s.inv,0);
-  let sedes=Object.entries(sedeMap).map(([nom,d])=>({nom,inv:d.inv,leads:d.leads,cpl:d.leads>0?d.inv/d.leads:0,facs:d.facs}));
-  const s=progSort;
-  sedes.sort((a,b)=>s.col==='nom'?s.dir*a.nom.localeCompare(b.nom):s.dir*(b[s.col]-a[s.col]));
-
-  let rows='';
-  sedes.forEach(sd=>{
-    const sid=idify(sd.nom);
-    const pctInv=invT>0?(sd.inv/invT*100).toFixed(1):0;
-    rows+=`<tr class="tr-ciudad" onclick="togPS('${sid}')">
-      <td><span class="tog" id="tips-${sid}">▶</span>${sd.nom}</td>
-      <td class="r">${fCOP(sd.inv)}</td>
-      <td class="r">${pctInv}%</td>
-      <td class="r">${fN(sd.leads)}</td>
-      <td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(sd.cpl)}</td>
-    </tr>`;
-    const facs=Object.entries(sd.facs).map(([nom,d])=>({nom,inv:d.inv,leads:d.leads,progs:d.progs}))
-      .sort((a,b)=>b.inv-a.inv);
-    facs.forEach(fc=>{
-      const fid=sid+'__'+idify(fc.nom);
-      const pctFac=sd.inv>0?(fc.inv/sd.inv*100).toFixed(1):0;
-      rows+=`<tr class="tr-ciudad-sub" data-sid="${sid}" style="display:none">
-        <td style="padding-left:24px;cursor:pointer" onclick="togPF('${fid}',event)"><span class="tog" id="tipf-${fid}">▶</span>${fc.nom}</td>
-        <td class="r">${fCOP(fc.inv)}</td>
-        <td class="r">${pctFac}%</td>
-        <td class="r">${fN(fc.leads)}</td>
-        <td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(fc.leads>0?fc.inv/fc.leads:0)}</td>
-      </tr>`;
-      const progs=Object.entries(fc.progs).map(([nom,d])=>({nom,inv:d.inv,leads:d.leads}))
-        .sort((a,b)=>b.inv-a.inv);
-      progs.forEach(pr=>{
-        const pctProg=fc.inv>0?(pr.inv/fc.inv*100).toFixed(1):0;
-        rows+=`<tr class="tr-prog-item" data-fid="${fid}" style="display:none">
-          <td style="padding-left:44px;font-size:12px;color:var(--gray-400)">${pr.nom}</td>
-          <td class="r" style="font-size:12px">${fCOP(pr.inv)}</td>
-          <td class="r" style="font-size:12px">${pctProg}%</td>
-          <td class="r" style="font-size:12px">${fN(pr.leads)}</td>
-          <td class="r" style="font-size:12px;color:var(--accent-fg);font-weight:600">${fCOP(pr.leads>0?pr.inv/pr.leads:0)}</td>
-        </tr>`
-      })
-    })
-  });
-  const tLeads=sedes.reduce((a,sd)=>a+sd.leads,0);
-  rows+=`<tr class="tr-total"><td>TOTAL</td><td class="r">${fCOP(invT)}</td><td class="r">100%</td><td class="r">${fN(tLeads)}</td><td class="r" style="color:var(--accent-fg);font-weight:600">${fCOP(tLeads>0?invT/tLeads:0)}</td></tr>`;
-  document.getElementById('body-prog').innerHTML=rows
-}
-function togPS(sid){
-  const ic=document.getElementById('tips-'+sid);ic.classList.toggle('open');
-  const show=ic.classList.contains('open');
-  document.querySelectorAll(`tr.tr-ciudad-sub[data-sid="${sid}"]`).forEach(r=>r.style.display=show?'table-row':'none')
-}
-function togPF(fid,ev){
-  if(ev)ev.stopPropagation();
-  const ic=document.getElementById('tipf-'+fid);ic.classList.toggle('open');
-  const show=ic.classList.contains('open');
-  document.querySelectorAll(`tr.tr-prog-item[data-fid="${fid}"]`).forEach(r=>r.style.display=show?'table-row':'none')
-}
-function sortProg(col){
-  progSort.dir=progSort.col===col?progSort.dir*-1:-1;progSort.col=col;
-  renderPrograma()
-}
-
-// pct-inline styles (inline)
+function expandAll(on){ document.querySelectorAll('#det-body .tog').forEach(t => OPEN[t.id.slice(2)] = on); renderDetalle() }
 </script>
-<style>
-.pct-inline{display:inline-flex;align-items:center;gap:5px}
-.pct-bg{width:38px;height:4px;background:var(--gray-200);border-radius:999px;overflow:hidden;flex-shrink:0}
-.pct-fill{height:100%;border-radius:999px}
-
-/* @movil:inicio */
-/* Colapso para telefono. Se escribe solo para los contenedores
-   que MIDIERON desbordamiento a 390px, no para todas las
-   rejillas del documento. El escritorio no se toca. */
-@media (max-width:560px){
-  .kpi-grid{grid-template-columns:minmax(0,1fr)}
-}
-/* @movil:fin */
-</style>
 </body>
 </html>
