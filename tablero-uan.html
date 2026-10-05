@@ -146,7 +146,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
     <a href="#sec-embudo"><b></b>Embudo</a>
     <a href="#sec-nivel"><b></b>Por nivel</a>
     <a href="#sec-medio"><b></b>Por medio</a>
-    <a href="#sec-semana"><b></b>Semana a semana</a>
+    <a href="#sec-semana"><b></b>Mes a mes · semanal</a>
     <a href="#sec-detalle"><b></b>Ciudad · facultad · programa</a>
   </div>
   <div class="app-sidebar-foot">Datos al: <span id="last-upd-side">—</span></div>
@@ -187,7 +187,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
     <div class="sec-title" id="sec-medio"><span></span>Por medio<span class="sec-note">el medio del CRM sale del canal del aspirante</span></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="medio-head"></thead><tbody id="medio-body"></tbody></table></div></div>
 
-    <div class="sec-title" id="sec-semana"><span></span>Semana a semana<span class="sec-note" id="semana-note"></span></div>
+    <div class="sec-title" id="sec-semana"><span></span>Evolución<span class="sec-note" id="semana-note"></span><span style="margin-left:auto;display:flex;gap:6px"><button class="qbtn on" data-ev="mes" onclick="setEvo('mes')">Mes a mes</button><button class="qbtn" data-ev="sem" onclick="setEvo('sem')">Semana a semana</button></span></div>
     <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-sem"></canvas></div></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="sem-head"></thead><tbody id="sem-body"></tbody></table></div></div>
 
@@ -196,6 +196,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="tbar">
         <button class="tbtn" onclick="expandAll(true)">Expandir todo</button>
         <button class="tbtn" onclick="expandAll(false)">Contraer</button>
+        <span class="sec-note" id="nac-note"></span>
         <span class="sp"></span>
         <input type="search" id="q" placeholder="Buscar programa, ciudad o facultad" oninput="renderDetalle()" style="width:240px">
       </div>
@@ -219,7 +220,7 @@ const GENERAL = 'Anuncio General';
 const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
 let RAW = [], METAS = [], PERIODOS = {}, FAC_BY_PROG = {}, DISP = {};
-let SORT = {col: 'inv', dir: -1}, OPEN = {}, CHART = null, QUICK = '';
+let SORT = {col: 'inv', dir: -1}, OPEN = {}, CHART = null, QUICK = '', EVO = 'mes';
 
 // ── Parsers y formato ─────────────────────────────────────────────────────────
 function num(v){ const s = String(v ?? '').replace(/[$\s%]/g,''); if(!s) return 0;
@@ -364,6 +365,8 @@ function render(){
   ENT = entradas(f);
   const T = M(ENT.reduce((a, e) => add(a, e), Z()));
   document.getElementById('rango-note').textContent = `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
+  const nac = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && r.prog === GENERAL && (r.ciu === 'COLOMBIA' || r.niv === 'General') && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio)).reduce((a, r) => (a.inv += r.inv, a.lp += r.lp, a), {inv:0, lp:0});
+  document.getElementById('nac-note').textContent = nac.inv ? `Campañas generales nacionales: ${fCOP(nac.inv)} y ${fN(nac.lp)} leads plataforma, ${f.rep ? 'repartidas entre ciudades según leads CRM' : 'en la fila "Nacional"'}` : '';
   renderKPIs(T); renderFunnel(T); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
 }
 
@@ -428,16 +431,17 @@ function renderMedio(f){
   document.getElementById('medio-body').innerHTML = ks.map(k => '<tr><td>' + (lbl[k] || k) + '</td>' + COLS_BASE.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
     '<tr class="tr-total"><td>Total</td>' + COLS_BASE.map(c => cell(T, c)).join('') + '</tr>';
 }
+function setEvo(k){ EVO = k; document.querySelectorAll('[data-ev]').forEach(b => b.classList.toggle('on', b.dataset.ev === k)); renderSemana(F()) }
 function renderSemana(f){
-  const rows = filasRango(f), g = groupRows(rows, r => weekStart(r.d)), ks = Object.keys(g).sort();
-  document.getElementById('semana-note').textContent = (f.fac || f.prog) ? 'con filtro de facultad o programa la inversión es solo la directa del programa' : 'semanas de lunes a domingo';
-  const lab = k => { const e = addDays(k, 6); return `${fDate(k)} – ${fDate(e)}` };
-  document.getElementById('sem-head').innerHTML = head('Semana', COLS_BASE, false);
+  const mes = EVO === 'mes', rows = filasRango(f), g = groupRows(rows, r => mes ? r.d.slice(0,7) : weekStart(r.d)), ks = Object.keys(g).sort();
+  document.getElementById('semana-note').textContent = (f.fac || f.prog) ? 'con filtro de facultad o programa la inversión es solo la directa del programa' : (mes ? 'por mes calendario' : 'semanas de lunes a domingo');
+  const lab = k => mes ? MESES[+k.slice(5,7)].replace(/^./, c => c.toUpperCase()) + ' ' + k.slice(0,4) : `${fDate(k)} – ${fDate(addDays(k, 6))}`;
+  document.getElementById('sem-head').innerHTML = head(mes ? 'Mes' : 'Semana', COLS_BASE, false);
   const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
   document.getElementById('sem-body').innerHTML = ks.slice().reverse().map(k => '<tr><td>' + lab(k) + '</td>' + COLS_BASE.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
     '<tr class="tr-total"><td>Total</td>' + COLS_BASE.map(c => cell(T, c)).join('') + '</tr>';
   const css = getComputedStyle(document.body), fg = css.getPropertyValue('--fg-muted').trim() || '#888';
-  const data = { labels: ks.map(k => fDate(k)), datasets: [
+  const data = { labels: ks.map(k => mes ? lab(k) : fDate(k)), datasets: [
     { type:'bar', label:'Inversión', data: ks.map(k => Math.round(g[k].inv)), backgroundColor:'rgba(255,212,0,.55)', yAxisID:'y1', order:3 },
     { type:'line', label:'Leads plataforma', data: ks.map(k => g[k].lp), borderColor:'#9ca3af', backgroundColor:'#9ca3af', tension:.25, yAxisID:'y', order:1 },
     { type:'line', label:'Leads CRM', data: ks.map(k => g[k].lc), borderColor:'#111', backgroundColor:'#111', tension:.25, yAxisID:'y', order:0 },
@@ -456,7 +460,7 @@ function sortBy(col){ SORT.dir = SORT.col === col ? -SORT.dir : -1; SORT.col = c
 function sorter(a, b){ const x = a.m[SORT.col], y = b.m[SORT.col];
   if(x === null && y === null) return 0; if(x === null) return 1; if(y === null) return -1; return SORT.dir * (x - y) }
 function renderDetalle(){
-  const cols = COLS_BASE.concat(COLS_META), q = norm(document.getElementById('q').value);
+  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP').concat(COLS_META), q = norm(document.getElementById('q').value);
   document.getElementById('det-head').innerHTML = head('Ciudad / facultad / programa', cols, true);
   const ents = ENT.filter(e => !q || norm(e.prog + ' ' + D(e.ciu) + ' ' + D(e.fac)).includes(q));
   const tree = {};
