@@ -125,6 +125,10 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 
 @media(max-width:1300px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.nm-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.f-row{grid-template-columns:90px 1fr 120px 130px}.f-cost span{display:none}.content{padding:14px 16px}}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.tag-pau{background:#FFF3B0;color:#7A5B00} .tag-org{background:#E0F2FE;color:#075985} .tag-otr{background:var(--gray-100);color:var(--gray-600)}
+@media(max-width:1300px){.three-col{grid-template-columns:1fr}}
+.nm-sub{margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-200)}
 </style>
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
 </head>
@@ -148,6 +152,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
     <a href="#sec-kpi" class="active"><b></b>Resumen</a>
     <a href="#sec-embudo"><b></b>Embudo</a>
     <a href="#sec-nivel"><b></b>Por nivel</a>
+    <a href="#sec-fuentes"><b></b>Pauta vs otras fuentes</a>
     <a href="#sec-medio"><b></b>Por medio</a>
     <a href="#sec-semana"><b></b>Mes a mes · semanal</a>
     <a href="#sec-detalle"><b></b>Ciudad · facultad · programa</a>
@@ -186,6 +191,10 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 
     <div class="sec-title" id="sec-nivel"><span></span>Por nivel</div>
     <div class="two-col" id="nivel-grid"></div>
+    <div class="sec-title" id="sec-fuentes"><span></span>Pauta vs orgánico y otras fuentes<span class="sec-note" id="fu-note">leads y matrículas del CRM de todas las fuentes · conversión = matrículas / leads del rango · matrículas por fecha de creación de la admisión (el embudo las cuenta en la fecha del lead) · aplican fechas y nivel (no ciudad, facultad, programa ni medio)</span></div>
+    <div class="three-col" id="fuente-cards"></div>
+    <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-fu"></canvas></div></div>
+    <div class="card tcard"><div class="tscroll"><table><thead id="fu-head"></thead><tbody id="fu-body"></tbody></table></div></div>
 
     <div class="sec-title" id="sec-medio"><span></span>Por medio<span class="sec-note">el medio del CRM sale del canal del aspirante</span></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="medio-head"></thead><tbody id="medio-body"></tbody></table></div></div>
@@ -219,6 +228,12 @@ const GV = (gid, extra) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/g
 const URL_CRUCE = GV(1948876709, '&range=A:M&headers=1');
 const URL_CTRL  = GV(1948876709, '&range=O1:Q80&headers=0');
 const URL_META  = GV(577768057);
+// CRM de todas las fuentes, agrupado por día para no descargar las pestañas completas
+const GVQ = (gid, tq) => GV(gid, '&tq=' + encodeURIComponent(tq));
+const URL_FU_LEADS = GVQ(409442000, 'select toDate(B), D, H, count(A) group by toDate(B), D, H');
+const URL_FU_MAT   = GVQ(775856729, "select toDate(C), I, M, count(A) where E = 'Matriculado' group by toDate(C), I, M");
+const fuenteDe = s => s === 'Digital - Pauta' ? 'Pauta' : s === 'Digital - Orgánico' ? 'Orgánico' : 'Otras fuentes';
+const nivelFu = s => { const t = norm(s); return t === 'PREGRADO' ? 'Pregrado' : (t === 'POSGRADO' || t === 'POSTGRADO') ? 'Posgrado' : '' };
 const GENERAL = 'Anuncio General';
 const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
@@ -255,7 +270,7 @@ function bgc(p){ return p >= .8 ? 'bg-pos' : p >= .5 ? 'bg-mid' : 'bg-neg' }
 function difCls(d){ return d === null ? 't-mute' : Math.abs(d) <= .1 ? 't-pos' : Math.abs(d) <= .25 ? 't-mid' : 't-neg' }
 
 // ── Carga ────────────────────────────────────────────────────────────────────
-let pend = 3;
+let pend = 5;
 function done(){ if(--pend) return; prepare(); document.getElementById('loading').style.display = 'none' }
 function fail(msg){ document.getElementById('ld-msg').textContent = msg }
 Papa.parse(URL_CRUCE, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer CRUCE_UAN'), complete: r => {
@@ -268,12 +283,17 @@ Papa.parse(URL_CRUCE, {download:true, header:false, skipEmptyLines:true, error:(
 Papa.parse(URL_META, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer METAS'), complete: r => {
   const rows = r.data; if(rows.length && /periodo/i.test(rows[0][0])) rows.shift();
   METAS = rows.map(x => ({ per: per(x[0]), ini: iso(x[1]), fin: iso(x[2]), ciu: disp(x[3]), fac: disp(x[5]), niv: String(x[6]||'').trim(),
-    prog: String(x[8]||'').trim(), ppto: num(x[10]), lm: num(x[12]), mm: num(x[15]) }))
+    prog: String(x[8]||'').trim(), ppto: num(x[10]), lm: num(x[12]), mm: num(x[14]) }))
     .filter(m => m.ini && m.fin && m.prog);
   METAS.forEach(m => { PERIODOS[m.per] = PERIODOS[m.per] || [m.ini, m.fin];
     if(m.ini < PERIODOS[m.per][0]) PERIODOS[m.per][0] = m.ini; if(m.fin > PERIODOS[m.per][1]) PERIODOS[m.per][1] = m.fin;
     FAC_BY_PROG[pkey(m.prog)] = FAC_BY_PROG[pkey(m.prog)] || m.fac });
   done() }});
+// CRM agrupado: fecha | fuente | nivel | conteo (educación continua y ETDH quedan fuera, como en el resto del tablero)
+[[URL_FU_LEADS, 'lc'], [URL_FU_MAT, 'mat']].forEach(([url, k]) => Papa.parse(url, {download:true, header:false, skipEmptyLines:true, error:() => done(), complete: r => {
+  r.data.slice(1).forEach(x => { const d = iso(x[0]), niv = nivelFu(x[2]); if(!d || !niv) return;
+    FUE.push({ d, niv, fu: fuenteDe(String(x[1]||'').trim()), lc: k === 'lc' ? num(x[3]) : 0, mat: k === 'mat' ? num(x[3]) : 0 }) });
+  done() }}));
 Papa.parse(URL_CTRL, {download:true, header:false, skipEmptyLines:true, error:() => done(), complete: r => {
   const row = r.data.find(x => /actualizaci/i.test(x[0]||'')); const t = row ? row[1] : '';
   document.getElementById('last-upd').textContent = t ? 'Cruce actualizado: ' + t : '';
@@ -370,7 +390,7 @@ function render(){
   document.getElementById('rango-note').textContent = `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
   const nac = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && r.prog === GENERAL && (r.ciu === 'COLOMBIA' || r.niv === 'General') && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio)).reduce((a, r) => (a.inv += r.inv, a.lp += r.lp, a), {inv:0, lp:0});
   document.getElementById('nac-note').textContent = nac.inv ? `Campañas generales nacionales: ${fCOP(nac.inv)} y ${fN(nac.lp)} leads plataforma, ${f.rep ? 'repartidas entre ciudades según leads CRM' : 'en la fila "Nacional"'}` : '';
-  renderKPIs(T); renderFunnel(T); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
+  renderKPIs(T); renderFunnel(T); renderFuentes(f, (r, f) => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
 }
 
 function bar(p, lbl){ if(p === null) return '';
@@ -414,7 +434,7 @@ function renderNivel(){
       ${it('CPL plataforma', fCOP(e.cplP))}${it('CPL CRM', fCOP(e.cplC))}${it('Costo / admisión', fCOP(e.cpa))}${it('Costo / matrícula', fCOP(e.cpm))}
       ${it('Admisiones', fN(e.adm))}${it('Matrículas', fN(e.mat))}${it('Lead → admisión', fP(div(e.adm, e.lc)))}${it('Admisión → mat.', fP(div(e.mat, e.adm)))}
       ${it('Meta leads', fN(e.lm))}${it('Cumpl. leads', fP(e.cumL), cls(e.cumL))}${it('Meta matrículas', fN(e.mm))}${it('Cumpl. matrículas', fP(e.cumM), cls(e.cumM))}
-    </div></div>` };
+    </div>${fuentesNivel(niv)}</div>` };
   document.getElementById('nivel-grid').innerHTML = card('Pregrado', 'tag-pre') + card('Posgrado', 'tag-pos');
 }
 const COLS_BASE = [['inv','Inversión','cop'],['lp','Leads plat.','n'],['lc','Leads CRM','n'],['dif','CRM vs plat.','dif'],['cplP','CPL plat.','cop'],['cplC','CPL CRM','cop'],
@@ -491,6 +511,46 @@ function renderDetalle(){
   h += '<tr class="tr-total"><td>Total</td>' + cols.map(c => cell(T, c)).join('') + '</tr>';
   document.getElementById('det-body').innerHTML = h;
 }
+// ── Pauta vs orgánico y otras fuentes (CRM de todas las fuentes) ─────────────
+const FUENTES = ['Pauta', 'Orgánico', 'Otras fuentes'];
+const FU_COLOR = {'Pauta':'#ffd400', 'Orgánico':'#0ea5e9', 'Otras fuentes':'#9ca3af'};
+const FU_TAG = {'Pauta':'tag-pau', 'Orgánico':'tag-org', 'Otras fuentes':'tag-otr'};
+let FUE = [], CHART_FU = null, FU_NIV = {};
+function renderFuentes(f, enR){
+  const rows = FUE.filter(r => enR(r, f)), Zf = () => ({lc:0, mat:0});
+  const T = {}, MES = {}; FU_NIV = {};
+  FUENTES.forEach(k => T[k] = Zf());
+  rows.forEach(r => { const m = r.d.slice(0,7); MES[m] = MES[m] || Object.fromEntries(FUENTES.map(k => [k, Zf()]));
+    [T[r.fu], MES[m][r.fu]].forEach(x => { x.lc += r.lc; x.mat += r.mat });
+    const n = FU_NIV[r.niv] = FU_NIV[r.niv] || Object.fromEntries(FUENTES.map(k => [k, Zf()])); n[r.fu].lc += r.lc; n[r.fu].mat += r.mat });
+  const tl = FUENTES.reduce((a, k) => a + T[k].lc, 0), tm = FUENTES.reduce((a, k) => a + T[k].mat, 0);
+  const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`;
+  document.getElementById('fuente-cards').innerHTML = FUENTES.map(k => `<div class="card nivel-card"><span class="nivel-tag ${FU_TAG[k]}">${k}</span><div class="nm-grid">
+    ${it('Leads CRM', fN(T[k].lc))}${it('% de los leads', fP(div(T[k].lc, tl)))}${it('Matrículas', fN(T[k].mat))}${it('% de las matrículas', fP(div(T[k].mat, tm)))}
+    ${it('Conversión', fP(div(T[k].mat, T[k].lc)))}</div></div>`).join('');
+  const ks = Object.keys(MES).sort(), MESES_C = ks.map(k => MESES[+k.slice(5,7)].replace(/^./, c => c.toUpperCase()) + ' ' + k.slice(0,4));
+  document.getElementById('fu-head').innerHTML = '<tr><th>Mes</th>' + FUENTES.map(k => `<th class="r grp">Leads ${k.toLowerCase()}</th><th class="r">Matrículas</th><th class="r">Conversión</th>`).join('') + '<th class="r grp">% leads de pauta</th></tr>';
+  const tr = (lab, x, tot) => `<tr${tot ? ' class="tr-total"' : ''}><td>${lab}</td>` + FUENTES.map(k => `<td class="r grp">${fN(x[k].lc)}</td><td class="r">${fN(x[k].mat)}</td><td class="r">${fP(div(x[k].mat, x[k].lc))}</td>`).join('') +
+    `<td class="r grp">${fP(div(x['Pauta'].lc, FUENTES.reduce((a, k) => a + x[k].lc, 0)))}</td></tr>`;
+  document.getElementById('fu-body').innerHTML = ks.slice().reverse().map((k, i) => tr(MESES_C[ks.length - 1 - i], MES[k])).join('') + tr('Total', T, true);
+  const fg = getComputedStyle(document.body).getPropertyValue('--fg-muted').trim() || '#888';
+  const data = { labels: MESES_C, datasets: [
+    ...FUENTES.map((k, i) => ({ type:'bar', label:'Leads ' + k.toLowerCase(), data: ks.map(m => MES[m][k].lc), backgroundColor: FU_COLOR[k] + (k === 'Pauta' ? 'cc' : '99'), stack:'leads', yAxisID:'y', order:5 + i })),
+    ...FUENTES.map((k, i) => ({ type:'line', label:'Conversión ' + k.toLowerCase(), data: ks.map(m => MES[m][k].lc ? MES[m][k].mat / MES[m][k].lc * 100 : null), borderColor: k === 'Pauta' ? '#b45309' : FU_COLOR[k], backgroundColor: k === 'Pauta' ? '#b45309' : FU_COLOR[k], borderWidth:2, tension:.25, spanGaps:true, yAxisID:'y1', order:i })) ] };
+  const opts = { responsive:true, maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
+    plugins:{ legend:{labels:{boxWidth:10, font:{family:'Poppins', size:11}, color:fg}},
+      tooltip:{callbacks:{label: c => c.dataset.label + ': ' + (c.dataset.yAxisID === 'y1' ? (c.raw === null ? '—' : c.raw.toLocaleString('es-CO', {maximumFractionDigits:1}) + '%') : fN(c.raw))}} },
+    scales:{ x:{stacked:true, ticks:{color:fg, font:{size:10}}, grid:{display:false}},
+      y:{stacked:true, position:'left', beginAtZero:true, ticks:{color:fg, font:{size:10}}, title:{display:true, text:'Leads CRM', color:fg, font:{size:10}}},
+      y1:{position:'right', beginAtZero:true, grid:{display:false}, ticks:{color:fg, font:{size:10}, callback: v => v + '%'}, title:{display:true, text:'Conversión lead → matrícula', color:fg, font:{size:10}}} } };
+  if(CHART_FU) CHART_FU.destroy();
+  CHART_FU = new Chart(document.getElementById('chart-fu'), { data, options: opts });
+}
+// fila extra de las tarjetas por nivel
+function fuentesNivel(niv){ const n = FU_NIV[niv]; if(!n) return '';
+  const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`, cv = k => div(n[k].mat, n[k].lc);
+  return '<div class="nm-grid nm-sub">' + it('Leads orgánicos', fN(n['Orgánico'].lc)) + it('Mat. orgánicas', fN(n['Orgánico'].mat)) + it('Conv. pauta (CRM)', fP(cv('Pauta'))) + it('Conv. orgánica', fP(cv('Orgánico'))) +
+    it('Leads otras fuentes', fN(n['Otras fuentes'].lc)) + it('Mat. otras fuentes', fN(n['Otras fuentes'].mat)) + it('Conv. otras fuentes', fP(cv('Otras fuentes'))) + '</div>' }
 function tog(id){
   OPEN[id] = !OPEN[id]; const ic = document.getElementById('t-' + id); if(ic) ic.classList.toggle('open', OPEN[id]);
   document.querySelectorAll(`tr[data-p="${id}"]`).forEach(tr => {
