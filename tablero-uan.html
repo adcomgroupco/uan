@@ -215,7 +215,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="tscroll"><table><thead id="det-head"></thead><tbody id="det-body"></tbody></table></div>
       <div class="foot-note">
         <b>Leads CRM</b>: posibles aspirantes con fuente "Digital - Pauta", por fecha de creación. <b>Admisiones y matrículas</b>: las que vienen de un lead de pauta, en la fecha del lead.
-        <b>Metas</b>: se prorratean a los días del rango elegido. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
+        <b>Metas</b>: con un periodo elegido en los atajos se toma la meta completa del periodo; con fechas libres, la parte proporcional a los días del rango. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
         Con "Repartir anuncios generales" activo, la inversión de anuncios sin programa se reparte entre los programas de la misma ciudad y facultad según sus leads CRM.
       </div>
     </div>
@@ -325,8 +325,14 @@ function setQuick(k){
   QUICK = k; cascade(); render() }
 function onDate(){ QUICK = ''; cascade(); render() }
 function onSel(which){ cascade(which); render() }
+// Parte de una meta que entra en el filtro: con un periodo elegido, la meta completa de ese periodo;
+// con fechas libres, proporcional a los días del rango que caen dentro de la meta.
+function share(m, f){
+  if(f.per) return m.per === f.per ? 1 : 0;
+  const a = m.ini > f.desde ? m.ini : f.desde, b = m.fin < f.hasta ? m.fin : f.hasta;
+  return a > b ? 0 : days(a, b) / days(m.ini, m.fin) }
 function F(){ const g = id => document.getElementById(id).value;
-  return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), medio: g('f-medio'), ciu: g('f-ciudad'), fac: g('f-facultad'), prog: g('f-programa'), rep: document.getElementById('f-repartir').checked } }
+  return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), medio: g('f-medio'), ciu: g('f-ciudad'), fac: g('f-facultad'), prog: g('f-programa'), per: QUICK[0] === 'P' ? QUICK.slice(1) : '', rep: document.getElementById('f-repartir').checked } }
 function cascade(){
   const f = F(), base = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && r.prog !== GENERAL && (!f.niv || r.niv === f.niv));
   fill('f-ciudad', [...new Set(base.map(r => r.ciu))].sort(), f.ciu, D);
@@ -370,8 +376,8 @@ function entradas(f){
   // metas prorrateadas al rango
   METAS.forEach(m => {
     if(f.niv && m.niv !== f.niv) return; if(f.ciu && m.ciu !== f.ciu) return;
-    const a = m.ini > f.desde ? m.ini : f.desde, b = m.fin < f.hasta ? m.fin : f.hasta; if(a > b) return;
-    const s = days(a, b) / days(m.ini, m.fin), pk = pkey(m.prog);
+    const s = share(m, f); if(!s) return;
+    const pk = pkey(m.prog);
     const e = get(m.ciu, m.niv, m.fac, m.prog, pk);
     e.ppto += m.ppto * s; e.lm += m.lm * s; e.mm += m.mm * s });
   return Object.values(E).filter(e => (!f.fac || e.fac === f.fac) && (!f.prog || e.pk === f.prog));
@@ -399,7 +405,7 @@ function renderKPIs(T){
   const k = (l, v, sub, extra) => `<div class="card kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div>${sub ? `<div class="kpi-sub">${sub}</div>` : ''}${extra || ''}</div>`;
   const cplMeta = div(T.ppto, T.lm);
   document.getElementById('kpi-grid').innerHTML = [
-    k('Inversión', fCOP(T.inv), T.invG ? `${fCOP(T.invG)} de anuncios generales repartidos` : 'presupuesto meta ' + fCOP(T.ppto), bar(T.cumI, 'Ejecución vs presupuesto ' + fCOP(T.ppto))),
+    k('Inversión', fCOP(T.inv), T.invG ? `${fCOP(T.invG)} de anuncios generales repartidos` : 'presupuesto meta ' + fCOP(T.ppto), bar(T.cumI, (QUICK[0] === 'P' ? 'Ejecución vs presupuesto del periodo ' : 'Ejecución vs presupuesto proporcional al rango ') + fCOP(T.ppto))),
     k('Leads plataforma', fN(T.lp), 'CPL plataforma ' + fCOP(T.cplP)),
     k('Leads CRM', fN(T.lc), `<span class="${difCls(T.dif)}">${T.dif === null ? '' : (T.dif > 0 ? '+' : '') + fP(T.dif) + ' vs plataforma'}</span>`, bar(T.cumL, 'Meta ' + fN(T.lm))),
     k('CPL CRM', fCOP(T.cplC), cplMeta ? 'CPL meta ' + fCOP(cplMeta) : ''),
@@ -408,7 +414,7 @@ function renderKPIs(T){
     k('Costo por matrícula', fCOP(T.cpm), T.mm ? 'meta ' + fCOP(div(T.ppto, T.mm)) : ''),
     k('Ciudades', new Set(ENT.filter(e => e.inv || e.lc).map(e => e.ciu)).size, 'con inversión o leads'),
     k('Programas', new Set(ENT.filter(e => (e.inv || e.lc) && e.prog !== GENERAL).map(e => e.ciu + e.pk)).size, 'ciudad · programa activos'),
-    k('Meta de matrículas del rango', fN(T.mm), 'prorrateada a los días elegidos'),
+    k(QUICK[0] === 'P' ? 'Meta de matrículas del periodo' : 'Meta de matrículas del rango', fN(T.mm), QUICK[0] === 'P' ? 'meta completa del periodo' : 'proporcional a los días elegidos'),
   ].join('');
 }
 function renderFunnel(T){
