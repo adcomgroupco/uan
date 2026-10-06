@@ -60,7 +60,10 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 
 /* EMBUDO */
 .funnel{padding:16px 18px;margin-bottom:20px;display:grid;grid-template-columns:1fr;gap:9px}
-.f-row{display:grid;grid-template-columns:150px 1fr 190px;align-items:center;gap:12px}
+.f-row{display:grid;grid-template-columns:150px 1fr 190px 190px;align-items:center;gap:12px}
+.f-head{font-size:11px;color:var(--gray-400);font-weight:600}
+.f-cost{font-size:12px;font-variant-numeric:tabular-nums;display:flex;justify-content:flex-end;align-items:baseline;gap:8px;border-left:1px solid var(--gray-200);padding-left:12px}
+.f-cost b{font-size:14px}
 .f-lbl{font-size:12px;font-weight:600;color:var(--gray-600)}
 .f-track{height:22px;background:var(--gray-100);border-radius:6px;overflow:hidden}
 .f-fill{height:100%;background:var(--yellow);border-radius:6px;min-width:2px}
@@ -121,7 +124,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 #ld-msg{color:var(--fg-muted);font-size:12px}
 
 @media(max-width:1300px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.nm-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.f-row{grid-template-columns:100px 1fr 150px}.content{padding:14px 16px}}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.f-row{grid-template-columns:90px 1fr 120px 130px}.f-cost span{display:none}.content{padding:14px 16px}}
 </style>
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
 </head>
@@ -318,7 +321,7 @@ function resetFilters(){ ['f-nivel','f-medio','f-ciudad','f-facultad','f-program
 // ── Cálculo ──────────────────────────────────────────────────────────────────
 const Z = () => ({inv:0, invG:0, lp:0, lc:0, adm:0, mat:0, ppto:0, lm:0, mm:0});
 function add(a, b){ for(const k in a) a[k] += b[k] || 0; return a }
-function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpm: div(e.inv, e.mat),
+function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpa: div(e.inv, e.adm), cpm: div(e.inv, e.mat),
   conv: div(e.mat, e.lc), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto) } }
 
 // Filas del rango + nivel/medio/ciudad (sin facultad/programa) -> entradas por ciudad·nivel·facultad·programa
@@ -389,21 +392,27 @@ function renderKPIs(T){
   ].join('');
 }
 function renderFunnel(T){
-  const steps = [['Leads plataforma', T.lp, ''], ['Leads CRM', T.lc, T.lp ? fP(div(T.lc, T.lp)) + ' de plataforma' : ''],
-    ['Admisiones', T.adm, fP(div(T.adm, T.lc)) + ' de leads CRM'], ['Matrículas', T.mat, fP(div(T.mat, T.adm)) + ' de admisiones']];
+  // costo por etapa = inversión del rango / volumen de la etapa; se colorea contra el costo meta cuando existe
+  const cplMeta = div(T.ppto, T.lm), cpmMeta = div(T.ppto, T.mm);
+  const steps = [['Leads plataforma', T.lp, '', null], ['Leads CRM', T.lc, T.lp ? fP(div(T.lc, T.lp)) + ' de plataforma' : '', cplMeta],
+    ['Admisiones', T.adm, fP(div(T.adm, T.lc)) + ' de leads CRM', null], ['Matrículas', T.mat, fP(div(T.mat, T.adm)) + ' de admisiones', cpmMeta]];
   const mx = Math.max(...steps.map(s => s[1]), 1);
-  document.getElementById('funnel').innerHTML = steps.map(([l, v, c], i) => `<div class="f-row"><div class="f-lbl">${l}</div>
-    <div class="f-track"><div class="f-fill${i === 3 ? ' dark' : ''}" style="width:${Math.max(v/mx*100, .4)}%"></div></div>
-    <div class="f-val"><b>${fN(v)}</b><span class="t-mute">${c}</span></div></div>`).join('') +
-    `<div class="f-row"><div class="f-lbl">Costo</div><div class="f-val" style="grid-column:2/4;justify-content:flex-start;gap:22px">
-      <span>CPL plataforma <b>${fCOP(T.cplP)}</b></span><span>CPL CRM <b>${fCOP(T.cplC)}</b></span><span>Costo por admisión <b>${fCOP(div(T.inv, T.adm))}</b></span><span>Costo por matrícula <b>${fCOP(T.cpm)}</b></span></div></div>`;
+  const costo = (v, meta) => { const c = div(T.inv, v); if(c === null) return '<span class="t-mute">—</span>';
+    const k = meta ? (c <= meta ? 't-pos' : c <= meta * 1.25 ? 't-mid' : 't-neg') : '';
+    return `<b class="${k}">${fCOP(c)}</b>${meta ? `<span class="t-mute">meta ${fCOP(meta)}</span>` : ''}` };
+  document.getElementById('funnel').innerHTML =
+    '<div class="f-row f-head"><div></div><div></div><div class="f-val"><span>Volumen</span><span>Tasa vs etapa anterior</span></div><div class="f-cost"><span>Costo por etapa</span></div></div>' +
+    steps.map(([l, v, c, meta], i) => `<div class="f-row"><div class="f-lbl">${l}</div>
+    <div class="f-track"><div class="f-fill${i === steps.length - 1 ? ' dark' : ''}" style="width:${Math.max(v/mx*100, .4)}%"></div></div>
+    <div class="f-val"><b>${fN(v)}</b><span class="t-mute">${c}</span></div><div class="f-cost">${costo(v, meta)}</div></div>`).join('');
 }
 function renderNivel(){
   const card = (niv, tag) => { const e = M(ENT.filter(x => x.niv === niv).reduce((a, x) => add(a, x), Z()));
     const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`;
     return `<div class="card nivel-card"><span class="nivel-tag ${tag}">${niv}</span><div class="nm-grid">
       ${it('Inversión', fCOP(e.inv))}${it('Leads plataforma', fN(e.lp))}${it('Leads CRM', fN(e.lc))}${it('CRM vs plat.', e.dif === null ? '—' : (e.dif > 0 ? '+' : '') + fP(e.dif), difCls(e.dif))}
-      ${it('CPL CRM', fCOP(e.cplC))}${it('Admisiones', fN(e.adm))}${it('Matrículas', fN(e.mat))}${it('Costo / matrícula', fCOP(e.cpm))}
+      ${it('CPL plataforma', fCOP(e.cplP))}${it('CPL CRM', fCOP(e.cplC))}${it('Costo / admisión', fCOP(e.cpa))}${it('Costo / matrícula', fCOP(e.cpm))}
+      ${it('Admisiones', fN(e.adm))}${it('Matrículas', fN(e.mat))}${it('Lead → admisión', fP(div(e.adm, e.lc)))}${it('Admisión → mat.', fP(div(e.mat, e.adm)))}
       ${it('Meta leads', fN(e.lm))}${it('Cumpl. leads', fP(e.cumL), cls(e.cumL))}${it('Meta matrículas', fN(e.mm))}${it('Cumpl. matrículas', fP(e.cumM), cls(e.cumM))}
     </div></div>` };
   document.getElementById('nivel-grid').innerHTML = card('Pregrado', 'tag-pre') + card('Posgrado', 'tag-pos');
@@ -460,7 +469,7 @@ function sortBy(col){ SORT.dir = SORT.col === col ? -SORT.dir : -1; SORT.col = c
 function sorter(a, b){ const x = a.m[SORT.col], y = b.m[SORT.col];
   if(x === null && y === null) return 0; if(x === null) return 1; if(y === null) return -1; return SORT.dir * (x - y) }
 function renderDetalle(){
-  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP').concat(COLS_META), q = norm(document.getElementById('q').value);
+  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP' && c[0] !== 'conv'); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpa','Costo / adm.','cop']); cols.push(...COLS_META); const q = norm(document.getElementById('q').value);
   document.getElementById('det-head').innerHTML = head('Ciudad / facultad / programa', cols, true);
   const ents = ENT.filter(e => !q || norm(e.prog + ' ' + D(e.ciu) + ' ' + D(e.fac)).includes(q));
   const tree = {};
