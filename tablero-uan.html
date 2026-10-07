@@ -215,7 +215,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="tscroll"><table><thead id="det-head"></thead><tbody id="det-body"></tbody></table></div>
       <div class="foot-note">
         <b>Leads CRM</b>: posibles aspirantes con fuente "Digital - Pauta", por fecha de creación. <b>Admisiones y matrículas</b>: las que vienen de un lead de pauta, en la fecha del lead.
-        <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
+        <b>CRM Meta, CRM Google…</b>: leads CRM de cada medio (las campañas generales no se reparten aquí). <b>Lead → mat.</b>: matrículas sobre leads CRM. <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
         Con "Repartir anuncios generales" activo, la inversión de anuncios sin programa se reparte entre los programas de la misma ciudad y facultad según sus leads CRM.
       </div>
     </div>
@@ -283,6 +283,7 @@ Papa.parse(URL_CRUCE, {download:true, header:false, skipEmptyLines:true, error:(
     ciu: disp(x[4]), niv: String(x[5]||'').trim(), facRaw: String(x[6]||'').trim(), prog: String(x[7]||'').trim(),
     inv: num(x[8]), lp: num(x[9]), lc: num(x[10]), adm: num(x[11]), mat: num(x[12]) }))
     .filter(x => x.d && (x.niv === 'Pregrado' || x.niv === 'Posgrado' || x.niv === 'General'));  // fuera educación continua / ETDH
+  RAW.forEach(r => { if(r.lc) r[lcKey(r.medio)] = r.lc });
   done() }});
 Papa.parse(URL_META, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer METAS'), complete: r => {
   const rows = r.data; if(rows.length && /periodo/i.test(rows[0][0])) rows.shift();
@@ -352,7 +353,10 @@ function resetFilters(){ ['f-nivel','f-medio','f-ciudad','f-facultad','f-program
   document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; QUICK = 'mes'; prepare() }
 
 // ── Cálculo ──────────────────────────────────────────────────────────────────
-const Z = () => ({inv:0, invG:0, lp:0, lc:0, adm:0, mat:0, ppto:0, lm:0, mm:0});
+const Z = () => ({inv:0, invG:0, lp:0, lc:0, adm:0, mat:0, ppto:0, lm:0, mm:0, lcF:0, lcG:0, lcT:0, lcL:0, lcP:0, lcO:0});
+// leads CRM por medio (columnas de la tabla de programas; no se reparten)
+const LCM = [['lcF','Meta'],['lcG','Google'],['lcT','TikTok'],['lcL','LinkedIn'],['lcP','Programática'],['lcO','Otros']];
+const lcKey = m => { const t = norm(m); return /FACE|META|INSTA/.test(t) ? 'lcF' : /GOOGLE/.test(t) ? 'lcG' : /TIKTOK/.test(t) ? 'lcT' : /LINKEDIN/.test(t) ? 'lcL' : /PROGRAM/.test(t) ? 'lcP' : 'lcO' };
 function add(a, b){ for(const k in a) a[k] += b[k] || 0; return a }
 function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpa: div(e.inv, e.adm), cpm: div(e.inv, e.mat),
   conv: div(e.mat, e.lc), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto) } }
@@ -365,7 +369,7 @@ function entradas(f){
   const pools = {};
   base.forEach(r => {
     if(r.prog === GENERAL){ const k = [r.ciu, r.niv, r.fac].join('|'); pools[k] = pools[k] || {ciu:r.ciu, niv:r.niv, fac:r.fac, inv:0, lp:0}; pools[k].inv += r.inv; pools[k].lp += r.lp; return }
-    const e = get(r.ciu, r.niv, r.fac, r.prog, r.pk); e.inv += r.inv; e.lp += r.lp; e.lc += r.lc; e.adm += r.adm; e.mat += r.mat });
+    const e = get(r.ciu, r.niv, r.fac, r.prog, r.pk); e.inv += r.inv; e.lp += r.lp; e.lc += r.lc; e.adm += r.adm; e.mat += r.mat; LCM.forEach(([k]) => e[k] += r[k] || 0) });
   const list = Object.values(E);
   Object.values(pools).forEach(g => {
     const nac = g.ciu === 'COLOMBIA' || g.niv === 'General';
@@ -513,7 +517,10 @@ function sortBy(col){ SORT.dir = SORT.col === col ? -SORT.dir : -1; SORT.col = c
 function sorter(a, b){ const x = a.m[SORT.col], y = b.m[SORT.col];
   if(x === null && y === null) return 0; if(x === null) return 1; if(y === null) return -1; return SORT.dir * (x - y) }
 function renderDetalle(){
-  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP' && c[0] !== 'conv'); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpa','Costo / adm.','cop']); cols.push(...COLS_META); const q = norm(document.getElementById('q').value);
+  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP'); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpa','Costo / adm.','cop']); cols.push(...COLS_META);
+  const lcCols = LCM.filter(([k]) => ENT.some(e => e[k])).map(([k, l]) => [k, 'CRM ' + l, 'n']);
+  cols.splice(cols.findIndex(c => c[0] === 'lc') + 1, 0, ...lcCols);
+  const q = norm(document.getElementById('q').value);
   document.getElementById('det-head').innerHTML = head('Ciudad / facultad / programa', cols, true);
   const ents = ENT.filter(e => !q || norm(e.prog + ' ' + D(e.ciu) + ' ' + D(e.fac)).includes(q));
   const tree = {};
