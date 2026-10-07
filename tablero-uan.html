@@ -196,7 +196,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
     <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-fu"></canvas></div></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="fu-head"></thead><tbody id="fu-body"></tbody></table></div></div>
 
-    <div class="sec-title" id="sec-medio"><span></span>Por medio<span class="sec-note">el medio del CRM sale del canal del aspirante</span></div>
+    <div class="sec-title" id="sec-medio"><span></span>Por nivel y medio<span class="sec-note">el medio del CRM sale del canal del aspirante</span><span style="margin-left:auto;display:flex;gap:6px"><button class="qbtn on" data-mv="niv" onclick="setMedioVista('niv')">Nivel · medio</button><button class="qbtn" data-mv="medio" onclick="setMedioVista('medio')">Solo medio</button></span></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="medio-head"></thead><tbody id="medio-body"></tbody></table></div></div>
 
     <div class="sec-title" id="sec-semana"><span></span>Evolución<span class="sec-note" id="semana-note"></span><span style="margin-left:auto;display:flex;gap:6px"><button class="qbtn on" data-ev="mes" onclick="setEvo('mes')">Mes a mes</button><button class="qbtn" data-ev="sem" onclick="setEvo('sem')">Semana a semana</button></span></div>
@@ -464,15 +464,25 @@ function head(first, cols, sortable){ return '<tr><th>' + first + '</th>' + cols
   const act = SORT.col === c[0]; return `<th class="r${c[3] ? ' grp' : ''}${sortable ? ' sortable' : ''}${sortable && act ? ' sort-act' : ''}"${sortable ? ` onclick="sortBy('${c[0]}')"` : ''}>${c[1]}${sortable && act ? (SORT.dir > 0 ? ' ↑' : ' ↓') : ''}</th>` }).join('') + '</tr>' }
 function groupRows(rows, keyFn){ const g = {}; rows.forEach(r => { const k = keyFn(r); g[k] = g[k] || Z(); add(g[k], r) }); return g }
 
+let MEDIO_VISTA = 'niv';
+function setMedioVista(k){ MEDIO_VISTA = k; document.querySelectorAll('[data-mv]').forEach(b => b.classList.toggle('on', b.dataset.mv === k)); renderMedio(F()) }
 function renderMedio(f){
-  const rows = filasRango(f), g = groupRows(rows, r => r.medio);
-  const order = ['Facebook','Google','LinkedIn','Landing','Otro'];
-  const ks = Object.keys(g).sort((a, b) => (order.indexOf(a) + 1 || 9) - (order.indexOf(b) + 1 || 9));
+  const rows = filasRango(f);
   const lbl = {Landing:'Landing (CRM)', Otro:'Otros canales (CRM)'};
-  document.getElementById('medio-head').innerHTML = head('Medio', COLS_BASE, false);
-  const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
-  document.getElementById('medio-body').innerHTML = ks.map(k => '<tr><td>' + (lbl[k] || k) + '</td>' + COLS_BASE.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
-    '<tr class="tr-total"><td>Total</td>' + COLS_BASE.map(c => cell(T, c)).join('') + '</tr>';
+  const orden = (a, b) => (['Facebook','Google','LinkedIn','Landing','Otro'].indexOf(a) + 1 || 9) - (['Facebook','Google','LinkedIn','Landing','Otro'].indexOf(b) + 1 || 9);
+  const conDatos = g => k => Object.keys(Z()).some(x => g[k][x]);
+  const cols = COLS_BASE;
+  const porNivel = MEDIO_VISTA === 'niv';
+  document.getElementById('medio-head').innerHTML = head(porNivel ? 'Nivel / medio' : 'Medio', cols, false);
+  const fila = (cl, lab, e) => `<tr${cl ? ` class="${cl}"` : ''}><td>${lab}</td>` + cols.map(c => cell(M(e), c)).join('') + '</tr>';
+  const medios = (rs, cl) => { const g = groupRows(rs, r => r.medio); return Object.keys(g).filter(conDatos(g)).sort(orden).map(k => fila(cl, lbl[k] || esc(k), g[k])).join('') };
+  let h = '';
+  if(porNivel){
+    // cada nivel con su subtotal y debajo sus medios
+    const nv = groupRows(rows, r => r.niv);
+    ['Pregrado','Posgrado','General'].filter(n => nv[n]).forEach(n => { h += fila('lv1', esc(n), nv[n]) + medios(rows.filter(r => r.niv === n), 'lv3') });
+  } else h = medios(rows, '');
+  document.getElementById('medio-body').innerHTML = h + fila('tr-total', 'Total', rows.reduce((a, r) => add(a, r), Z()));
 }
 function setEvo(k){ EVO = k; document.querySelectorAll('[data-ev]').forEach(b => b.classList.toggle('on', b.dataset.ev === k)); renderSemana(F()) }
 function renderSemana(f){
