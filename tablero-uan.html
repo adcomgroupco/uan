@@ -177,7 +177,6 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="fg"><span class="fl">Ciudad</span><select id="f-ciudad" onchange="onSel('ciudad')"><option value="">Todas</option></select></div>
       <div class="fg"><span class="fl">Facultad</span><select id="f-facultad" onchange="onSel('facultad')"><option value="">Todas</option></select></div>
       <div class="fg"><span class="fl">Programa</span><select id="f-programa" onchange="onSel('programa')"><option value="">Todos</option></select></div>
-      <label class="chk" title="Reparte la inversión de anuncios generales entre los programas de la misma ciudad y facultad según sus leads CRM"><input type="checkbox" id="f-repartir" checked onchange="render()">Repartir anuncios generales</label>
       <button class="btn-reset" onclick="resetFilters()">↺ Reset</button>
     </div>
   </div>
@@ -216,7 +215,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="foot-note">
         <b>Leads CRM</b>: posibles aspirantes con fuente "Digital - Pauta", por fecha de creación. <b>Admisiones</b>: las que vienen de un lead de pauta, en la fecha del lead. <b>Matrículas</b>: matriculados con fuente "Digital - Pauta" en CRM_ADMISIONES, en la fecha de pago (Fecha de cierre).
         <b>CRM Meta, CRM Google…</b>: leads CRM de cada medio (las campañas generales no se reparten aquí). <b>Lead → mat.</b>: matrículas sobre leads CRM. <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
-        Con "Repartir anuncios generales" activo, la inversión de anuncios sin programa se reparte entre los programas de la misma ciudad y facultad según sus leads CRM.
+        La inversión de las campañas generales (sin programa) no se reparte: queda en su fila "Anuncios generales" de la ciudad y facultad donde se pautó, con sus leads de plataforma.
       </div>
     </div>
   </div>
@@ -360,7 +359,7 @@ function share(m, f){
   const a = m.ini > f.desde ? m.ini : f.desde, b = m.fin < f.hasta ? m.fin : f.hasta;
   return a > b ? 0 : days(a, b) / days(m.ini, m.fin) }
 function F(){ const g = id => document.getElementById(id).value;
-  return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), medio: g('f-medio'), ciu: g('f-ciudad'), fac: g('f-facultad'), prog: g('f-programa'), per: '', rep: document.getElementById('f-repartir').checked } }
+  return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), medio: g('f-medio'), ciu: g('f-ciudad'), fac: g('f-facultad'), prog: g('f-programa'), per: '' } }
 function cascade(){
   const f = F(), base = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && r.prog !== GENERAL && (!f.niv || r.niv === f.niv));
   fill('f-ciudad', [...new Set(base.map(r => r.ciu))].sort(), f.ciu, D);
@@ -370,7 +369,7 @@ function cascade(){
   fill('f-programa', [...new Set(b3.map(r => r.pk))].sort((x,y) => x.localeCompare(y)), f.prog, k => (b3.find(r => r.pk === k) || {}).prog || k);
 }
 function resetFilters(){ ['f-nivel','f-medio','f-ciudad','f-facultad','f-programa'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; QUICK = 'mes'; prepare() }
+  document.getElementById('q').value = ''; QUICK = 'mes'; prepare() }
 
 // ── Cálculo ──────────────────────────────────────────────────────────────────
 const Z = () => ({inv:0, invG:0, lp:0, lc:0, adm:0, mat:0, ppto:0, lm:0, mm:0, lcF:0, lcG:0, lcT:0, lcL:0, lcP:0, lcO:0});
@@ -386,24 +385,10 @@ function entradas(f){
   const base = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio) && (!f.ciu || r.ciu === f.ciu));
   const E = {}, get = (ciu, niv, fac, prog, pk) => { const k = [ciu, niv, pk].join('|');
     return E[k] = E[k] || { ...Z(), ciu, niv, fac, prog, pk } };
-  const pools = {};
+  // las campañas generales (sin programa) quedan en su propia fila con su inversión y leads de plataforma; no se reparten
   base.forEach(r => {
-    if(r.prog === GENERAL){ const k = [r.ciu, r.niv, r.fac].join('|'); pools[k] = pools[k] || {ciu:r.ciu, niv:r.niv, fac:r.fac, inv:0, lp:0}; pools[k].inv += r.inv; pools[k].lp += r.lp; return }
-    const e = get(r.ciu, r.niv, r.fac, r.prog, r.pk); e.inv += r.inv; e.lp += r.lp; e.lc += r.lc; e.adm += r.adm; e.mat += r.mat; LCM.forEach(([k]) => e[k] += r[k] || 0) });
-  const list = Object.values(E);
-  Object.values(pools).forEach(g => {
-    const nac = g.ciu === 'COLOMBIA' || g.niv === 'General';
-    const okNiv = e => (g.niv !== 'Pregrado' && g.niv !== 'Posgrado') || e.niv === g.niv;
-    let c = [];
-    if(f.rep){
-      if(!nac && g.fac !== 'GENERAL') c = list.filter(e => e.ciu === g.ciu && okNiv(e) && e.fac === g.fac && e.lc > 0);
-      if(!c.length && !nac) c = list.filter(e => e.ciu === g.ciu && okNiv(e) && e.lc > 0);
-      if(!c.length && nac) c = list.filter(e => okNiv(e) && e.lc > 0);
-    }
-    if(!c.length){ const e = get(g.ciu, g.niv, g.fac, GENERAL, 'GENERAL|' + g.fac); e.inv += g.inv; e.invG += g.inv; e.lp += g.lp; return }
-    const t = c.reduce((a, e) => a + e.lc, 0);
-    c.forEach(e => { const s = e.lc / t; e.inv += g.inv * s; e.invG += g.inv * s; e.lp += g.lp * s });
-  });
+    const gen = r.prog === GENERAL, e = gen ? get(r.ciu, r.niv, r.fac, GENERAL, 'GENERAL|' + r.fac) : get(r.ciu, r.niv, r.fac, r.prog, r.pk);
+    e.inv += r.inv; if(gen) e.invG += r.inv; e.lp += r.lp; e.lc += r.lc; e.adm += r.adm; e.mat += r.mat; LCM.forEach(([k]) => e[k] += r[k] || 0) });
   // metas prorrateadas al rango
   METAS.forEach(m => {
     if(m.per !== META_PER) return; if(f.niv && m.niv !== f.niv) return; if(f.ciu && m.ciu !== f.ciu) return;
@@ -427,7 +412,7 @@ function render(){
   const T = M(ENT.reduce((a, e) => add(a, e), Z()));
   document.getElementById('rango-note').textContent = `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
   const nac = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && r.prog === GENERAL && (r.ciu === 'COLOMBIA' || r.niv === 'General') && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio)).reduce((a, r) => (a.inv += r.inv, a.lp += r.lp, a), {inv:0, lp:0});
-  document.getElementById('nac-note').textContent = nac.inv ? `Campañas generales nacionales: ${fCOP(nac.inv)} y ${fN(nac.lp)} leads plataforma, ${f.rep ? 'repartidas entre ciudades según leads CRM' : 'en la fila "Nacional"'}` : '';
+  document.getElementById('nac-note').textContent = nac.inv ? `Campañas generales nacionales: ${fCOP(nac.inv)} y ${fN(nac.lp)} leads plataforma, en la fila "Nacional"` : '';
   renderKPIs(T); renderFunnel(T); renderFuentes(f, (r, f) => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
 }
 
@@ -437,7 +422,7 @@ function renderKPIs(T){
   const k = (l, v, sub, extra) => `<div class="card kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div>${sub ? `<div class="kpi-sub">${sub}</div>` : ''}${extra || ''}</div>`;
   const cplMeta = div(T.ppto, T.lm);
   document.getElementById('kpi-grid').innerHTML = [
-    k('Inversión', fCOP(T.inv), T.invG ? `${fCOP(T.invG)} de anuncios generales repartidos` : 'presupuesto meta ' + fCOP(T.ppto), bar(T.cumI, (META_TOTAL ? 'Ejecución vs presupuesto del periodo ' : 'Ejecución vs presupuesto proporcional al rango ') + fCOP(T.ppto))),
+    k('Inversión', fCOP(T.inv), T.invG ? `incluye ${fCOP(T.invG)} de campañas generales` : 'presupuesto meta ' + fCOP(T.ppto), bar(T.cumI, (META_TOTAL ? 'Ejecución vs presupuesto del periodo ' : 'Ejecución vs presupuesto proporcional al rango ') + fCOP(T.ppto))),
     k('Leads plataforma', fN(T.lp), 'CPL plataforma ' + fCOP(T.cplP)),
     k('Leads CRM', fN(T.lc), `<span class="${difCls(T.dif)}">${T.dif === null ? '' : (T.dif > 0 ? '+' : '') + fP(T.dif) + ' vs plataforma'}</span>`, bar(T.cumL, 'Meta ' + fN(T.lm))),
     k('CPL CRM', fCOP(T.cplC), cplMeta ? 'CPL meta ' + fCOP(cplMeta) : ''),
