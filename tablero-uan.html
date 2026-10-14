@@ -191,7 +191,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 
     <div class="sec-title" id="sec-nivel"><span></span>Por nivel</div>
     <div class="two-col" id="nivel-grid"></div>
-    <div class="sec-title" id="sec-fuentes"><span></span>Pauta vs orgánico y otras fuentes<span class="sec-note" id="fu-note">leads y matrículas del CRM de todas las fuentes · conversión = matrículas / leads del rango · matrículas por fecha de creación de la admisión (el embudo las cuenta en la fecha del lead) · aplican fechas y nivel (no ciudad, facultad, programa ni medio)</span></div>
+    <div class="sec-title" id="sec-fuentes"><span></span>Pauta vs orgánico y otras fuentes<span class="sec-note" id="fu-note">leads y matrículas del CRM de todas las fuentes · conversión = matrículas / leads del rango · matrículas por fecha de pago, igual que en el embudo · aplican fechas y nivel (no ciudad, facultad, programa ni medio)</span></div>
     <div class="three-col" id="fuente-cards"></div>
     <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-fu"></canvas></div></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="fu-head"></thead><tbody id="fu-body"></tbody></table></div></div>
@@ -214,7 +214,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       </div>
       <div class="tscroll"><table><thead id="det-head"></thead><tbody id="det-body"></tbody></table></div>
       <div class="foot-note">
-        <b>Leads CRM</b>: posibles aspirantes con fuente "Digital - Pauta", por fecha de creación. <b>Admisiones y matrículas</b>: las que vienen de un lead de pauta, en la fecha del lead.
+        <b>Leads CRM</b>: posibles aspirantes con fuente "Digital - Pauta", por fecha de creación. <b>Admisiones</b>: las que vienen de un lead de pauta, en la fecha del lead. <b>Matrículas</b>: matriculados con fuente "Digital - Pauta" en CRM_ADMISIONES, en la fecha de pago (Fecha de cierre).
         <b>CRM Meta, CRM Google…</b>: leads CRM de cada medio (las campañas generales no se reparten aquí). <b>Lead → mat.</b>: matrículas sobre leads CRM. <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
         Con "Repartir anuncios generales" activo, la inversión de anuncios sin programa se reparte entre los programas de la misma ciudad y facultad según sus leads CRM.
       </div>
@@ -231,7 +231,9 @@ const URL_META  = GV(577768057);
 // CRM de todas las fuentes, agrupado por día para no descargar las pestañas completas
 const GVQ = (gid, tq) => GV(gid, '&tq=' + encodeURIComponent(tq));
 const URL_FU_LEADS = GVQ(409442000, 'select toDate(B), D, H, count(A) group by toDate(B), D, H');
-const URL_FU_MAT   = GVQ(775856729, "select toDate(C), I, M, count(A) where E = 'Matriculado' group by toDate(C), I, M");
+// matrículas por fecha de pago (Fecha de cierre, col P), no por la fecha del lead
+const URL_FU_MAT   = GVQ(775856729, "select P, I, M, count(A) where E = 'Matriculado' group by P, I, M");
+const URL_MAT_PAU  = GVQ(775856729, "select P, J, K, L, M, count(A) where E = 'Matriculado' and I = 'Digital - Pauta' group by P, J, K, L, M");
 const fuenteDe = s => s === 'Digital - Pauta' ? 'Pauta' : s === 'Digital - Orgánico' ? 'Orgánico' : 'Otras fuentes';
 const nivelFu = s => { const t = norm(s); return t === 'PREGRADO' ? 'Pregrado' : (t === 'POSGRADO' || t === 'POSTGRADO') ? 'Posgrado' : '' };
 const GENERAL = 'Anuncio General';
@@ -274,7 +276,7 @@ function bgc(p){ return p >= .8 ? 'bg-pos' : p >= .5 ? 'bg-mid' : 'bg-neg' }
 function difCls(d){ return d === null ? 't-mute' : Math.abs(d) <= .1 ? 't-pos' : Math.abs(d) <= .25 ? 't-mid' : 't-neg' }
 
 // ── Carga ────────────────────────────────────────────────────────────────────
-let pend = 5;
+let pend = 6, MATP = [];
 function done(){ if(--pend) return; prepare(); document.getElementById('loading').style.display = 'none' }
 function fail(msg){ document.getElementById('ld-msg').textContent = msg }
 Papa.parse(URL_CRUCE, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer CRUCE_UAN'), complete: r => {
@@ -299,13 +301,31 @@ Papa.parse(URL_META, {download:true, header:false, skipEmptyLines:true, error:()
   r.data.slice(1).forEach(x => { const d = iso(x[0]), niv = nivelFu(x[2]); if(!d || !niv) return;
     FUE.push({ d, niv, fu: fuenteDe(String(x[1]||'').trim()), lc: k === 'lc' ? num(x[3]) : 0, mat: k === 'mat' ? num(x[3]) : 0 }) });
   done() }}));
+Papa.parse(URL_MAT_PAU, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer CRM_ADMISIONES'), complete: r => {
+  r.data.slice(1).forEach(x => { const d = iso(x[0]), niv = nivelFu(x[4]); if(!d || !niv) return;
+    MATP.push({ d, canal: String(x[1]||'').trim(), sede: String(x[2]||'').trim(), prog: String(x[3]||'').trim(), niv, mat: num(x[5]) }) });
+  done() }});
 Papa.parse(URL_CTRL, {download:true, header:false, skipEmptyLines:true, error:() => done(), complete: r => {
   const row = r.data.find(x => /actualizaci/i.test(x[0]||'')); const t = row ? row[1] : '';
   document.getElementById('last-upd').textContent = t ? 'Cruce actualizado: ' + t : '';
   document.getElementById('last-upd-side').textContent = t || '—';
   done() }});
 
+// Sede del CRM -> ciudad del CRUCE ("BOGOTÁ - SUR" -> BOGOTÁ, "VIRTUAL" -> SEDE VIRTUAL)
+function ciudadDe(sede, ciudades){ const t = norm(sede); if(ciudades.has(t)) return t;
+  if(/VIRTUAL|DISTANCIA/.test(t)) return 'SEDE VIRTUAL';
+  const b = t.split(/\s+-\s+|\s*\(/)[0].trim(); if(ciudades.has(b)) return b;
+  return [...ciudades].find(c => b.startsWith(c) || c.startsWith(b)) || b }
+function matriculasPorPago(){
+  const ciudades = new Set([...RAW.map(r => r.ciu), ...METAS.map(m => m.ciu)]), medios = {}, sin = {};
+  RAW.forEach(r => { r.mat = 0; const k = lcKey(r.medio); medios[k] = medios[k] || r.medio });
+  MATP.forEach(m => { const ciu = ciudadDe(m.sede, ciudades); if(!ciudades.has(ciu)) sin[m.sede] = (sin[m.sede] || 0) + m.mat;
+    RAW.push({ d: m.d, per: '', medio: medios[lcKey(m.canal)] || m.canal || 'Otro', ciu: disp(ciu), niv: m.niv, facRaw: '', prog: m.prog,
+      inv: 0, lp: 0, lc: 0, adm: 0, mat: m.mat }) });
+  if(Object.keys(sin).length) console.warn('Sedes del CRM sin ciudad en el CRUCE:', sin);
+}
 function prepare(){
+  matriculasPorPago();
   RAW.forEach(r => { r.fac = r.prog === GENERAL ? disp(r.facRaw || 'General') : disp(r.facRaw || FAC_BY_PROG[pkey(r.prog)] || '(Sin facultad)'); r.pk = pkey(r.prog) });
   // selects fijos
   fill('f-medio', [...new Set(RAW.map(r => r.medio))].sort(), '');
@@ -424,7 +444,7 @@ function renderKPIs(T){
     k('Admisiones', fN(T.adm), fP(div(T.adm, T.lc)) + ' de los leads CRM'),
     k('Matrículas', fN(T.mat), fP(T.conv) + ' de los leads CRM', bar(T.cumM, 'Meta ' + fN(T.mm))),
     k('Costo por matrícula', fCOP(T.cpm), T.mm ? 'meta ' + fCOP(div(T.ppto, T.mm)) : ''),
-    k('Ciudades', new Set(ENT.filter(e => e.inv || e.lc).map(e => e.ciu)).size, 'con inversión o leads'),
+    k('Conversión lead → matrícula', fP(T.conv), `${fN(T.mat)} matrículas de ${fN(T.lc)} leads CRM`),
     k('Programas', new Set(ENT.filter(e => (e.inv || e.lc) && e.prog !== GENERAL).map(e => e.ciu + e.pk)).size, 'ciudad · programa activos'),
     k(META_TOTAL ? 'Meta de matrículas del periodo' : 'Meta de matrículas del rango', fN(T.mm), META_TOTAL ? 'meta completa del periodo' : 'proporcional a los días elegidos'),
   ].join('');
@@ -450,7 +470,7 @@ function renderNivel(){
     return `<div class="card nivel-card"><span class="nivel-tag ${tag}">${niv}</span><div class="nm-grid">
       ${it('Inversión', fCOP(e.inv))}${it('Leads plataforma', fN(e.lp))}${it('Leads CRM', fN(e.lc))}${it('CRM vs plat.', e.dif === null ? '—' : (e.dif > 0 ? '+' : '') + fP(e.dif), difCls(e.dif))}
       ${it('CPL plataforma', fCOP(e.cplP))}${it('CPL CRM', fCOP(e.cplC))}${it('Costo / admisión', fCOP(e.cpa))}${it('Costo / matrícula', fCOP(e.cpm))}
-      ${it('Admisiones', fN(e.adm))}${it('Matrículas', fN(e.mat))}${it('Lead → admisión', fP(div(e.adm, e.lc)))}${it('Admisión → mat.', fP(div(e.mat, e.adm)))}
+      ${it('Admisiones', fN(e.adm))}${it('Matrículas', fN(e.mat))}${it('Lead → matrícula', fP(e.conv))}${it('Admisión → mat.', fP(div(e.mat, e.adm)))}
       ${it('Meta leads', fN(e.lm))}${it('Cumpl. leads', fP(e.cumL), cls(e.cumL))}${it('Meta matrículas', fN(e.mm))}${it('Cumpl. matrículas', fP(e.cumM), cls(e.cumM))}
     </div>${fuentesNivel(niv)}</div>` };
   document.getElementById('nivel-grid').innerHTML = card('Pregrado', 'tag-pre') + card('Posgrado', 'tag-pos');
