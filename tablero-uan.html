@@ -129,6 +129,14 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 .tag-pau{background:#FFF3B0;color:#7A5B00} .tag-org{background:#E0F2FE;color:#075985} .tag-otr{background:var(--gray-100);color:var(--gray-600)}
 @media(max-width:1300px){.three-col{grid-template-columns:1fr}}
 .nm-sub{margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-200)}
+/* tarjetas por nivel: una fila por etapa; columnas alineadas (volumen · costo · tasa · meta · cumplimiento · extra) */
+.nivel-stack{display:grid;grid-template-columns:1fr;gap:14px}
+.nv-row{display:grid;grid-template-columns:92px repeat(6,minmax(0,1fr));gap:4px 10px;align-items:start;padding:9px 0;border-top:1px solid var(--gray-100)}
+.nv-row:first-of-type{border-top:0}
+.nv-row.nv-fu{border-top-style:dashed}
+.nv-stage{font-size:11px;font-weight:700;color:var(--gray-600);padding-top:2px}
+.nv-row .nm-value{font-size:14px}
+@media(max-width:900px){.nv-row{grid-template-columns:repeat(3,minmax(0,1fr))}.nv-stage{grid-column:1/-1}.nv-row .nv-empty{display:none}}
 </style>
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
 </head>
@@ -189,7 +197,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
     <div class="card funnel" id="funnel"></div>
 
     <div class="sec-title" id="sec-nivel"><span></span>Por nivel</div>
-    <div class="two-col" id="nivel-grid"></div>
+    <div class="nivel-stack" id="nivel-grid"></div>
     <div class="sec-title" id="sec-fuentes"><span></span>Pauta vs orgánico y otras fuentes<span class="sec-note" id="fu-note">leads y matrículas del CRM de todas las fuentes · conversión = matrículas / leads del rango · matrículas por fecha de pago, igual que en el embudo · aplican fechas y nivel (no ciudad, facultad, programa ni medio)</span></div>
     <div class="three-col" id="fuente-cards"></div>
     <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-fu"></canvas></div></div>
@@ -467,14 +475,20 @@ function renderFunnel(T){
     <div class="f-val"><b>${fN(v)}</b><span class="t-mute">${c}</span></div><div class="f-cost">${costo(v, meta)}</div></div>`).join('');
 }
 function renderNivel(){
+  const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`;
+  // fila de una etapa: celdas en las 6 columnas fijas (null = celda vacía para mantener la alineación)
+  const row = (stage, cells, extra) => `<div class="nv-row${extra ? ' ' + extra : ''}"><div class="nv-stage">${stage}</div>` +
+    cells.concat(Array(6 - cells.length).fill(null)).map(c => c ? it(...c) : '<div class="nv-empty"></div>').join('') + '</div>';
   const card = (niv, tag) => { const e = M(ENT.filter(x => x.niv === niv).reduce((a, x) => add(a, x), Z()));
-    const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`;
-    return `<div class="card nivel-card"><span class="nivel-tag ${tag}">${niv}</span><div class="nm-grid">
-      ${it('Inversión', fCOP(e.inv))}${it('Leads plataforma', fN(e.lp))}${it('Leads CRM', fN(e.lc))}${it('CRM vs plat.', e.dif === null ? '—' : (e.dif > 0 ? '+' : '') + fP(e.dif), difCls(e.dif))}
-      ${it('CPL plataforma', fCOP(e.cplP))}${it('CPL CRM', fCOP(e.cplC))}${it('Costo / admisión', fCOP(e.cpa))}${it('Costo / matrícula', fCOP(e.cpm))}
-      ${it('Admisiones', fN(e.adm))}${it('Matrículas', fN(e.mat))}${it('Lead → matrícula', fP(e.conv))}${it('Admisión → mat.', fP(div(e.mat, e.adm)))}
-      ${it('Meta leads', fN(e.lm))}${it('Cumpl. leads', fP(e.cumL), cls(e.cumL))}${it('Meta matrículas', fN(e.mm))}${it('Cumpl. matrículas', fP(e.cumM), cls(e.cumM))}
-    </div>${fuentesNivel(niv)}</div>` };
+    return `<div class="card nivel-card"><span class="nivel-tag ${tag}">${niv}</span>` +
+      row('Inversión', [['Inversión', fCOP(e.inv)], null, null, ['Ppto meta', fCOP(e.ppto)], ['Ejecución', fP(e.cumI), cls(e.cumI)]]) +
+      row('Plataforma', [['Leads', fN(e.lp)], ['CPL', fCOP(e.cplP)]]) +
+      row('CRM', [['Leads', fN(e.lc)], ['CPL', fCOP(e.cplC)], ['vs plataforma', e.dif === null ? '—' : (e.dif > 0 ? '+' : '') + fP(e.dif), difCls(e.dif)],
+        ['Meta leads', fN(e.lm)], ['Cumplimiento', fP(e.cumL), cls(e.cumL)]]) +
+      row('Admisiones', [['Admisiones', fN(e.adm)], ['Costo / adm.', fCOP(e.cpa)], ['Lead → adm.', fP(div(e.adm, e.lc))]]) +
+      row('Matrículas', [['Matrículas', fN(e.mat)], ['Costo / mat.', fCOP(e.cpm)], ['Lead → mat.', fP(e.conv)],
+        ['Meta mat.', fN(e.mm)], ['Cumplimiento', fP(e.cumM), cls(e.cumM)], ['Adm. → mat.', fP(div(e.mat, e.adm))]]) +
+      fuentesNivel(niv, row) + '</div>' };
   document.getElementById('nivel-grid').innerHTML = card('Pregrado', 'tag-pre') + card('Posgrado', 'tag-pos');
 }
 const COLS_BASE = [['inv','Inversión','cop'],['lp','Leads plat.','n'],['lc','Leads CRM','n'],['dif','CRM vs plat.','dif'],['cplP','CPL plat.','cop'],['cplC','CPL CRM','cop'],
@@ -610,10 +624,10 @@ function renderFuentes(f, enR){
   CHART_FU = new Chart(document.getElementById('chart-fu'), { data, options: opts });
 }
 // fila extra de las tarjetas por nivel
-function fuentesNivel(niv){ const n = FU_NIV[niv]; if(!n) return '';
-  const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`, cv = k => div(n[k].mat, n[k].lc);
-  return '<div class="nm-grid nm-sub">' + it('Leads orgánicos', fN(n['Orgánico'].lc)) + it('Mat. orgánicas', fN(n['Orgánico'].mat)) + it('Conv. pauta (CRM)', fP(cv('Pauta'))) + it('Conv. orgánica', fP(cv('Orgánico'))) +
-    it('Leads otras fuentes', fN(n['Otras fuentes'].lc)) + it('Mat. otras fuentes', fN(n['Otras fuentes'].mat)) + it('Conv. otras fuentes', fP(cv('Otras fuentes'))) + '</div>' }
+// filas de orgánico y otras fuentes del nivel (leads y matrículas de todo el CRM)
+function fuentesNivel(niv, row){ const n = FU_NIV[niv]; if(!n) return '';
+  const f = (stage, k) => row(stage, [['Leads', fN(n[k].lc)], ['Matrículas', fN(n[k].mat)], ['Lead → mat.', fP(div(n[k].mat, n[k].lc))]], 'nv-fu');
+  return f('Orgánico', 'Orgánico') + f('Otras fuentes', 'Otras fuentes') }
 function tog(id){
   OPEN[id] = !OPEN[id]; const ic = document.getElementById('t-' + id); if(ic) ic.classList.toggle('open', OPEN[id]);
   document.querySelectorAll(`tr[data-p="${id}"]`).forEach(tr => {
