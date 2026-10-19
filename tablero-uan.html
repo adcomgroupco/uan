@@ -214,7 +214,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="tscroll"><table><thead id="det-head"></thead><tbody id="det-body"></tbody></table></div>
       <div class="foot-note">
         <b>Leads CRM</b>: posibles aspirantes con fuente "Digital - Pauta", por fecha de creación. <b>Admisiones</b>: las que vienen de un lead de pauta, en la fecha del lead. <b>Matrículas</b>: matriculados con fuente "Digital - Pauta" en CRM_ADMISIONES, en la fecha de pago (Fecha de cierre).
-        <b>CRM Meta, CRM Google…</b>: leads CRM de cada medio (las campañas generales no se reparten aquí). <b>Lead → mat.</b>: matrículas sobre leads CRM. <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma.
+        <b>CRM Meta, CRM Google…</b>: leads CRM de cada medio (las campañas generales no se reparten aquí). <b>Lead → mat.</b>: matrículas sobre leads CRM. <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. <b>CRM vs plat.</b>: diferencia entre leads CRM y leads que reporta la plataforma. <b>Evolución, metas mensuales</b>: salen de MENSUAL (curva mensual del forecast por nivel); <b>Ejec. ppto</b> = inversión / ppto meta y <b>Cumpl. leads</b> = leads CRM / meta leads. Con el botón de meta encendido, en la vista mes a mes se toma el mes completo; apagado, la parte de los días del rango. Solo aplican sin filtro de medio, ciudad, facultad o programa.
         La inversión de las campañas generales (sin programa) no se reparte: queda en su fila "Anuncios generales" de la ciudad y facultad donde se pautó, con sus leads de plataforma.
       </div>
     </div>
@@ -227,6 +227,8 @@ const GV = (gid, extra) => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/g
 const URL_CRUCE = GV(1948876709, '&range=A:M&headers=1');
 const URL_CTRL  = GV(1948876709, '&range=O1:Q80&headers=0');
 const URL_META  = GV(577768057);
+// metas mensuales por nivel (MENSUAL, la llena el script del forecast)
+const URL_MENS  = GV(234133784);
 // CRM de todas las fuentes, agrupado por día para no descargar las pestañas completas
 const GVQ = (gid, tq) => GV(gid, '&tq=' + encodeURIComponent(tq));
 const URL_FU_LEADS = GVQ(409442000, 'select toDate(B), D, H, count(A) group by toDate(B), D, H');
@@ -242,7 +244,7 @@ const META_PER = '2027-1';
 let META_TOTAL = false;
 const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
-let RAW = [], METAS = [], PERIODOS = {}, FAC_BY_PROG = {}, DISP = {};
+let RAW = [], METAS = [], MENS = [], PERIODOS = {}, FAC_BY_PROG = {}, DISP = {};
 let SORT = {col: 'inv', dir: -1}, OPEN = {}, CHART = null, QUICK = '', EVO = 'mes';
 
 // ── Parsers y formato ─────────────────────────────────────────────────────────
@@ -275,7 +277,7 @@ function bgc(p){ return p >= .8 ? 'bg-pos' : p >= .5 ? 'bg-mid' : 'bg-neg' }
 function difCls(d){ return d === null ? 't-mute' : Math.abs(d) <= .1 ? 't-pos' : Math.abs(d) <= .25 ? 't-mid' : 't-neg' }
 
 // ── Carga ────────────────────────────────────────────────────────────────────
-let pend = 6, MATP = [];
+let pend = 7, MATP = [];
 function done(){ if(--pend) return; prepare(); document.getElementById('loading').style.display = 'none' }
 function fail(msg){ document.getElementById('ld-msg').textContent = msg }
 Papa.parse(URL_CRUCE, {download:true, header:false, skipEmptyLines:true, error:() => fail('No se pudo leer CRUCE_UAN'), complete: r => {
@@ -294,6 +296,12 @@ Papa.parse(URL_META, {download:true, header:false, skipEmptyLines:true, error:()
   METAS.forEach(m => { PERIODOS[m.per] = PERIODOS[m.per] || [m.ini, m.fin];
     if(m.ini < PERIODOS[m.per][0]) PERIODOS[m.per][0] = m.ini; if(m.fin > PERIODOS[m.per][1]) PERIODOS[m.per][1] = m.fin;
     FAC_BY_PROG[pkey(m.prog)] = FAC_BY_PROG[pkey(m.prog)] || m.fac });
+  done() }});
+// MENSUAL: Periodo | Fecha (1.º del mes) | Mes | Nivel | % Mes | Presupuesto | Meta leads | CPL meta.
+// Tecnología cuenta como Pregrado, igual que en el CRUCE.
+Papa.parse(URL_MENS, {download:true, header:false, skipEmptyLines:true, error:() => done(), complete: r => {
+  MENS = r.data.slice(1).map(x => ({ mes: iso(x[1]).slice(0,7), niv: String(x[3]||'').trim() === 'Posgrado' ? 'Posgrado' : 'Pregrado',
+    ppto: num(x[5]), lm: num(x[6]) })).filter(m => m.mes);
   done() }});
 // CRM agrupado: fecha | fuente | nivel | conteo (educación continua y ETDH quedan fuera, como en el resto del tablero)
 [[URL_FU_LEADS, 'lc'], [URL_FU_MAT, 'mat']].forEach(([url, k]) => Papa.parse(url, {download:true, header:false, skipEmptyLines:true, error:() => done(), complete: r => {
@@ -372,13 +380,14 @@ function resetFilters(){ ['f-nivel','f-medio','f-ciudad','f-facultad','f-program
   document.getElementById('q').value = ''; QUICK = 'mes'; prepare() }
 
 // ── Cálculo ──────────────────────────────────────────────────────────────────
-const Z = () => ({inv:0, invG:0, lp:0, lc:0, adm:0, mat:0, ppto:0, lm:0, mm:0, lcF:0, lcG:0, lcT:0, lcL:0, lcP:0, lcO:0});
+const Z = () => ({inv:0, invG:0, lp:0, lc:0, adm:0, mat:0, ppto:0, lm:0, mm:0, pm:0, lmm:0, lcF:0, lcG:0, lcT:0, lcL:0, lcP:0, lcO:0});
 // leads CRM por medio (columnas de la tabla de programas; no se reparten)
 const LCM = [['lcF','Meta'],['lcG','Google'],['lcT','TikTok'],['lcL','LinkedIn'],['lcP','Programática'],['lcO','Otros']];
 const lcKey = m => { const t = norm(m); return /FACE|META|INSTA/.test(t) ? 'lcF' : /GOOGLE/.test(t) ? 'lcG' : /TIKTOK/.test(t) ? 'lcT' : /LINKEDIN/.test(t) ? 'lcL' : /PROGRAM/.test(t) ? 'lcP' : 'lcO' };
 function add(a, b){ for(const k in a) a[k] += b[k] || 0; return a }
 function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpa: div(e.inv, e.adm), cpm: div(e.inv, e.mat),
-  conv: div(e.mat, e.lc), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto) } }
+  conv: div(e.mat, e.lc), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto),
+  cumP: div(e.inv, e.pm), cumLm: div(e.lc, e.lmm), cplM: div(e.pm, e.lmm) } }
 
 // Filas del rango + nivel/medio/ciudad (sin facultad/programa) -> entradas por ciudad·nivel·facultad·programa
 function entradas(f){
@@ -398,6 +407,14 @@ function entradas(f){
     e.ppto += m.ppto * s; e.lm += m.lm * s; e.mm += m.mm * s });
   return Object.values(E).filter(e => (!f.fac || e.fac === f.fac) && (!f.prog || e.pk === f.prog));
 }
+// Meta mensual (MENSUAL) que cae entre a y b: cada mes aporta su meta × días del mes dentro del rango / días del mes
+function metaMensual(a, b, niv){
+  const out = {pm:0, lmm:0};
+  MENS.forEach(m => { if(niv && m.niv !== niv) return;
+    const ini = m.mes + '-01', fin = addDays(new Date(Date.UTC(+m.mes.slice(0,4), +m.mes.slice(5,7), 1)).toISOString().slice(0,10), -1);
+    const x = a > ini ? a : ini, y = b < fin ? b : fin; if(x > y) return;
+    const s = days(x, y) / days(ini, fin); out.pm += m.ppto * s; out.lmm += m.lm * s });
+  return out }
 function filasRango(f){ // filas diarias con todos los filtros (para semana y medio; sin reparto)
   return RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio) &&
     (!f.ciu || r.ciu === f.ciu) && (!f.fac || r.fac === f.fac) && (!f.prog || r.pk === f.prog)) }
@@ -462,6 +479,7 @@ function renderNivel(){
 }
 const COLS_BASE = [['inv','Inversión','cop'],['lp','Leads plat.','n'],['lc','Leads CRM','n'],['dif','CRM vs plat.','dif'],['cplP','CPL plat.','cop'],['cplC','CPL CRM','cop'],
   ['adm','Admisiones','n'],['mat','Matrículas','n'],['cpm','Costo / mat.','cop'],['conv','Lead → mat.','pct']];
+const COLS_MES = [['pm','Ppto meta','cop',1],['cumP','Ejec. ppto','cum'],['lmm','Meta leads','n'],['cumLm','Cumpl. leads','cum'],['cplM','CPL meta','cop']];
 const COLS_META = [['lm','Meta leads','n',1],['cumL','Cumpl. leads','cum'],['mm','Meta mat.','n'],['cumM','Cumpl. mat.','cum']];
 function cell(e, [k, , t, grp]){ const v = e[k], g = grp ? ' grp' : '';
   if(t === 'cop') return `<td class="r${g}">${fCOP(v)}</td>`;
@@ -496,12 +514,21 @@ function renderMedio(f){
 function setEvo(k){ EVO = k; document.querySelectorAll('[data-ev]').forEach(b => b.classList.toggle('on', b.dataset.ev === k)); renderSemana(F()) }
 function renderSemana(f){
   const mes = EVO === 'mes', rows = filasRango(f), g = groupRows(rows, r => mes ? r.d.slice(0,7) : weekStart(r.d)), ks = Object.keys(g).sort();
-  document.getElementById('semana-note').textContent = (f.fac || f.prog) ? 'con filtro de facultad o programa la inversión es solo la directa del programa' : (mes ? 'por mes calendario' : 'semanas de lunes a domingo');
+  // metas mensuales: solo por nivel; con filtro de medio, ciudad, facultad o programa no aplican
+  const conMeta = !f.medio && !f.ciu && !f.fac && !f.prog && f.niv !== 'General';
+  if(conMeta) ks.forEach(k => {
+    let a = k, b = mes ? addDays(new Date(Date.UTC(+k.slice(0,4), +k.slice(5,7), 1)).toISOString().slice(0,10), -1) : addDays(k, 6);
+    if(mes) a = k + '-01';
+    if(!(mes && META_TOTAL)) { if(f.desde > a) a = f.desde; if(f.hasta < b) b = f.hasta }
+    Object.assign(g[k], metaMensual(a, b, f.niv)) });
+  document.getElementById('semana-note').textContent = [(f.fac || f.prog) ? 'con filtro de facultad o programa la inversión es solo la directa del programa' : (mes ? 'por mes calendario' : 'semanas de lunes a domingo'),
+    conMeta ? (mes && META_TOTAL ? 'meta del mes completo' : 'meta mensual proporcional a los días del rango') : 'metas mensuales solo sin filtro de medio, ciudad, facultad o programa'].join(' · ');
   const lab = k => mes ? MESES[+k.slice(5,7)].replace(/^./, c => c.toUpperCase()) + ' ' + k.slice(0,4) : `${fDate(k)} – ${fDate(addDays(k, 6))}`;
-  document.getElementById('sem-head').innerHTML = head(mes ? 'Mes' : 'Semana', COLS_BASE, false);
+  const cols = COLS_BASE.concat(COLS_MES);
+  document.getElementById('sem-head').innerHTML = head(mes ? 'Mes' : 'Semana', cols, false);
   const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
-  document.getElementById('sem-body').innerHTML = ks.slice().reverse().map(k => '<tr><td>' + lab(k) + '</td>' + COLS_BASE.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
-    '<tr class="tr-total"><td>Total</td>' + COLS_BASE.map(c => cell(T, c)).join('') + '</tr>';
+  document.getElementById('sem-body').innerHTML = ks.slice().reverse().map(k => '<tr><td>' + lab(k) + '</td>' + cols.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
+    '<tr class="tr-total"><td>Total</td>' + cols.map(c => cell(T, c)).join('') + '</tr>';
   const css = getComputedStyle(document.body), fg = css.getPropertyValue('--fg-muted').trim() || '#888';
   const data = { labels: ks.map(k => mes ? lab(k) : fDate(k)), datasets: [
     { type:'bar', label:'Inversión', data: ks.map(k => Math.round(g[k].inv)), backgroundColor:'rgba(255,212,0,.55)', yAxisID:'y1', order:3 },
