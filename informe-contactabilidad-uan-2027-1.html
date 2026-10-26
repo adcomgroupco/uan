@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAN · Contactabilidad y embudo de conversión</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="assets/css/adcom.css">
+<script defer src="assets/js/adcom.js"></script>
+<style>
+/* Componentes propios de este informe. Todo resuelve con los tokens del sistema. */
+:root{--ink-b:#0a0a0a;--y:#ffc000;--card:#ffffff;--zebra:#fafaf7;--lineT:#e8e8e3}
+.app-main,.app-content,.sec,.tabla-abierta,.g2>*,.g3>*,.g4>*,.conc>div{min-width:0;max-width:100%}
+body.con-shell .app-main{overflow-x:clip}
+.app-content{max-width:1180px}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* portada oscura */
+.hero-d{background:var(--ink-b);color:#fff;border-radius:22px;padding:clamp(32px,5vw,56px);margin:var(--s-5) 0 var(--s-6);position:relative;overflow:hidden}
+.hero-d::before{content:'';position:absolute;right:-70px;top:-70px;width:300px;height:300px;border-radius:50%;border:64px solid rgba(255,192,0,.10)}
+.hero-d .kick{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,192,0,.4);color:var(--y);border-radius:999px;padding:6px 14px;font-size:var(--fs-min);font-weight:700}
+.hero-d .kick::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--y)}
+.hero-d h1{color:#fff;font-size:clamp(2.1rem,5vw,3.8rem);letter-spacing:-.045em;line-height:1;max-width:19ch;margin:22px 0 18px;position:relative}
+.hero-d h1 em{background:none;color:var(--y);font-style:normal}
+.hero-d p{color:#b9b9b4;max-width:60ch;font-size:1.05rem;position:relative}
+.pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;position:relative}
+.pills span{border:1px solid #3a3a38;color:#ddd;border-radius:999px;padding:7px 14px;font-size:.78rem}
+
+/* encabezado de sección oscuro */
+.sec{padding-block:var(--s-5)}
+.sec-h{background:var(--ink-b);color:#fff;border-radius:18px;padding:clamp(22px,3vw,34px) clamp(22px,3vw,38px);margin-bottom:var(--s-5);display:grid;gap:10px}
+.sec-h .n{color:var(--y);font-size:var(--fs-min);font-weight:800}
+.sec-h h2{color:#fff;font-size:clamp(1.5rem,3vw,2.3rem);letter-spacing:-.035em;line-height:1.05;max-width:26ch}
+.sec-h h2 em{background:none;color:var(--y);font-style:normal}
+.sec-h p{color:#b9b9b4;max-width:62ch}
+.sub-h{font-size:1.2rem;letter-spacing:-.02em;margin:var(--s-5) 0 var(--s-3)}
+.txt{max-width:72ch;color:var(--fg-secondary);margin:0 0 var(--s-3)}
+.txt b{color:var(--fg)}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-4)}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s-4)}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s-3)}
+@media (max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.g2,.g3{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.g4{grid-template-columns:minmax(0,1fr)}}
+small{font-size:var(--fs-min);color:var(--fg-muted);font-weight:500}
+.foot{font-size:var(--fs-body-min);color:var(--fg-muted);margin-top:var(--s-3);max-width:80ch}
+.cardw{background:var(--card);border:1px solid var(--rule-strong);border-radius:16px;padding:clamp(18px,2.4vw,28px)}
+
+/* mensaje clave */
+.clave{background:var(--card);border:2px solid var(--y);border-radius:16px;padding:clamp(20px,3vw,32px);margin:0 0 var(--s-4)}
+.clave h3{font-size:1.2rem;margin:0 0 8px}
+.clave p{color:var(--fg-secondary);max-width:78ch}
+.clave b{color:var(--fg)}
+
+/* tablas: suaves, como el tablero semanal */
+.tabla-abierta{display:block;overflow-x:auto;background:var(--card);border:1px solid var(--rule);border-radius:14px;margin:0 0 var(--s-3)}
+.tabla-abierta table{width:100%;border-collapse:collapse;min-width:520px;font-size:.8rem}
+.tabla-abierta th{background:#f6f6f2;color:var(--fg-muted);font-size:.72rem;font-weight:700;padding:10px 12px;border-bottom:2px solid #e6e6df;text-align:right;white-space:nowrap}
+.tabla-abierta th:first-child{text-align:left}
+.tabla-abierta td{padding:8px 12px;border-bottom:1px solid #efefea;color:var(--fg-secondary);text-align:right;vertical-align:middle;font-variant-numeric:tabular-nums}
+.tabla-abierta td:first-child{text-align:left;color:var(--fg);font-weight:600}
+.tabla-abierta tbody tr:last-child td{border-bottom:0}
+.tabla-abierta tbody tr:hover td{background:#fbfbf8}
+.tabla-abierta td b{font-weight:800;color:var(--fg)}
+.tabla-abierta td .sub{display:block;font-size:var(--fs-min);color:var(--fg-muted);font-weight:500;margin-top:2px}
+.tabla-abierta td small{color:var(--fg-muted)}
+.tabla-abierta tr.es-total td{background:#f6f6f2;font-weight:700;color:var(--fg);border-top:2px solid #e6e6df}
+.tabla-abierta tr.nv td{background:#fff9e0;color:var(--ink-b);font-weight:700}
+.tabla-abierta tr.gt td{background:#f6f6f2;color:var(--ink-b);font-weight:800;border-top:2px solid #e6e6df}
+.tabla-abierta .ind{display:inline-block;padding-left:18px;font-weight:500;color:var(--fg-secondary)}
+.t-main td:first-child{white-space:nowrap}
+.t-main td:not(:first-child),.t-main th:not(:first-child){min-width:150px}
+.t-main td:not(:first-child){line-height:1.35}
+.t-wide table{min-width:820px}
+.t-wide td,.t-wide th{white-space:nowrap;padding-inline:6px}
+.tree td,.tree th{font-size:.72rem}
+.tree td:first-child{min-width:150px}
+.tabla-abierta.t-txt td,.tabla-abierta.t-txt th{text-align:left;vertical-align:top}
+
+/* árbol nivel > periodo > medio */
+.tree tr[hidden]{display:none}
+.tree tr.lv1 td{font-weight:700;color:var(--ink-b);cursor:pointer;background:#fff;border-top:1px solid #e6e6df}
+.tree tr.lv1.tot td{background:#f6f6f2;border-top:2px solid #e6e6df}
+.tree tr.lv2 td{background:#fcfcfa;font-weight:500;cursor:pointer}
+.tree tr.lv2 td:first-child{padding-left:34px;color:var(--fg)}
+.tree tr.lv3 td:first-child{padding-left:62px;font-weight:500;color:var(--fg-secondary)}
+.tree tr.lv3 td{font-size:.78rem}
+.tree .cv{display:inline-block;width:0;height:0;border-left:5px solid #9a9a92;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-right:9px;transition:transform .15s}
+.tree tr.open>td>.cv{transform:rotate(90deg)}
+.tree tr.lv3 .cv{display:none}
+.tree small.pr{font-weight:500;color:var(--fg-muted)}
+.tree-ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.tree-ctl span{font-size:var(--fs-min);color:var(--fg-muted);margin-left:6px}
+.tbtn{font:inherit;font-size:.76rem;font-weight:700;border:1px solid #dcdcd5;background:#fff;color:var(--fg-secondary);border-radius:999px;padding:6px 14px;cursor:pointer}
+.tbtn:hover{border-color:var(--ink-b);color:var(--ink-b)}
+
+/* gráficos combinados */
+.chart-top{font-weight:800;color:var(--fg);margin-bottom:8px;font-size:.95rem}
+figure.chart{margin:0}
+.chart-leg{display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:var(--fs-min);color:var(--fg-muted);margin:8px 0 0}
+.chart-leg span{display:inline-flex;align-items:center}
+.lg-bar,.lg-line{display:inline-block;margin-right:6px}
+.lg-bar{width:12px;height:12px;background:var(--serie-1)}
+.lg-line{width:16px;height:3px;background:var(--fg)}
+
+/* chips desplegables */
+details.chip{margin:var(--s-3) 0;background:var(--card);border:1px solid var(--rule);border-radius:16px;padding:0 clamp(16px,2.2vw,26px)}
+details.chip>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:16px 0;font-weight:700;color:var(--fg);flex-wrap:wrap}
+details.chip>summary::-webkit-details-marker{display:none}
+details.chip>summary .pill{display:inline-flex;align-items:center;gap:8px;background:#fff7d6;color:var(--ink-b);border:1px solid #f0d981;border-radius:999px;padding:7px 16px;font-size:.84rem}
+details.chip>summary .pill::after{content:'+';font-weight:800;font-size:1.05rem;line-height:1;color:#a87c00}
+details.chip[open]>summary .pill::after{content:'–'}
+details.chip>div.chip-body{padding:4px 0 var(--s-4)}
+.seg{display:inline-flex;border:1px solid var(--rule-strong);border-radius:999px;padding:3px;gap:2px;margin:6px 0 14px;background:var(--zebra)}
+.seg-b{font:inherit;font-size:.82rem;font-weight:700;border:0;background:transparent;color:var(--fg-secondary);border-radius:999px;padding:8px 18px;cursor:pointer}
+.seg-b.on{background:var(--ink-b);color:#fff}
+.seg-b:focus-visible,details.chip>summary:focus-visible{outline:2px solid var(--accent-fg);outline-offset:2px;border-radius:12px}
+.pts{margin:8px 0 var(--s-3);padding-left:18px;color:var(--fg-secondary);max-width:78ch}
+.pts li{margin:6px 0}
+.pts b{color:var(--fg)}
+
+/* barras horizontales */
+.hb{display:grid;grid-template-columns:minmax(150px,230px) minmax(0,1fr) minmax(110px,150px);gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--lineT)}
+.hb:last-child{border-bottom:0}
+.hb-l{font-size:.88rem;color:var(--fg-secondary)}
+.hb-t{height:12px;background:#ececE6}
+.hb-t i{display:block;height:100%;background:var(--ink-b)}
+.hb-v{text-align:right;font-variant-numeric:tabular-nums;font-size:.9rem}
+@media (max-width:560px){.hb{grid-template-columns:minmax(0,1fr) minmax(90px,.6fr)}.hb-t{grid-column:1/-1;order:3}}
+
+/* tres embudos */
+.fe{background:var(--card);border:1px solid var(--rule-strong);border-top:4px solid var(--ink-b);border-radius:14px;padding:20px}
+.fe:nth-child(2){border-top-color:var(--y)}
+.fe h4{font-size:1.1rem;margin:0 0 4px}
+.fe-s{font-size:var(--fs-body-min);color:var(--fg-muted);margin-bottom:var(--s-3)}
+.fe ul{list-style:none;margin:0;padding:0}
+.fe li{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr) 92px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--lineT);font-size:.82rem}
+.fe-l{color:var(--fg-secondary)}
+.fe-t{height:9px;background:#ececE6}
+.fe-t i{display:block;height:100%;background:var(--ink-b)}
+.fe:nth-child(2) .fe-t i{background:#b88700}
+.fe-v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fe-n{font-size:var(--fs-body-min);color:var(--fg-muted);margin-top:var(--s-3)}
+@media (max-width:560px){.fe li{grid-template-columns:minmax(0,1fr) auto}.fe-t{grid-column:1/-1;order:3}}
+
+/* conclusiones */
+.conc{display:grid;grid-template-columns:56px minmax(0,1fr);gap:var(--s-4);background:var(--card);border:1px solid var(--rule-strong);border-radius:18px;padding:clamp(20px,3vw,32px);margin:var(--s-4) 0}
+.conc .cn{width:48px;height:48px;border-radius:50%;background:var(--ink-b);color:var(--y);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800}
+.conc h3{font-size:clamp(1.2rem,2.2vw,1.55rem);letter-spacing:-.025em;margin-bottom:10px;max-width:36ch}
+@media (max-width:640px){.conc{grid-template-columns:minmax(0,1fr)}}
+
+/* avanzan solos: mini barras */
+.mini{background:var(--card);border:1px solid var(--rule-strong);border-radius:14px;padding:18px}
+.mini h4{font-size:.95rem;margin:0 0 4px;letter-spacing:-.01em}
+.mini p{font-size:var(--fs-min);color:var(--fg-muted);margin:0 0 14px;min-height:2.4em}
+.mb{display:grid;grid-template-columns:78px minmax(0,1fr) auto;gap:8px;align-items:center;padding:5px 0;font-size:.78rem}
+.mb-l{color:var(--fg-muted)}
+.mb-t{height:14px;background:#ececE6}
+.mb-t i{display:block;height:100%;background:#9b9b94}
+.mb-t i.cur{background:var(--y)}
+.mb-v{font-variant-numeric:tabular-nums;min-width:56px;text-align:right}
+
+/* plan: tarjetas con gráfico */
+.pc{background:var(--card);border:1px solid var(--rule-strong);border-top:4px solid var(--y);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:6px}
+.pc-k{font-size:var(--fs-min);font-weight:800;color:var(--fg-muted)}
+.pc h3{font-size:1.08rem;letter-spacing:-.02em;line-height:1.2;margin-bottom:8px}
+.pc-s{font-size:var(--fs-body-min);color:var(--fg-secondary);margin-top:8px}
+.pb{display:grid;grid-template-columns:104px minmax(0,1fr) 52px;gap:8px;align-items:center;padding:4px 0;font-size:.78rem}
+.pb-l{color:var(--fg-secondary)}
+.pb-t{height:14px;background:#ececE6}
+.pb-t i{display:block;height:100%}
+.pb-v{text-align:right;font-variant-numeric:tabular-nums}
+.pb-cap{font-size:var(--fs-min);font-weight:700;color:var(--fg-muted);margin-top:8px}
+.tl{display:grid;grid-template-columns:repeat(4,1fr);margin-top:14px;border-top:3px solid var(--ink-b);position:relative}
+.tl span{font-size:.7rem;color:var(--fg-secondary);padding-top:10px;position:relative;display:flex;flex-direction:column;gap:2px}
+.tl span::before{content:'';position:absolute;top:-8px;left:0;width:13px;height:13px;border-radius:50%;background:var(--y);border:3px solid var(--ink-b)}
+.tl b{color:var(--fg);font-size:.8rem}
+.split{display:flex;height:42px;margin:8px 0 4px;font-weight:800;font-size:.85rem}
+.split div{display:flex;align-items:center;padding-inline:14px}
+.split .a{flex:70;background:var(--ink-b);color:#fff;border-radius:10px 0 0 10px}
+.split .b{flex:30;background:var(--y);color:var(--ink-b);border-radius:0 10px 10px 0}
+.tg{background:var(--card);border:1px solid var(--rule-strong);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.tg p{font-size:.82rem;color:var(--fg-secondary);margin:0;flex:1}
+.tg p b{color:var(--fg)}
+.tg-n{font-size:1.8rem;letter-spacing:-.03em;line-height:1}
+.rotulo{white-space:nowrap;align-self:flex-start}
+.dec{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--s-3)}
+.dec span{background:var(--card);border:1px solid var(--rule-strong);border-radius:999px;padding:9px 16px;font-size:.82rem;color:var(--fg-secondary)}
+.dec b{color:var(--fg)}
+.chip-read{color:var(--fg-secondary);max-width:75ch}
+</style>
+</head>
+<body class="con-shell">
+
+<nav class="app-sidebar" aria-label="Contenido del informe">
+  <div class="app-sidebar-top">
+    <a class="app-sidebar-brand" href="index.html"><i></i>Adcom</a>
+    <div class="app-sidebar-client">
+      <span class="app-sidebar-client-label">Cliente</span>
+      <strong class="app-sidebar-client-name">Universidad Antonio Nariño</strong>
+      <span class="app-sidebar-client-period">2026-1 · 2026-2 · 2027-1</span>
+    </div>
+  </div>
+  <div class="app-sidebar-nav">
+    <span class="app-sidebar-nav-title">Resultados</span>
+    <a href="#resumen"><b></b>Resumen general<small>01</small></a>
+    <span class="app-sidebar-nav-title">Contactabilidad</span>
+    <a href="#estrategia"><b></b>Estrategia y resultados<small>02</small></a>
+    <a href="#conclusiones"><b></b>Conclusiones<small>03</small></a>
+    <span class="app-sidebar-nav-title">Plan</span>
+    <a href="#plan"><b></b>Plan táctico<small>04</small></a>
+  </div>
+  <div class="app-sidebar-foot">Adcom, estrategia digital.<br>Datos al 26 de octubre de 2026.</div>
+</nav>
+
+<div class="app-main">
+  <div class="app-topbar">
+    <span class="app-topbar-crumb">UAN</span>
+    <span class="app-topbar-section">Resumen general</span>
+    <span class="app-topbar-meta">Contactabilidad y embudo</span>
+  </div>
+
+  <div class="app-content wrap">
+
+    <header class="hero-d">
+      <span class="kick">Universidad Antonio Nariño · pauta digital</span>
+      <h1>Del lead a la matrícula: <em>dónde se gana y dónde se pierde</em></h1>
+      <p>El embudo de los tres últimos periodos, cómo funciona la contactabilidad con WhatsApp y llamada con IA, y el plan para rescatar a quienes hoy se quedan en el camino.</p>
+      <div class="pills"><span>Pregrado y posgrado</span><span>Meta y Google</span><span>2026-1 · 2026-2 · 2027-1</span><span>Datos al 26 de octubre de 2026</span></div>
+    </header>
+
+    <!-- ============================================================= 01 -->
+    <section class="sec" id="resumen">
+      <div class="sec-h">
+        <span class="n">01 · RESUMEN GENERAL</span>
+        <h2>El embudo de <em>tres periodos</em></h2>
+        <p>Inversión, leads y cada etapa del proceso, con su porcentaje y su costo.</p>
+      </div>
+
+      <div class="clave">
+        <h3>La estrategia funciona hasta la admisión</h3>
+        <p>De lead a admisión se pasó de <b>2,6%</b> en 2026-1 a <b>4,3%</b> en 2026-2 y <b>5,6%</b> en 2027-1. De la admisión en adelante el embudo se comporta parecido en los dos periodos ya cerrados: de cada 100 admisiones, <b>29% y 26%</b> terminan en matrícula. Ahí está la oportunidad: acompañar mejor a quien ya empezó.</p>
+      </div>
+
+      <div class='tabla-abierta t-main'><table><thead><tr><th></th><th>2026-1</th><th>2026-2</th><th>2027-1 · en curso</th></tr></thead><tbody><tr class=''><td>Inversión en pauta</td><td><b>$219,2 M</b><span class='sub'>Meta $128,8 M · Google $90,4 M</span></td><td><b>$287,7 M</b><span class='sub'>Meta $229,6 M · Google $58,0 M</span></td><td><b>$67,5 M</b><span class='sub'>Meta $40,0 M · Google $27,5 M</span></td></tr><tr class=''><td>Leads en CRM</td><td><b>19.317</b><span class='sub'>$11.350 por lead</span></td><td><b>14.853</b><span class='sub'>$19.368 por lead</span></td><td><b>3.993</b><span class='sub'>$16.895 por lead</span></td></tr><tr class=''><td>Admisión</td><td><b>497</b><span class='sub'>2,6% de los leads<br>$441.138 por admisión</span></td><td><b>634</b><span class='sub'>4,3% de los leads<br>$453.753 por admisión</span></td><td><b>224</b><span class='sub'>5,6% de los leads<br>$301.161 por admisión</span></td></tr><tr class=''><td>Inscritos</td><td><b>289</b><span class='sub'>1,5% de los leads<br>$758.635 por inscrito</span></td><td><b>453</b><span class='sub'>3,0% de los leads<br>$635.053 por inscrito</span></td><td><b>162</b><span class='sub'>4,1% de los leads<br>$416.421 por inscrito</span></td></tr><tr class=''><td>Admitidos</td><td><b>186</b><span class='sub'>1,0% de los leads<br>$1.178.740 por admitido</span></td><td><b>237</b><span class='sub'>1,6% de los leads<br>$1.213.836 por admitido</span></td><td><b>64</b><span class='sub'>1,6% de los leads<br>$1.054.065 por admitido</span></td></tr><tr class=''><td>Matriculados</td><td><b>145</b><span class='sub'>0,75% de los leads<br>$1.512.038 por matrícula</span></td><td><b>168</b><span class='sub'>1,13% de los leads<br>$1.712.376 por matrícula</span></td><td><b>15</b><span class='sub'>0,38% de los leads<br>$4.497.344 por matrícula</span></td></tr><tr class='es-total'><td>Avance entre etapas</td><td></td><td></td><td></td></tr><tr class=''><td>&nbsp;&nbsp;Lead a admisión</td><td>2,6%</td><td>4,3%</td><td>5,6%</td></tr><tr class=''><td>&nbsp;&nbsp;Admisión a inscrito</td><td>58%</td><td>71%</td><td>72%</td></tr><tr class=''><td>&nbsp;&nbsp;Inscrito a admitido</td><td>64%</td><td>52%</td><td>40%</td></tr><tr class=''><td>&nbsp;&nbsp;Admitido a matrícula</td><td>78%</td><td>71%</td><td>23%</td></tr></tbody></table></div>
+
+      <div class="cardw" style="margin-top:var(--s-4)">
+        <div class="g2">
+          <figure class='chart'><figcaption class='chart-top'>Inversión, leads y matrículas por periodo</figcaption><svg viewBox='0 0 560 342' role='img' aria-label='Inversión en millones de pesos, leads en CRM, matrículas y conversión final de los tres periodos' style='width:100%;height:auto;display:block'><line x1='24' y1='250' x2='536' y2='250' stroke='var(--rule-strong)'/><line x1='24' y1='101.0' x2='536' y2='101.0' stroke='var(--rule)' stroke-dasharray='3 4'/><rect x='73.5' y='162.4' width='71.7' height='87.6' fill='var(--serie-1)'/><text x='109.3' y='155.4' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>$219 M</text><text x='109.3' y='270' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>2026-1</text><text x='109.3' y='290' text-anchor='middle' font-size='11' font-weight='700' fill='var(--fg)'>145 matrículas</text><text x='109.3' y='307' text-anchor='middle' font-size='11' font-weight='500' fill='var(--fg-secondary)'>0,75% conversión final</text><rect x='244.2' y='135.0' width='71.7' height='115.0' fill='var(--serie-1)'/><text x='280.0' y='128.0' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>$288 M</text><text x='280.0' y='270' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>2026-2</text><text x='280.0' y='290' text-anchor='middle' font-size='11' font-weight='700' fill='var(--fg)'>168 matrículas</text><text x='280.0' y='307' text-anchor='middle' font-size='11' font-weight='500' fill='var(--fg-secondary)'>1,13% conversión final</text><rect x='414.8' y='223.0' width='71.7' height='27.0' fill='var(--serie-1)'/><text x='450.7' y='216.0' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>$67 M</text><text x='450.7' y='270' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>2027-1 · en curso</text><text x='450.7' y='290' text-anchor='middle' font-size='11' font-weight='700' fill='var(--fg)'>15 matrículas</text><text x='450.7' y='307' text-anchor='middle' font-size='11' font-weight='500' fill='var(--fg-secondary)'>0,38% conversión final</text><polyline fill='none' stroke='var(--fg)' stroke-width='2' points='109.3,39.2 280.0,53.2 450.7,87.1'/><circle cx='109.3' cy='39.2' r='4.5' fill='var(--fg)' stroke='var(--ground)' stroke-width='2'/><text x='109.3' y='28.2' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>19.317</text><circle cx='280.0' cy='53.2' r='4.5' fill='var(--fg)' stroke='var(--ground)' stroke-width='2'/><text x='280.0' y='42.2' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>14.853</text><circle cx='450.7' cy='87.1' r='4.5' fill='var(--fg)' stroke='var(--ground)' stroke-width='2'/><text x='450.7' y='76.1' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>3.993</text></svg><p class='chart-leg'><span><i class='lg-bar'></i>Inversión Meta + Google (barras)</span><span><i class='lg-line'></i>Leads en CRM (línea)</span></p></figure>
+          <figure class='chart'><figcaption class='chart-top'>Leads y % de lead a admisión</figcaption><svg viewBox='0 0 560 290' role='img' aria-label='Leads en CRM y porcentaje de lead a admisión por periodo' style='width:100%;height:auto;display:block'><line x1='24' y1='250' x2='536' y2='250' stroke='var(--rule-strong)'/><line x1='24' y1='101.0' x2='536' y2='101.0' stroke='var(--rule)' stroke-dasharray='3 4'/><rect x='73.5' y='135.0' width='71.7' height='115.0' fill='var(--serie-1)'/><text x='109.3' y='128.0' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>19.317</text><text x='109.3' y='270' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>2026-1</text><rect x='244.2' y='161.6' width='71.7' height='88.4' fill='var(--serie-1)'/><text x='280.0' y='154.6' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>14.853</text><text x='280.0' y='270' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>2026-2</text><rect x='414.8' y='226.2' width='71.7' height='23.8' fill='var(--serie-1)'/><text x='450.7' y='219.2' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>3.993</text><text x='450.7' y='270' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>2027-1 · en curso</text><polyline fill='none' stroke='var(--fg)' stroke-width='2' points='109.3,83.4 280.0,59.0 450.7,39.6'/><circle cx='109.3' cy='83.4' r='4.5' fill='var(--fg)' stroke='var(--ground)' stroke-width='2'/><text x='109.3' y='72.4' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>2,6%</text><circle cx='280.0' cy='59.0' r='4.5' fill='var(--fg)' stroke='var(--ground)' stroke-width='2'/><text x='280.0' y='48.0' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>4,3%</text><circle cx='450.7' cy='39.6' r='4.5' fill='var(--fg)' stroke='var(--ground)' stroke-width='2'/><text x='450.7' y='28.6' text-anchor='middle' font-size='11.5' font-weight='700' fill='var(--fg)'>5,6%</text></svg><p class='chart-leg'><span><i class='lg-bar'></i>Leads en CRM (barras)</span><span><i class='lg-line'></i>% de lead a admisión (línea)</span></p></figure>
+        </div>
+      </div>
+
+      <details class="chip" style="margin-top:var(--s-4)">
+        <summary><span class="pill">Pregrado y posgrado</span><small>Por periodo y, dentro de cada uno, por medio</small></summary>
+        <div class="chip-body">
+          <div class='tree-ctl'><button type='button' class='tbtn' data-t='all'>Expandir todo</button><button type='button' class='tbtn' data-t='none'>Contraer</button><span>Haz clic en una fila para abrir o cerrar</span></div><div class='tabla-abierta tree t-wide'><table><thead><tr><th>Nivel · periodo · medio</th><th class='r'>Inversión</th><th class='r'>Leads CRM</th><th class='r'>CPL CRM</th><th class='r'>Admisión</th><th class='r'>Lead→adm.</th><th class='r'>Inscritos</th><th class='r'>Admitidos</th><th class='r'>Matrículas</th><th class='r'>Conv. final</th><th class='r'>CPL matr.</th></tr></thead><tbody><tr class='lv1 open' data-id='g0'><td><span class='cv'></span>Pregrado<small class='pr'> · 3 periodos</small></td><td class='r'>$427,3 M</td><td class='r'>27.807</td><td class='r'>$15.365</td><td class='r'>1.230</td><td class='r'>4,4%</td><td class='r'>802</td><td class='r'>436</td><td class='r'>291</td><td class='r'>1,05%</td><td class='r'>$1.468.242</td></tr><tr class='lv2' data-id='g0-2026-1' data-parent='g0'><td><span class='cv'></span>2026-1</td><td class='r'>$177,0 M</td><td class='r'>14.367</td><td class='r'>$12.318</td><td class='r'>480</td><td class='r'>3,3%</td><td class='r'>280</td><td class='r'>180</td><td class='r'>140</td><td class='r'>0,97%</td><td class='r'>$1.264.116</td></tr><tr class='lv3' data-parent='g0-2026-1' hidden><td>Meta</td><td class='r'>$123,4 M</td><td class='r'>7.337</td><td class='r'>$16.822</td><td class='r'>276</td><td class='r'>3,8%</td><td class='r'>172</td><td class='r'>92</td><td class='r'>67</td><td class='r'>0,91%</td><td class='r'>$1.842.094</td></tr><tr class='lv3' data-parent='g0-2026-1' hidden><td>Google</td><td class='r'>$53,6 M</td><td class='r'>7.030</td><td class='r'>$7.618</td><td class='r'>204</td><td class='r'>2,9%</td><td class='r'>108</td><td class='r'>88</td><td class='r'>73</td><td class='r'>1,04%</td><td class='r'>$733.642</td></tr><tr class='lv2' data-id='g0-2026-2' data-parent='g0'><td><span class='cv'></span>2026-2</td><td class='r'>$199,9 M</td><td class='r'>10.611</td><td class='r'>$18.843</td><td class='r'>554</td><td class='r'>5,2%</td><td class='r'>383</td><td class='r'>200</td><td class='r'>140</td><td class='r'>1,32%</td><td class='r'>$1.428.184</td></tr><tr class='lv3' data-parent='g0-2026-2' hidden><td>Meta</td><td class='r'>$162,6 M</td><td class='r'>8.825</td><td class='r'>$18.430</td><td class='r'>303</td><td class='r'>3,4%</td><td class='r'>203</td><td class='r'>100</td><td class='r'>68</td><td class='r'>0,77%</td><td class='r'>$2.391.830</td></tr><tr class='lv3' data-parent='g0-2026-2' hidden><td>Google</td><td class='r'>$37,3 M</td><td class='r'>1.786</td><td class='r'>$20.885</td><td class='r'>251</td><td class='r'>14,1%</td><td class='r'>180</td><td class='r'>100</td><td class='r'>72</td><td class='r'>4,03%</td><td class='r'>$518.073</td></tr><tr class='lv2' data-id='g0-2027-1' data-parent='g0'><td><span class='cv'></span>2027-1 · en curso</td><td class='r'>$50,3 M</td><td class='r'>2.829</td><td class='r'>$17.793</td><td class='r'>196</td><td class='r'>6,9%</td><td class='r'>139</td><td class='r'>56</td><td class='r'>11</td><td class='r'>0,39%</td><td class='r'>$4.576.042</td></tr><tr class='lv3' data-parent='g0-2027-1' hidden><td>Meta</td><td class='r'>$28,6 M</td><td class='r'>2.062</td><td class='r'>$13.853</td><td class='r'>125</td><td class='r'>6,1%</td><td class='r'>90</td><td class='r'>34</td><td class='r'>5</td><td class='r'>0,24%</td><td class='r'>$5.713.144</td></tr><tr class='lv3' data-parent='g0-2027-1' hidden><td>Google</td><td class='r'>$21,8 M</td><td class='r'>767</td><td class='r'>$28.384</td><td class='r'>71</td><td class='r'>9,3%</td><td class='r'>49</td><td class='r'>22</td><td class='r'>6</td><td class='r'>0,78%</td><td class='r'>$3.628.456</td></tr><tr class='lv1 open' data-id='g1'><td><span class='cv'></span>Posgrado<small class='pr'> · 3 periodos</small></td><td class='r'>$144,2 M</td><td class='r'>8.833</td><td class='r'>$16.323</td><td class='r'>125</td><td class='r'>1,4%</td><td class='r'>102</td><td class='r'>51</td><td class='r'>37</td><td class='r'>0,42%</td><td class='r'>$3.896.682</td></tr><tr class='lv2' data-id='g1-2026-1' data-parent='g1'><td><span class='cv'></span>2026-1</td><td class='r'>$41,2 M</td><td class='r'>4.507</td><td class='r'>$9.147</td><td class='r'>17</td><td class='r'>0,4%</td><td class='r'>9</td><td class='r'>6</td><td class='r'>5</td><td class='r'>0,11%</td><td class='r'>$8.245.058</td></tr><tr class='lv3' data-parent='g1-2026-1' hidden><td>Meta</td><td class='r'>$4,4 M</td><td class='r'>1.065</td><td class='r'>$4.088</td><td class='r'>6</td><td class='r'>0,6%</td><td class='r'>4</td><td class='r'>2</td><td class='r'>2</td><td class='r'>0,19%</td><td class='r'>$2.176.783</td></tr><tr class='lv3' data-parent='g1-2026-1' hidden><td>Google</td><td class='r'>$36,9 M</td><td class='r'>3.442</td><td class='r'>$10.712</td><td class='r'>11</td><td class='r'>0,3%</td><td class='r'>5</td><td class='r'>4</td><td class='r'>3</td><td class='r'>0,09%</td><td class='r'>$12.290.575</td></tr><tr class='lv2' data-id='g1-2026-2' data-parent='g1'><td><span class='cv'></span>2026-2</td><td class='r'>$85,8 M</td><td class='r'>3.622</td><td class='r'>$23.696</td><td class='r'>80</td><td class='r'>2,2%</td><td class='r'>70</td><td class='r'>37</td><td class='r'>28</td><td class='r'>0,77%</td><td class='r'>$3.065.295</td></tr><tr class='lv3' data-parent='g1-2026-2' hidden><td>Meta</td><td class='r'>$65,1 M</td><td class='r'>3.549</td><td class='r'>$18.342</td><td class='r'>72</td><td class='r'>2,0%</td><td class='r'>62</td><td class='r'>32</td><td class='r'>25</td><td class='r'>0,70%</td><td class='r'>$2.603.894</td></tr><tr class='lv3' data-parent='g1-2026-2' hidden><td>Google</td><td class='r'>$20,7 M</td><td class='r'>73</td><td class='r'>$283.985</td><td class='r'>8</td><td class='r'>11,0%</td><td class='r'>8</td><td class='r'>5</td><td class='r'>3</td><td class='r'>4,11%</td><td class='r'>$6.910.302</td></tr><tr class='lv2' data-id='g1-2027-1' data-parent='g1'><td><span class='cv'></span>2027-1 · en curso</td><td class='r'>$17,1 M</td><td class='r'>704</td><td class='r'>$24.323</td><td class='r'>28</td><td class='r'>4,0%</td><td class='r'>23</td><td class='r'>8</td><td class='r'>4</td><td class='r'>0,57%</td><td class='r'>$4.280.925</td></tr><tr class='lv3' data-parent='g1-2027-1' hidden><td>Meta</td><td class='r'>$11,4 M</td><td class='r'>602</td><td class='r'>$18.914</td><td class='r'>26</td><td class='r'>4,3%</td><td class='r'>21</td><td class='r'>7</td><td class='r'>4</td><td class='r'>0,66%</td><td class='r'>$2.846.554</td></tr><tr class='lv3' data-parent='g1-2027-1' hidden><td>Google</td><td class='r'>$5,7 M</td><td class='r'>102</td><td class='r'>$56.250</td><td class='r'>2</td><td class='r'>2,0%</td><td class='r'>2</td><td class='r'>1</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv1 open' data-id='g2'><td><span class='cv'></span>Otros (sin nivel)<small class='pr'> · 3 periodos</small></td><td class='r'>$2,9 M</td><td class='r'>1.523</td><td class='r'>$1.936</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv2' data-id='g2-2026-1' data-parent='g2'><td><span class='cv'></span>2026-1</td><td class='r'>$1,0 M</td><td class='r'>443</td><td class='r'>$2.357</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv3' data-parent='g2-2026-1' hidden><td>Meta</td><td class='r'>$1,0 M</td><td class='r'>322</td><td class='r'>$3.243</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv3' data-parent='g2-2026-1' hidden><td>Google</td><td class='r'>-</td><td class='r'>121</td><td class='r'>-</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv2' data-id='g2-2026-2' data-parent='g2'><td><span class='cv'></span>2026-2</td><td class='r'>$1,9 M</td><td class='r'>620</td><td class='r'>$3.073</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv3' data-parent='g2-2026-2' hidden><td>Meta</td><td class='r'>$1,9 M</td><td class='r'>620</td><td class='r'>$3.073</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv3' data-parent='g2-2026-2' hidden><td>Google</td><td class='r'>-</td><td class='r'>0</td><td class='r'>-</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv2' data-id='g2-2027-1' data-parent='g2'><td><span class='cv'></span>2027-1 · en curso</td><td class='r'>-</td><td class='r'>460</td><td class='r'>-</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv3' data-parent='g2-2027-1' hidden><td>Meta</td><td class='r'>-</td><td class='r'>460</td><td class='r'>-</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv3' data-parent='g2-2027-1' hidden><td>Google</td><td class='r'>-</td><td class='r'>0</td><td class='r'>-</td><td class='r'>0</td><td class='r'>0,0%</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0</td><td class='r'>0,00%</td><td class='r'>n/d</td></tr><tr class='lv1 tot open' data-id='g3'><td><span class='cv'></span>Total pauta<small class='pr'> · 3 periodos</small></td><td class='r'>$574,4 M</td><td class='r'>38.163</td><td class='r'>$15.051</td><td class='r'>1.355</td><td class='r'>3,6%</td><td class='r'>904</td><td class='r'>487</td><td class='r'>328</td><td class='r'>0,86%</td><td class='r'>$1.751.173</td></tr><tr class='lv2' data-id='g3-2026-1' data-parent='g3'><td><span class='cv'></span>2026-1</td><td class='r'>$219,2 M</td><td class='r'>19.317</td><td class='r'>$11.350</td><td class='r'>497</td><td class='r'>2,6%</td><td class='r'>289</td><td class='r'>186</td><td class='r'>145</td><td class='r'>0,75%</td><td class='r'>$1.512.038</td></tr><tr class='lv3' data-parent='g3-2026-1' hidden><td>Meta</td><td class='r'>$128,8 M</td><td class='r'>8.724</td><td class='r'>$14.766</td><td class='r'>282</td><td class='r'>3,2%</td><td class='r'>176</td><td class='r'>94</td><td class='r'>69</td><td class='r'>0,79%</td><td class='r'>$1.866.928</td></tr><tr class='lv3' data-parent='g3-2026-1' hidden><td>Google</td><td class='r'>$90,4 M</td><td class='r'>10.593</td><td class='r'>$8.537</td><td class='r'>215</td><td class='r'>2,0%</td><td class='r'>113</td><td class='r'>92</td><td class='r'>76</td><td class='r'>0,72%</td><td class='r'>$1.189.837</td></tr><tr class='lv2' data-id='g3-2026-2' data-parent='g3'><td><span class='cv'></span>2026-2</td><td class='r'>$287,7 M</td><td class='r'>14.853</td><td class='r'>$19.368</td><td class='r'>634</td><td class='r'>4,3%</td><td class='r'>453</td><td class='r'>237</td><td class='r'>168</td><td class='r'>1,13%</td><td class='r'>$1.712.376</td></tr><tr class='lv3' data-parent='g3-2026-2' hidden><td>Meta</td><td class='r'>$229,6 M</td><td class='r'>12.994</td><td class='r'>$17.673</td><td class='r'>375</td><td class='r'>2,9%</td><td class='r'>265</td><td class='r'>132</td><td class='r'>93</td><td class='r'>0,72%</td><td class='r'>$2.469.322</td></tr><tr class='lv3' data-parent='g3-2026-2' hidden><td>Google</td><td class='r'>$58,0 M</td><td class='r'>1.859</td><td class='r'>$31.217</td><td class='r'>259</td><td class='r'>13,9%</td><td class='r'>188</td><td class='r'>105</td><td class='r'>75</td><td class='r'>4,03%</td><td class='r'>$773.763</td></tr><tr class='lv2' data-id='g3-2027-1' data-parent='g3'><td><span class='cv'></span>2027-1 · en curso</td><td class='r'>$67,5 M</td><td class='r'>3.993</td><td class='r'>$16.895</td><td class='r'>224</td><td class='r'>5,6%</td><td class='r'>162</td><td class='r'>64</td><td class='r'>15</td><td class='r'>0,38%</td><td class='r'>$4.497.344</td></tr><tr class='lv3' data-parent='g3-2027-1' hidden><td>Meta</td><td class='r'>$40,0 M</td><td class='r'>3.124</td><td class='r'>$12.789</td><td class='r'>151</td><td class='r'>4,8%</td><td class='r'>111</td><td class='r'>41</td><td class='r'>9</td><td class='r'>0,29%</td><td class='r'>$4.439.104</td></tr><tr class='lv3' data-parent='g3-2027-1' hidden><td>Google</td><td class='r'>$27,5 M</td><td class='r'>869</td><td class='r'>$31.655</td><td class='r'>73</td><td class='r'>8,4%</td><td class='r'>51</td><td class='r'>23</td><td class='r'>6</td><td class='r'>0,69%</td><td class='r'>$4.584.703</td></tr></tbody></table></div>
+          <p class='foot'>La inversión por nivel se asigna por el nombre de la campaña; los leads y las etapas, por el nivel del programa registrado en el CRM.</p><ul class='pts'><li><b>Pregrado:</b> lead a admisión 3,3% → 5,2% → 6,9%. Concentra 83% de las matrículas de 2026-2.</li><li><b>Posgrado:</b> 0,4% → 2,2% → 4,0%. Pesa menos en volumen y es donde el embudo más sube.</li></ul>
+        </div>
+      </details>
+
+      <details class="chip">
+        <summary><span class="pill">Seis semanas contra seis semanas</span><small>Los mismos días desde que arranca la pauta</small></summary>
+        <div class="chip-body">
+          <div class='tabla-abierta'><table><thead><tr><th></th><th>2026-1 · 1-oct a 11-nov de 2025</th><th>2027-1 · 15-sep a 26-oct de 2026</th></tr></thead><tbody><tr class='es-total'><td>Inversión (Meta + Google)</td><td>$79,5 M</td><td>$67,2 M</td></tr><tr class='es-total'><td>Leads en CRM</td><td>4.696</td><td>3.552</td></tr><tr><td>Costo por lead</td><td>$16.940</td><td>$18.910</td></tr><tr class='es-total'><td>Admisión</td><td>114</td><td>107</td></tr><tr><td>&nbsp;&nbsp;% de los leads</td><td>2,4%</td><td>3,0%</td></tr><tr><td>Costo por admisión</td><td>$697.803</td><td>$627.739</td></tr><tr class='es-total'><td>Inscritos</td><td>74</td><td>81</td></tr><tr class='es-total'><td>Admitidos</td><td>46</td><td>16</td></tr><tr class='es-total'><td>Matriculados</td><td>34</td><td>0</td></tr></tbody></table></div>
+          <p class="foot">Se comparan los leads creados en las primeras seis semanas de pauta de cada periodo.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ============================================================= 02 -->
+    <section class="sec" id="estrategia">
+      <div class="sec-h">
+        <span class="n">02 · ESTRATEGIA DE CONTACTABILIDAD</span>
+        <h2>Qué hace la IA y <em>qué resultado da</em></h2>
+        <p>Cada lead de pauta llega a una página de gracias con dos botones: hablar por WhatsApp con un asistente o pedir una llamada de la IA.</p>
+      </div>
+
+      <div class="cardw">
+        <h3 class="sub-h" style="margin-top:0">Qué eligen los leads al terminar el formulario</h3>
+        <div class='hb'><div class='hb-l'>Eligen WhatsApp (bot)</div><div class='hb-t'><i style='width:43.0%'></i></div><div class='hb-v'><b>1.470</b> <small>43,0%</small></div></div><div class='hb'><div class='hb-l'>Eligen llamada (IA)</div><div class='hb-t'><i style='width:4.1%'></i></div><div class='hb-v'><b>141</b> <small>4,1%</small></div></div><div class='hb'><div class='hb-l'>No eligen ningún botón</div><div class='hb-t'><i style='width:52.9%'></i></div><div class='hb-v'><b>1.806</b> <small>52,9%</small></div></div>
+        <p class="txt" style="margin-top:var(--s-3);margin-bottom:0">Del 17 de septiembre al 26 de octubre llegaron <b>3.417 leads de pauta</b>. <b>47,1%</b> tocó un botón y <b>52,9%</b> no eligió ninguno: esos solo los atiende el equipo comercial.</p>
+      </div>
+
+      <div class="g2" style="margin-top:var(--s-4)">
+        <div class="cardw">
+          <h3 class="sub-h" style="margin-top:0">WhatsApp: capta, pero no retiene</h3>
+          <div class='hb'><div class='hb-l'>Registro en el bot</div><div class='hb-t'><i style='width:93.8%'></i></div><div class='hb-v'><b>1.379</b> <small>93,8%</small></div></div><div class='hb'><div class='hb-l'>Abandonan la conversación</div><div class='hb-t'><i style='width:72.9%'></i></div><div class='hb-v'><b>1.071</b> <small>72,9%</small></div></div><div class='hb'><div class='hb-l'>Conversan con el bot</div><div class='hb-t'><i style='width:21.0%'></i></div><div class='hb-v'><b>308</b> <small>21,0%</small></div></div><div class='hb'><div class='hb-l'>Muestran interés en avanzar</div><div class='hb-t'><i style='width:12.8%'></i></div><div class='hb-v'><b>188</b> <small>12,8%</small></div></div>
+          <p class="foot">Sobre los 1.470 leads que eligieron WhatsApp.</p>
+        </div>
+        <div class="cardw">
+          <h3 class="sub-h" style="margin-top:0">Llamada IA: funciona si contestan</h3>
+          <div class='hb'><div class='hb-l'>Reciben llamada de la IA</div><div class='hb-t'><i style='width:100.0%'></i></div><div class='hb-v'><b>181</b> <small>100,0% <small>(181 leads con resultado)</small></small></div></div><div class='hb'><div class='hb-l'>Contestan</div><div class='hb-t'><i style='width:43.1%'></i></div><div class='hb-v'><b>78</b> <small>43,1%</small></div></div><div class='hb'><div class='hb-l'>No contestan o llamada no efectiva</div><div class='hb-t'><i style='width:56.9%'></i></div><div class='hb-v'><b>103</b> <small>56,9%</small></div></div><div class='hb'><div class='hb-l'>Dicen "Sí, quiero iniciar"</div><div class='hb-t'><i style='width:18.8%'></i></div><div class='hb-v'><b>34</b> <small>18,8%</small></div></div><div class='hb'><div class='hb-l'>Dicen "Tal vez"</div><div class='hb-t'><i style='width:14.9%'></i></div><div class='hb-v'><b>27</b> <small>14,9%</small></div></div>
+          <p class="foot">Sobre los 181 leads con resultado de llamada IA.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-h">Qué tanto conoce la IA al lead</h3>
+      <div class='tabla-abierta'><table><thead><tr><th>Dato que deja la IA</th><th>Llamada</th><th>WhatsApp</th></tr></thead><tbody><tr><td>Nivel de interés</td><td>51%</td><td>17%</td></tr><tr><td>Programa de interés</td><td>72%</td><td>2%</td></tr><tr><td>Sede</td><td>49%</td><td>1%</td></tr><tr><td>Modalidad</td><td>49%</td><td>1%</td></tr><tr><td>Periodo de interés</td><td>38%</td><td>1%</td></tr><tr><td>Duda principal</td><td>52%</td><td>1%</td></tr></tbody></table></div>
+
+      <h3 class="sub-h">¿Los leads están avanzando por sí solos?</h3>
+      <div class="clave" style="margin-bottom:var(--s-3)">
+        <h3>Sí: el lead inicia su admisión mucho más rápido y, en dos de cada tres casos, sin ayuda de un asesor</h3>
+        <p>Antes pasaban unos <b>100 días</b> entre el registro y el inicio de la admisión; hoy pasa <b>1 día</b>, y la mitad de las admisiones (<b>50%</b>) se crea en las primeras 24 horas. De las admisiones de 2027-1, <b>65%</b> ocurrió sin gestión de asesor, contra <b>32%</b> en 2026-1.</p>
+      </div>
+      <div class='g4'><article class='mini'><h4>Tiempo hasta iniciar la admisión</h4><p>Mediana, desde que se registra el lead</p><div class='mb'><span class='mb-l'>2026-1</span><span class='mb-t'><i style='width:100.0%' class=''></i></span><b class='mb-v'>100 días</b></div><div class='mb'><span class='mb-l'>2026-2</span><span class='mb-t'><i style='width:4.9%' class=''></i></span><b class='mb-v'>5 días</b></div><div class='mb'><span class='mb-l'>2027-1 · en curso</span><span class='mb-t'><i style='width:2.0%' class='cur'></i></span><b class='mb-v'>1 día</b></div></article><article class='mini'><h4>Admisiones en las primeras 24 horas</h4><p>Del total de admisiones del periodo</p><div class='mb'><span class='mb-l'>2026-1</span><span class='mb-t'><i style='width:2.0%' class=''></i></span><b class='mb-v'>0%</b></div><div class='mb'><span class='mb-l'>2026-2</span><span class='mb-t'><i style='width:63.8%' class=''></i></span><b class='mb-v'>32%</b></div><div class='mb'><span class='mb-l'>2027-1 · en curso</span><span class='mb-t'><i style='width:100.0%' class='cur'></i></span><b class='mb-v'>50%</b></div></article><article class='mini'><h4>Admisiones sin gestión de asesor</h4><p>El lead avanzó por su cuenta</p><div class='mb'><span class='mb-l'>2026-1</span><span class='mb-t'><i style='width:45.7%' class=''></i></span><b class='mb-v'>32%</b></div><div class='mb'><span class='mb-l'>2026-2</span><span class='mb-t'><i style='width:100.0%' class=''></i></span><b class='mb-v'>69%</b></div><div class='mb'><span class='mb-l'>2027-1 · en curso</span><span class='mb-t'><i style='width:94.7%' class='cur'></i></span><b class='mb-v'>65%</b></div></article><article class='mini'><h4>Admisiones sin asesor por cada 100 leads</h4><p>Leads de las primeras seis semanas</p><div class='mb'><span class='mb-l'>2026-1</span><span class='mb-t'><i style='width:33.8%' class=''></i></span><b class='mb-v'>0,8</b></div><div class='mb'><span class='mb-l'>2026-2</span><span class='mb-t'><i style='width:100.0%' class=''></i></span><b class='mb-v'>2,3</b></div><div class='mb'><span class='mb-l'>2027-1 · en curso</span><span class='mb-t'><i style='width:86.9%' class='cur'></i></span><b class='mb-v'>2,0</b></div></article></div>
+      <p class="foot">Leads de las primeras seis semanas de pauta de cada periodo. Sin gestión de asesor = el lead sigue en estado Nuevo en el CRM.</p>
+    </section>
+
+    <!-- ============================================================= 03 -->
+    <section class="sec" id="conclusiones">
+      <div class="sec-h">
+        <span class="n">03 · CONCLUSIONES</span>
+        <h2>Tres embudos, <em>cuatro lecturas</em></h2>
+        <p>Los leads se separan en tres caminos según lo que hacen en la página de gracias. Cada uno avanza distinto.</p>
+      </div>
+
+      <div class="g3"><article class='fe'><h4>WhatsApp y bot</h4><p class='fe-s'>1.470 leads que hicieron clic en WhatsApp</p><ul><li><span class='fe-l'>Clic en WhatsApp</span><span class='fe-t'><i style='width:100.0%'></i></span><span class='fe-v'><b>1.470</b> <small>100,0%</small></span></li><li><span class='fe-l'>Conversan con el bot</span><span class='fe-t'><i style='width:21.0%'></i></span><span class='fe-v'><b>308</b> <small>21,0%</small></span></li><li><span class='fe-l'>Gestión de asesor</span><span class='fe-t'><i style='width:63.2%'></i></span><span class='fe-v'><b>929</b> <small>63,2%</small></span></li><li><span class='fe-l'>Quedan interesados</span><span class='fe-t'><i style='width:10.8%'></i></span><span class='fe-v'><b>159</b> <small>10,8%</small></span></li><li><span class='fe-l'>Admisión</span><span class='fe-t'><i style='width:4.3%'></i></span><span class='fe-v'><b>63</b> <small>4,3%</small></span></li><li><span class='fe-l'>Inscritos</span><span class='fe-t'><i style='width:3.4%'></i></span><span class='fe-v'><b>50</b> <small>3,4%</small></span></li><li><span class='fe-l'>Admitidos</span><span class='fe-t'><i style='width:1.2%'></i></span><span class='fe-v'><b>12</b> <small>0,82%</small></span></li><li><span class='fe-l'>Matriculados</span><span class='fe-t'><i style='width:1.2%'></i></span><span class='fe-v'><b>0</b> <small>0,0%</small></span></li></ul><p class='fe-n'>Con 14 o más días: 85% con gestión y 5,1% a admisión.</p></article><article class='fe'><h4>Llamada con IA</h4><p class='fe-s'>141 leads que hicieron clic en llamada</p><ul><li><span class='fe-l'>Clic en llamada</span><span class='fe-t'><i style='width:100.0%'></i></span><span class='fe-v'><b>141</b> <small>100,0%</small></span></li><li><span class='fe-l'>Reciben llamada de la IA</span><span class='fe-t'><i style='width:95.7%'></i></span><span class='fe-v'><b>135</b> <small>95,7%</small></span></li><li><span class='fe-l'>Contestan</span><span class='fe-t'><i style='width:45.4%'></i></span><span class='fe-v'><b>64</b> <small>45,4%</small></span></li><li><span class='fe-l'>Gestión de asesor</span><span class='fe-t'><i style='width:66.7%'></i></span><span class='fe-v'><b>94</b> <small>66,7%</small></span></li><li><span class='fe-l'>Quedan interesados</span><span class='fe-t'><i style='width:14.2%'></i></span><span class='fe-v'><b>20</b> <small>14,2%</small></span></li><li><span class='fe-l'>Admisión</span><span class='fe-t'><i style='width:2.8%'></i></span><span class='fe-v'><b>4</b> <small>2,8%</small></span></li><li><span class='fe-l'>Inscritos</span><span class='fe-t'><i style='width:1.4%'></i></span><span class='fe-v'><b>2</b> <small>1,4%</small></span></li><li><span class='fe-l'>Admitidos</span><span class='fe-t'><i style='width:1.2%'></i></span><span class='fe-v'><b>1</b> <small>0,71%</small></span></li><li><span class='fe-l'>Matriculados</span><span class='fe-t'><i style='width:1.2%'></i></span><span class='fe-v'><b>0</b> <small>0,0%</small></span></li></ul><p class='fe-n'>Con 14 o más días: 88% con gestión. Grupo pequeño: 60 leads.</p></article><article class='fe'><h4>Gestión comercial</h4><p class='fe-s'>1.806 leads que no hicieron clic en ningún botón</p><ul><li><span class='fe-l'>Sin clic</span><span class='fe-t'><i style='width:100.0%'></i></span><span class='fe-v'><b>1.806</b> <small>100,0%</small></span></li><li><span class='fe-l'>Gestión de asesor</span><span class='fe-t'><i style='width:64.3%'></i></span><span class='fe-v'><b>1.162</b> <small>64,3%</small></span></li><li><span class='fe-l'>Quedan interesados</span><span class='fe-t'><i style='width:10.8%'></i></span><span class='fe-v'><b>195</b> <small>10,8%</small></span></li><li><span class='fe-l'>Admisión</span><span class='fe-t'><i style='width:2.3%'></i></span><span class='fe-v'><b>41</b> <small>2,3%</small></span></li><li><span class='fe-l'>Inscritos</span><span class='fe-t'><i style='width:1.7%'></i></span><span class='fe-v'><b>30</b> <small>1,7%</small></span></li><li><span class='fe-l'>Admitidos</span><span class='fe-t'><i style='width:1.2%'></i></span><span class='fe-v'><b>3</b> <small>0,17%</small></span></li><li><span class='fe-l'>Matriculados</span><span class='fe-t'><i style='width:1.2%'></i></span><span class='fe-v'><b>0</b> <small>0,0%</small></span></li></ul><p class='fe-n'>Con 14 o más días: 87% con gestión y 2,7% a admisión.</p></article></div>
+      <p class="foot">"Gestión de asesor" = el lead tiene al menos un intento de contacto, quedó interesado, volver a contactar, próxima oportunidad o descartado. Los leads de pocos días tienen menos gestión por tiempo; por eso se muestran también las cifras con 14 o más días.</p>
+
+      <article class="conc">
+        <div class="cn">1</div>
+        <div>
+          <h3>WhatsApp convierte mejor, sobre todo cuando el lead conversa</h3>
+          <ul class="pts">
+            <li>De los leads que eligen WhatsApp, <b>4,3%</b> llega a admisión, contra <b>2,8%</b> de llamada y <b>2,3%</b> de quienes no hacen clic.</li>
+            <li>La diferencia la hace la conversación: quien conversa llega a admisión en <b>8,6%</b>; quien abandona, en <b>1,5%</b>.</li>
+            <li>Por volumen y por conversión, WhatsApp es el canal principal. Hay que cuidar que el lead no abandone.</li>
+          </ul>
+          <div class='tabla-abierta'><table><thead><tr><th>Grupo</th><th>Leads</th><th>A admisión</th><th>A inscrito</th><th>A admitido</th></tr></thead><tbody><tr><td>WhatsApp: conversa con el bot</td><td>244</td><td>8,6%</td><td>6,1%</td><td>1,2%</td></tr><tr><td>WhatsApp: abandona el bot</td><td>1.071</td><td>1,5%</td><td>1,1%</td><td>0,4%</td></tr><tr><td>Llamada</td><td>141</td><td>2,8%</td><td>1,4%</td><td>0,7%</td></tr><tr><td>Sin clic</td><td>1.806</td><td>2,3%</td><td>1,7%</td><td>0,2%</td></tr><tr><td>WhatsApp total</td><td>1.470</td><td>4,3%</td><td>3,4%</td><td>0,8%</td></tr></tbody></table></div>
+          <p class="foot">El total de WhatsApp incluye 91 leads que hicieron clic pero no tienen registro del asistente en el CRM y suman 23 admisiones; sin ellos, WhatsApp queda en 2,9%. El equipo técnico revisa esos registros.</p>
+        </div>
+      </article>
+
+      <article class="conc">
+        <div class="cn">2</div>
+        <div>
+          <h3>La llamada deja mejores leads, pero el equipo comercial no los atiende a tiempo</h3>
+          <ul class="pts">
+            <li>Quien pasa por la llamada queda más perfilado: <b>51%</b> con nivel de interés frente a <b>17%</b> en WhatsApp, y <b>17,6%</b> termina como interesado frente a <b>10,8%</b> de un lead normal.</li>
+            <li>Aun así, los perfilados esperan lo mismo que cualquier lead: la gestión llega a la mitad de ellos pasada la primera semana.</li>
+            <li>Los <b>236 leads calientes</b> según la IA convierten a admisión en <b>10,6%</b>, contra <b>2,6%</b> del resto. Hoy <b>95</b> siguen sin ninguna gestión.</li>
+          </ul>
+          <div class='tabla-abierta'><table><thead><tr><th>Leads con gestión de asesor, según su antigüedad</th><th>2 a 3 días</th><th>4 a 7 días</th><th>8 a 14 días</th><th>15 o más</th><th>Sin gestión a los 8+ días</th><th>Quedan interesados</th></tr></thead><tbody><tr><td>Perfilados por llamada IA</td><td>43% <small>(n=7)</small></td><td>57% <small>(n=14)</small></td><td>57% <small>(n=28)</small></td><td>82% <small>(n=40)</small></td><td>28%</td><td>17,6%</td></tr><tr><td>Calientes según la IA</td><td>12% <small>(n=16)</small></td><td>40% <small>(n=42)</small></td><td>60% <small>(n=84)</small></td><td>78% <small>(n=92)</small></td><td>30%</td><td>15,7%</td></tr><tr><td>Normales (sin acción)</td><td>14% <small>(n=140)</small></td><td>47% <small>(n=329)</small></td><td>66% <small>(n=519)</small></td><td>87% <small>(n=738)</small></td><td>20%</td><td>10,8%</td></tr></tbody></table></div>
+          <p class="foot">Estimación: el CRM no guarda la fecha del primer contacto del asesor. Se calcula con el porcentaje de cada grupo que ya tiene gestión, según los días desde que se creó el lead.</p>
+        </div>
+      </article>
+
+      <article class="conc">
+        <div class="cn">3</div>
+        <div>
+          <h3>El embudo que no genera ninguna acción convierte menos</h3>
+          <ul class="pts">
+            <li>Son <b>1.806 leads</b> (52,9%) que vieron la página y no tocaron ningún botón. Los atiende solo el equipo comercial.</li>
+            <li>Con el mismo tiempo de maduración, llegan a admisión en <b>2,7%</b>, contra <b>4,6%</b> de quienes sí hacen clic, y a admitido en <b>0,3%</b> contra <b>1,6%</b>.</li>
+            <li>No es un tema de cobertura: a los 14 días ya tiene gestión de asesor el <b>87%</b>. Se pierden después de haber sido contactados.</li>
+          </ul>
+          <div class='tabla-abierta'><table><thead><tr><th>Con 14 o más días de antigüedad</th><th>Con clic en un botón</th><th>Sin clic</th></tr></thead><tbody><tr><td>Leads</td><td>626</td><td>738</td></tr><tr><td>Con gestión de asesor</td><td>85,5%</td><td>86,9%</td></tr><tr><td>Quedan interesados</td><td>12,1%</td><td>13,1%</td></tr><tr class='es-total'><td>Llegan a admisión</td><td>4,6%</td><td>2,7%</td></tr><tr><td>Llegan a inscrito</td><td>3,4%</td><td>2,2%</td></tr><tr><td>Llegan a admitido</td><td>1,6%</td><td>0,3%</td></tr></tbody></table></div>
+        </div>
+      </article>
+
+      <article class="conc">
+        <div class="cn">4</div>
+        <div>
+          <h3>Ya hay admitidos que tuvieron contacto con el bot o la llamada IA</h3>
+          <ul class="pts">
+            <li>De los <b>16 admitidos</b> de 2027-1 desde el 15 de septiembre, <b>7</b> habían conversado con el bot o recibido una llamada de la IA.</li>
+            <li>Entre los <b>82 inscritos</b> o más, <b>56</b> (68%) nunca tuvo gestión de asesor: avanzaron solos, con el apoyo del bot, la llamada y la página.</li>
+          </ul>
+          <div class='tabla-abierta'><table><thead><tr><th>Leads de 2027-1 (desde el 15-sep)</th><th>Inscritos o más</th><th>Admitidos</th></tr></thead><tbody><tr class='es-total'><td>Total</td><td>82</td><td>16</td></tr><tr><td>Con contacto con el bot o la llamada IA</td><td>24 <small>(29%)</small></td><td>7 <small>(44%)</small></td></tr><tr><td>Hicieron clic en algún botón</td><td>52 <small>(63%)</small></td><td>13 <small>(81%)</small></td></tr><tr class='es-total'><td>Sin ninguna gestión de asesor</td><td>56 <small>(68%)</small></td><td>7 <small>(44%)</small></td></tr><tr><td>&nbsp;&nbsp;de ellos, con bot o llamada IA</td><td>19</td><td>3</td></tr><tr><td>&nbsp;&nbsp;de ellos, solo clic en WhatsApp</td><td>18</td><td>4</td></tr><tr><td>&nbsp;&nbsp;de ellos, sin ninguna acción</td><td>19</td><td>0</td></tr></tbody></table></div>
+          <p class="foot">Sin gestión de asesor = el lead sigue en estado Nuevo en el CRM. Si un asesor ayudó sin actualizar el estado, aparecería aquí.</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============================================================= 04 -->
+    <section class="sec" id="plan">
+      <div class="sec-h">
+        <span class="n">04 · PLAN TÁCTICO</span>
+        <h2>Rescatar, repartir el tráfico y <em>priorizar</em></h2>
+        <p>Tres acciones que se apoyan entre sí.</p>
+      </div>
+
+      <div class="g3"><article class='pc'><span class='pc-k'>A · Rescate</span><h3>949 abandonos activos y solo 24 con llamada IA</h3><div class='pb'><span class='pb-l'>Abandonan el bot</span><span class='pb-t'><i style='width:100.0%;background:var(--fg)'></i></span><b class='pb-v'>1.071</b></div><div class='pb'><span class='pb-l'>Siguen activos</span><span class='pb-t'><i style='width:88.6%;background:var(--serie-1)'></i></span><b class='pb-v'>949</b></div><div class='pb'><span class='pb-l'>Con llamada IA hoy</span><span class='pb-t'><i style='width:2.2%;background:var(--accent)'></i></span><b class='pb-v'>24</b></div><div class='tl'><span><b>0 h</b>abandona</span><span><b>2 h</b>llamada IA</span><span><b>24 h</b>2.ª llamada</span><span><b>Día 8</b>mensaje</span></div><p class='pc-s'>Si no contesta: plantilla de WhatsApp que lo devuelve al bot.</p></article><article class='pc'><span class='pc-k'>B · Dos páginas de gracias</span><h3>Más tráfico a WhatsApp, y la llamada se mide aparte</h3><div class='split' aria-label='70 por ciento WhatsApp, 30 por ciento llamada'><div class='a'>70% WhatsApp</div><div class='b'>30% llamada</div></div><div class='pb-cap'>Clics por cada 100 leads</div><div class='pb'><span class='pb-l'>WhatsApp</span><span class='pb-t'><i style='width:86.0%;background:var(--fg)'></i></span><b class='pb-v'>43</b></div><div class='pb'><span class='pb-l'>Llamada</span><span class='pb-t'><i style='width:8.0%;background:var(--accent)'></i></span><b class='pb-v'>4</b></div><div class='pb'><span class='pb-l'>Meta de la llamada</span><span class='pb-t'><i style='width:36.0%;background:var(--serie-1)'></i></span><b class='pb-v'>18</b></div><p class='pc-s'>Para igualar a WhatsApp en contactos efectivos, la llamada necesita 18 clics de cada 100.</p></article><article class='pc'><span class='pc-k'>C · Prioridad IA</span><h3>236 leads calientes que hoy esperan igual que los demás</h3><div class='pb-cap'>Llegan a admisión</div><div class='pb'><span class='pb-l'>Calientes</span><span class='pb-t'><i style='width:88.3%;background:var(--accent)'></i></span><b class='pb-v'>10,6%</b></div><div class='pb'><span class='pb-l'>Resto</span><span class='pb-t'><i style='width:21.7%;background:var(--fg)'></i></span><b class='pb-v'>2,6%</b></div><div class='pb-cap'>Con gestión de asesor</div><div class='pb'><span class='pb-l'>Calientes</span><span class='pb-t'><i style='width:60.0%;background:var(--accent)'></i></span><b class='pb-v'>60%</b></div><div class='pb'><span class='pb-l'>Resto</span><span class='pb-t'><i style='width:64.0%;background:var(--fg)'></i></span><b class='pb-v'>64%</b></div><p class='pc-s'>95 siguen sin ninguna gestión.</p></article></div>
+
+      <h3 class="sub-h">Cómo queda marcado cada lead en el CRM</h3>
+      <div class='g4 tags'><article class='tg'><span class='rotulo es-acento'>IA · Caliente</span><p>Lista para iniciar o con dudas. <b>El asesor llama en 24 h.</b></p><b class='tg-n'>236</b><small>leads hoy</small></article><article class='tg'><span class='rotulo'>IA · Perfilado</span><p>La IA dejó programa, sede y duda. <b>Llamada en 48 h.</b></p><b class='tg-n'>316</b><small>leads hoy</small></article><article class='tg'><span class='rotulo'>IA · Rescate</span><p>En llamadas o mensajes de rescate. <b>Entra si responde.</b></p><b class='tg-n'>949</b><small>leads hoy</small></article><article class='tg'><span class='rotulo'>Sin acción</span><p>No tocó ningún botón. <b>Gestión normal.</b></p><b class='tg-n'>1.806</b><small>leads hoy</small></article></div>
+
+      <h3 class="sub-h">Cómo se decide al terminar la prueba de páginas</h3>
+      <div class="dec">
+        <span><b>1.</b> % de leads que no toca ningún botón (hoy 52,9%)</span>
+        <span><b>2.</b> Contactos efectivos por cada 100 leads</span>
+        <span><b>3.</b> Admisiones a 14 días por cada 100 leads</span>
+        <span><b>4.</b> Página vista, registrada en el CRM</span>
+      </div>
+      <p class="foot">Rescate a las 2 y 24 horas y mensaje del día 8: acordados el 19 de octubre. Plantilla de WhatsApp tras una llamada sin respuesta y etiquetas de prioridad: propuestas por validar. Con 30% del tráfico llegan ~38 leads al día a la página de llamada, cerca de 1.000 en cuatro semanas.</p>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('.tree').forEach(function(tb){
+    var rows=[].slice.call(tb.querySelectorAll('tbody tr'));
+    function kids(id){return rows.filter(function(r){return r.dataset.parent===id})}
+    function setOpen(r,open){r.classList.toggle('open',open);kids(r.dataset.id).forEach(function(c){c.hidden=!open;if(!open&&c.dataset.id)setOpen(c,false)})}
+    rows.forEach(function(r){if(r.dataset.id)r.addEventListener('click',function(){setOpen(r,!r.classList.contains('open'))})});
+    rows.filter(function(r){return r.classList.contains('lv2')}).forEach(function(r){r.classList.remove('open')});
+    var wrap=tb.previousElementSibling;
+    if(wrap&&wrap.classList.contains('tree-ctl'))wrap.addEventListener('click',function(e){var k=e.target.dataset&&e.target.dataset.t;if(!k)return;
+      if(k==='all'){rows.filter(function(r){return r.classList.contains('lv1')}).forEach(function(r){setOpen(r,true)});rows.filter(function(r){return r.classList.contains('lv2')}).forEach(function(r){setOpen(r,true)})}
+      else{rows.filter(function(r){return r.classList.contains('lv1')}).forEach(function(r){setOpen(r,false)})}});
+  });
+  document.querySelectorAll('.seg-b').forEach(function(b){b.addEventListener('click',function(){
+    var kind=b.dataset.seg,k=b.dataset.k;
+    document.querySelectorAll('.seg-b[data-seg="'+kind+'"]').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});
+    document.querySelectorAll('.seg-p[data-seg="'+kind+'"]').forEach(function(p){p.hidden=p.dataset.k!==k})})});
+})();
+</script>
+</body>
+</html>
