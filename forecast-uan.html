@@ -367,7 +367,8 @@ const BASE='https://docs.google.com/spreadsheets/d/e/2PACX-1vRwJQPslpw-WvCvV9t1M
 const URLS={
   programa: BASE+'1432798497&single=true&output=csv',
   medio:    BASE+'286855002&single=true&output=csv',
-  mes:      BASE+'1540897893&single=true&output=csv'
+  mes:      BASE+'1540897893&single=true&output=csv',
+  mensual:  BASE+'1282762389&single=true&output=csv'
 };
 // Datos crudos (una fila por registro del CSV, con Periodo adjunto). Se parsean una sola vez por fetch.
 var RAW_PROGRAMA=[], RAW_MEDIO=[], RAW_MES=[];
@@ -487,8 +488,8 @@ function buildPeriodoChips(){
 function loadAll(){
   setSyncing(true);
   ['resumen','ciudades','medios','meses','facultades','programas'].forEach(function(p){show(p,false)});
-  Promise.all([fetchCSV(URLS.medio),fetchCSV(URLS.mes),fetchCSV(URLS.programa)]).then(function(res){
-    processData(res[0],res[1],res[2]);
+  Promise.all([fetchCSV(URLS.medio),fetchCSV(URLS.mes),fetchCSV(URLS.programa),fetchCSV(URLS.mensual)]).then(function(res){
+    processData(res[0],res[1],res[2],res[3]);
     setSyncing(false);
     var now=new Date();
     document.getElementById('lastUpd').textContent='Actualizado: '+now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})
@@ -496,7 +497,36 @@ function loadAll(){
 }
 
 // Ingesta cruda del CSV -> RAW_MEDIO / RAW_PROGRAMA / RAW_MES (con Periodo adjunto a cada fila)
-function processData(medio,mes,programa){
+// En estos periodos "Anual por mes" repite el presupuesto de la ciudad en cada fila de nivel y no sirve para
+// Facebook y Google: se calculan con "Anual por medio" x el peso de cada mes (hoja _mensual, sin TikTok, que solo
+// corre en noviembre). TikTok sí se toma de "Anual por mes".
+var MES_DESDE_MEDIO={'2027-1':true};
+function rebuildMesDesdeMedio(mensual){
+  var tot={},tt={},den={},lbl={};
+  mensual.forEach(function(r){
+    var per=(col(r,['Periodo','periodo'])||'').trim(),pm=parseMesUAN(r['Mes']);
+    if(!MES_DESDE_MEDIO[per]||!pm)return;
+    tot[per]=tot[per]||{};tot[per][pm.key]=(tot[per][pm.key]||0)+parseNum(r['Presupuesto']);lbl[pm.key]=pm.label
+  });
+  RAW_MES.forEach(function(r){
+    if(!MES_DESDE_MEDIO[r.periodo]||r.medio!=='Tiktok')return;
+    tt[r.periodo]=tt[r.periodo]||{};tt[r.periodo][r.mesKey]=(tt[r.periodo][r.mesKey]||0)+r.presupuesto
+  });
+  Object.keys(tot).forEach(function(per){
+    den[per]=0;Object.keys(tot[per]).forEach(function(k){den[per]+=tot[per][k]-((tt[per]||{})[k]||0)})
+  });
+  RAW_MES=RAW_MES.filter(function(r){return !(MES_DESDE_MEDIO[r.periodo]&&tot[r.periodo]&&r.medio!=='Tiktok')});
+  RAW_MEDIO.forEach(function(r){
+    if(!MES_DESDE_MEDIO[r.periodo]||!tot[r.periodo]||!den[r.periodo]||r.medio==='Tiktok')return;
+    var m=r.medio.charAt(0).toUpperCase()+r.medio.slice(1);
+    Object.keys(tot[r.periodo]).forEach(function(k){
+      var w=(tot[r.periodo][k]-((tt[r.periodo]||{})[k]||0))/den[r.periodo];
+      RAW_MES.push({periodo:r.periodo,ciudad:r.ciudad,medio:m,mesKey:k,mesLabel:lbl[k],presupuesto:r.presupuesto*w})
+    })
+  })
+}
+
+function processData(medio,mes,programa,mensual){
   RAW_MEDIO=[];
   medio.forEach(function(r){
     var periodo=(col(r,['Periodo','periodo'])||'').trim();
@@ -531,6 +561,8 @@ function processData(medio,mes,programa){
     RAW_MES.push({periodo:periodo,ciudad:ciudad,medio:m,mesKey:pm.key,mesLabel:pm.label,presupuesto:pmes});
     if(periodo)PERIODOS_CON_DATA.add(periodo)
   });
+
+  rebuildMesDesdeMedio(mensual||[]);
 
   buildPeriodoChips();
   updatePeriodoLabels();
