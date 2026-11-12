@@ -32,7 +32,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .hero{background:linear-gradient(135deg,var(--uan-blue-dark) 0%,var(--uan-blue) 100%);padding:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 .hero h1{color:#fff;font-size:22px;font-weight:700;margin-bottom:4px}
 .hero p{color:rgba(255,255,255,.75);font-size:13px}
-.hero-stats{display:flex;gap:2.5rem}
+.hero-stats{display:flex;flex-wrap:wrap;gap:1.2rem 2rem}
 .hero-stat .hval{color:#fff;font-size:26px;font-weight:700;line-height:1}
 .hero-stat .hlbl{color:rgba(255,255,255,.6);font-size:var(--fs-min);margin-top:4px}
 .periodo-bar{background:var(--uan-dark);border-bottom:1px solid rgba(255,255,255,.08);padding:.7rem 2rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -161,7 +161,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="hero">
   <div><h1 id="heroTitle">Forecast Digital</h1><p>Universidad Antonio Nariño · Inversión, Leads y Matrículas por ciudad, medio y programa</p></div>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="hval" id="hP">—</div><div class="hlbl">Presupuesto</div></div>
+    <div class="hero-stat"><div class="hval" id="hP">—</div><div class="hlbl">Inversión en medios</div></div>
+    <div class="hero-stat"><div class="hval" id="hI">—</div><div class="hlbl">IVA</div></div>
+    <div class="hero-stat"><div class="hval" id="hT">—</div><div class="hlbl">Total con IVA</div></div>
     <div class="hero-stat"><div class="hval" id="hL">—</div><div class="hlbl">Leads</div></div>
     <div class="hero-stat"><div class="hval" id="hM">—</div><div class="hlbl">Matríc. / <span id="hMeta" style="opacity:.8">—</span> meta</div></div>
     <div class="hero-stat"><div class="hval" id="hC">—</div><div class="hlbl">Participación</div></div>
@@ -195,11 +197,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
         <!-- KPIs top -->
         <div class="resumen-kpis">
-          <div class="rkpi"><div class="rlbl">Presupuesto total</div><div class="rval" id="rP">—</div><div class="rsub">COP</div></div>
+          <div class="rkpi"><div class="rlbl">Inversión en medios</div><div class="rval" id="rP">—</div><div class="rsub" id="rPsub">COP · sin IVA</div></div>
           <div class="rkpi"><div class="rlbl">Leads proyectados</div><div class="rval" id="rL">—</div><div class="rsub">Total ciudades</div></div>
           <div class="rkpi"><div class="rlbl">Matrículas forecast</div><div class="rval" id="rM">—</div><div style="margin-top:6px"><span style="font-size:18px;font-weight:700;color:var(--uan-dark)" id="rMeta">—</span><span style="font-size:var(--fs-min);color:var(--fg-muted)"> meta total</span></div><div style="font-size:var(--fs-min);color:var(--fg-muted);margin-top:2px" id="rMsub">de — meta</div></div>
           <div class="rkpi"><div class="rlbl">CPL promedio</div><div class="rval" id="rCPL">—</div><div class="rsub">Costo por lead</div></div>
           <div class="rkpi"><div class="rlbl">Participación</div><div class="rval" id="rC">—</div><div class="rsub">vs meta matrículas</div></div>
+        </div>
+
+        <!-- Desglose mensual: inversión en medios + IVA = total -->
+        <div class="sec-title">Inversión mensual: medios, IVA y total <span id="ivaNota" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--fg-muted)"></span></div>
+        <div class="g2" style="margin-bottom:1.5rem">
+          <div class="tbl-wrap"><table class="tbl" id="rTblIva"></table></div>
+          <div class="chart-box">
+            <div class="chart-title">Inversión en medios + IVA por mes</div>
+            <div style="position:relative;height:300px"><canvas id="rBarIva"></canvas></div>
+          </div>
         </div>
 
         <!-- Row 1: Donut medios + Barras ciudad + Top ciudades -->
@@ -368,10 +380,13 @@ const URLS={
   programa: BASE+'1432798497&single=true&output=csv',
   medio:    BASE+'286855002&single=true&output=csv',
   mes:      BASE+'1540897893&single=true&output=csv',
-  mensual:  BASE+'1282762389&single=true&output=csv'
+  mensual:  BASE+'1282762389&single=true&output=csv',
+  resumen:  BASE+'0&single=true&output=csv'
 };
 // Datos crudos (una fila por registro del CSV, con Periodo adjunto). Se parsean una sola vez por fetch.
 var RAW_PROGRAMA=[], RAW_MEDIO=[], RAW_MES=[];
+// Tabla mensual de RESUMEN GENERAL: Presupuesto (con IVA), IVA e Inversión (en medios) por mes
+var RAW_IVA=[];
 // Set de periodos que realmente tienen filas en la fuente (para construir los chips dinámicamente)
 var PERIODOS_CON_DATA=new Set();
 // Filtro activo. 'todos' = agregado de todos los periodos.
@@ -425,6 +440,22 @@ function splitLine(line){
   r.push(c);return r
 }
 function fetchCSV(url){return fetch(url).then(function(r){return r.text()}).then(parseCSV)}
+// RESUMEN GENERAL no tiene encabezado en la fila 1: se lee por filas y se ubica la tabla por su encabezado "No | Mes"
+function fetchResumen(url){
+  return fetch(url).then(function(r){return r.text()}).then(function(t){
+    var rows=t.split('\n').map(splitLine),h=-1;
+    for(var i=0;i<rows.length;i++){if((rows[i][11]||'').trim()==='No'&&(rows[i][12]||'').trim()==='Mes'){h=i;break}}
+    var out=[],per='';
+    if(h<0)return out;
+    for(var j=h+1;j<rows.length;j++){
+      var r=rows[j],pm=parseMesUAN(r[12]);
+      if(!pm)break;
+      if((r[11]||'').trim())per=r[11].trim();
+      out.push({periodo:per,mesKey:pm.key,mesLabel:pm.label,total:parseNum(r[14]),iva:parseNum(r[15]),inv:parseNum(r[16])})
+    }
+    return out
+  }).catch(function(e){console.error('RESUMEN GENERAL',e);return []})
+}
 function show(p,ok){document.getElementById('sp-'+p).style.display=ok?'none':'flex';document.getElementById('ct-'+p).style.display=ok?'block':'none'}
 function setSyncing(on){document.getElementById('syncDot').className='sync-dot'+(on?' spin':'');document.getElementById('syncBtn').disabled=on}
 
@@ -488,7 +519,8 @@ function buildPeriodoChips(){
 function loadAll(){
   setSyncing(true);
   ['resumen','ciudades','medios','meses','facultades','programas'].forEach(function(p){show(p,false)});
-  Promise.all([fetchCSV(URLS.medio),fetchCSV(URLS.mes),fetchCSV(URLS.programa),fetchCSV(URLS.mensual)]).then(function(res){
+  Promise.all([fetchCSV(URLS.medio),fetchCSV(URLS.mes),fetchCSV(URLS.programa),fetchCSV(URLS.mensual),fetchResumen(URLS.resumen)]).then(function(res){
+    RAW_IVA=res[4];
     processData(res[0],res[1],res[2],res[3]);
     setSyncing(false);
     var now=new Date();
@@ -500,7 +532,7 @@ function loadAll(){
 // En estos periodos "Anual por mes" repite el presupuesto de la ciudad en cada fila de nivel y no sirve para
 // Facebook y Google: se calculan con "Anual por medio" x el peso de cada mes (hoja _mensual, sin TikTok, que solo
 // corre en noviembre). TikTok sí se toma de "Anual por mes".
-var MES_DESDE_MEDIO={'2027-1':true};
+var MES_DESDE_MEDIO={'2027-1':true,'2026-2':'todos'};
 function rebuildMesDesdeMedio(mensual){
   var tot={},tt={},den={},lbl={};
   mensual.forEach(function(r){
@@ -509,15 +541,15 @@ function rebuildMesDesdeMedio(mensual){
     tot[per]=tot[per]||{};tot[per][pm.key]=(tot[per][pm.key]||0)+parseNum(r['Presupuesto']);lbl[pm.key]=pm.label
   });
   RAW_MES.forEach(function(r){
-    if(!MES_DESDE_MEDIO[r.periodo]||r.medio!=='Tiktok')return;
+    if(!MES_DESDE_MEDIO[r.periodo]||MES_DESDE_MEDIO[r.periodo]==='todos'||r.medio!=='Tiktok')return;
     tt[r.periodo]=tt[r.periodo]||{};tt[r.periodo][r.mesKey]=(tt[r.periodo][r.mesKey]||0)+r.presupuesto
   });
   Object.keys(tot).forEach(function(per){
     den[per]=0;Object.keys(tot[per]).forEach(function(k){den[per]+=tot[per][k]-((tt[per]||{})[k]||0)})
   });
-  RAW_MES=RAW_MES.filter(function(r){return !(MES_DESDE_MEDIO[r.periodo]&&tot[r.periodo]&&r.medio!=='Tiktok')});
+  RAW_MES=RAW_MES.filter(function(r){return !(MES_DESDE_MEDIO[r.periodo]&&tot[r.periodo]&&(MES_DESDE_MEDIO[r.periodo]==='todos'||r.medio!=='Tiktok'))});
   RAW_MEDIO.forEach(function(r){
-    if(!MES_DESDE_MEDIO[r.periodo]||!tot[r.periodo]||!den[r.periodo]||r.medio==='Tiktok')return;
+    if(!MES_DESDE_MEDIO[r.periodo]||!tot[r.periodo]||!den[r.periodo]||(r.medio==='Tiktok'&&MES_DESDE_MEDIO[r.periodo]!=='todos'))return;
     var m=r.medio.charAt(0).toUpperCase()+r.medio.slice(1);
     Object.keys(tot[r.periodo]).forEach(function(k){
       var w=(tot[r.periodo][k]-((tt[r.periodo]||{})[k]||0))/den[r.periodo];
@@ -676,7 +708,10 @@ function updateKPIs(){
   var totMeta=ciudadesData.reduce(function(s,c){return s+c.meta_mat},0);
   var pctG=totMeta>0?totM/totMeta*100:0;
   var cplProm=totL>0?totP/totL:0;
-  ['hP','rP'].forEach(function(id){document.getElementById(id).textContent=fmtM(totP)});
+  var iv=ivaFiltrado();
+  document.getElementById('hP').textContent=fmtM(iv.inv);document.getElementById('hI').textContent=fmtM(iv.iva);document.getElementById('hT').textContent=fmtM(iv.total);
+  document.getElementById('rP').textContent=fmtM(totP);
+  document.getElementById('rPsub').textContent='COP · sin IVA · con IVA '+fmtM(iv.total);
   ['hL','rL'].forEach(function(id){document.getElementById(id).textContent=fmt(totL)});
   ['hM','rM'].forEach(function(id){document.getElementById(id).textContent=fmt(totM)});if(document.getElementById('hMeta'))document.getElementById('hMeta').textContent=fmt(totMeta);
   ['hC','rC'].forEach(function(id){document.getElementById(id).textContent=pctG.toFixed(1)+'%'});
@@ -696,7 +731,40 @@ function renderAll(){
 }
 
 // ===== RESUMEN EJECUTIVO =====
+// Desglose del periodo activo desde la tabla mensual de RESUMEN GENERAL. Si no se pudo leer, se deriva de la inversión
+// con la misma regla de la hoja (IVA = 19% del total; inversión = total - IVA)
+var IVA_TASA=0.19;
+function ivaFiltrado(){
+  var rows=RAW_IVA.filter(function(r){return FILTERS.periodo==='todos'||r.periodo===FILTERS.periodo});
+  if(rows.length)return {rows:rows,inv:sumK(rows,'inv'),iva:sumK(rows,'iva'),total:sumK(rows,'total'),hoja:true};
+  var inv=ciudadesData.reduce(function(s,c){return s+c.presupuesto},0),tot=inv/(1-IVA_TASA);
+  return {rows:[],inv:inv,iva:tot-inv,total:tot,hoja:false}
+}
+function sumK(a,k){return a.reduce(function(s,x){return s+(x[k]||0)},0)}
+function filaIva(label,inv,iva,tot,cls){
+  return '<tr'+(cls?' class="'+cls+'"':'')+'><td><strong>'+label+'</strong></td><td>'+fmtM(inv)+'</td><td>'+fmtM(iva)+'</td><td><strong>'+fmtM(tot)+'</strong></td></tr>'
+}
+function renderIvaResumen(){
+  var d=ivaFiltrado(),rows='',periodos=[];
+  d.rows.forEach(function(r){if(periodos.indexOf(r.periodo)<0)periodos.push(r.periodo)});
+  periodos.sort(periodoSort).forEach(function(p){
+    var pr=d.rows.filter(function(r){return r.periodo===p});
+    if(periodos.length>1)rows+='<tr><td colspan="4" style="font-weight:700;background:#FFF8E1">Periodo '+p+'</td></tr>';
+    pr.forEach(function(r){rows+=filaIva(r.mesLabel,r.inv,r.iva,r.total)});
+    if(periodos.length>1)rows+=filaIva('Total '+p,sumK(pr,'inv'),sumK(pr,'iva'),sumK(pr,'total'),'tr-total')
+  });
+  rows+=filaIva(FILTERS.periodo==='todos'?'TOTAL GENERAL':'TOTAL '+FILTERS.periodo,d.inv,d.iva,d.total,'tr-grand');
+  document.getElementById('rTblIva').innerHTML='<thead><tr><th>Mes</th><th>Inversión en medios</th><th>IVA</th><th>Total con IVA</th></tr></thead><tbody>'+rows+'</tbody>';
+  var n=document.getElementById('ivaNota');if(n)n.textContent=d.hoja?'· IVA del '+Math.round(IVA_TASA*100)+'% sobre el total':'· estimado con IVA del '+Math.round(IVA_TASA*100)+'% (sin leer la tabla mensual)';
+  if(CH.rIva)CH.rIva.destroy();
+  CH.rIva=new Chart(document.getElementById('rBarIva'),{type:'bar',
+    data:{labels:d.rows.map(function(r){return periodos.length>1?r.mesLabel+' ('+r.periodo+')':r.mesLabel}),datasets:[
+      {label:'Inversión en medios',data:d.rows.map(function(r){return r.inv}),backgroundColor:BLUE,borderRadius:3},
+      {label:'IVA',data:d.rows.map(function(r){return r.iva}),backgroundColor:MID,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:12,font:{size:12}}},tooltip:{callbacks:{label:function(v){return v.dataset.label+': '+fmtM(v.raw)}}}},scales:{x:{stacked:true,ticks:{font:{size:10},maxRotation:45,autoSkip:false}},y:{stacked:true,ticks:{callback:function(v){return fmtM(v)}}}}}})
+}
 function renderResumen(){
+  renderIvaResumen();
   // Totales medios
   var totMedio={Facebook:0,Google:0,Tiktok:0};
   mediosData.forEach(function(d){totMedio[d.medio]=(totMedio[d.medio]||0)+d.presupuesto});
