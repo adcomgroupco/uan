@@ -225,7 +225,7 @@ td .stack{display:inline-flex;vertical-align:middle;width:120px}
       <span class="last-upd" id="last-upd"></span>
     </div>
     <div class="tb-row">
-      <div class="fg"><span class="fl">Nivel</span><select id="f-nivel" onchange="onSel()"><option value="">Todos</option><option>Pregrado</option><option>Posgrado</option><option>Otros</option></select></div>
+      <div class="fg"><span class="fl">Nivel</span><select id="f-nivel" onchange="onSel()"><option value="">Todos</option><option>Pregrado</option><option>Posgrado</option></select></div>
       <div class="fg"><span class="fl">Fuente</span><select id="f-fuente" onchange="onSel()"><option value="">Todas</option><option>Pauta</option><option>Orgánico</option><option>Otras fuentes</option></select></div>
       <div class="fg"><span class="fl">Sede</span><select id="f-sede" onchange="onSel()"><option value="">Todas</option></select></div>
       <div class="fg"><span class="fl">Facultad</span><select id="f-fac" onchange="onSel()"><option value="">Todas</option></select></div>
@@ -338,14 +338,16 @@ const GVQ = (gid, tq) => GV(gid, '&tq=' + encodeURIComponent(tq));
 // Inicio del periodo 2027-1 (igual que el CRUCE del tablero de pauta)
 const DESDE_DATOS = '2026-09-01';
 // CRM_POSIBLES_ASPIRANTES: A id · B creación · C propietario · D fuente · F sede · G programa · H nivel · K estado · L detalle · N convertido
-const URL_LEADS = GVQ(409442000, `select A, B, C, D, F, G, H, K, L where N = 'No' and B >= date '${DESDE_DATOS}'`);
-const URL_CONV  = GVQ(409442000, `select toDate(B), C, D, F, G, H, count(A) where N = 'Sí' and B >= date '${DESDE_DATOS}' group by toDate(B), C, D, F, G, H`);
+// Solo Pregrado y Posgrado (Postgrado se muestra como Posgrado); fuera Educación Continuada, ETDH y sin nivel
+const NIV_OK = c => `(${c} = 'PREGRADO' or ${c} = 'POSGRADO' or ${c} = 'POSTGRADO')`;
+const URL_LEADS = GVQ(409442000, `select A, B, C, D, F, G, H, K, L where N = 'No' and B >= date '${DESDE_DATOS}' and ${NIV_OK('H')}`);
+const URL_CONV  = GVQ(409442000, `select toDate(B), C, D, F, G, H, count(A) where N = 'Sí' and B >= date '${DESDE_DATOS}' and ${NIV_OK('H')} group by toDate(B), C, D, F, G, H`);
 // CRM_GESTION_LEADS (script "Procesa IA", vista de Analytics "ADCOM Gestion por lead UAN"):
 // id lead · primera gestión del asesor · última gestión del asesor · cambios (historial de Detalle de estado, perfil Comercial)
 const URL_TAR   = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=CRM_GESTION_LEADS`;
 const URL_META  = GV(577768057);
 // CRM_ADMISIONES: A id · C creación · D propietario · E fase · G resultado de seguimiento · I fuente · K sede · L programa · M nivel · Q hora de modificación
-const URL_ADM   = GVQ(775856729, `select A, C, D, E, G, I, K, L, M, Q where C >= date '${DESDE_DATOS}'`);
+const URL_ADM   = GVQ(775856729, `select A, C, D, E, G, I, K, L, M, Q where C >= date '${DESDE_DATOS}' and ${NIV_OK('M')}`);
 // Última sincronización exitosa de cada parte (CRM_LOG lo escribe el script en cada corrida)
 const URL_CTRL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=CRM_LOG&tq=` +
   encodeURIComponent("select B, max(A) where C = 'OK' group by B");
@@ -388,7 +390,7 @@ function addDays(s,n){ return new Date(Date.parse(s) + n*864e5).toISOString().sl
 function weekStart(s){ const d = new Date(Date.parse(s)); return addDays(s, -((d.getUTCDay() + 6) % 7)) }
 const todayISO = () => isoBog(Date.now());
 const fuenteDe = s => s === 'Digital - Pauta' ? 'Pauta' : s === 'Digital - Orgánico' ? 'Orgánico' : 'Otras fuentes';
-const nivelDe = s => { const t = norm(s); return t === 'PREGRADO' ? 'Pregrado' : (t === 'POSGRADO' || t === 'POSTGRADO') ? 'Posgrado' : 'Otros' };
+const nivelDe = s => { const t = norm(s); return t === 'PREGRADO' ? 'Pregrado' : (t === 'POSGRADO' || t === 'POSTGRADO') ? 'Posgrado' : '' };
 function etapa(est, det){
   if(est === 'Por gestionar') return 'pg';
   if(est === 'Seguimiento'){ const n = (String(det).match(/^(\d)/) || [])[1]; return n && +n >= 1 && +n <= 5 ? 'i' + n : 'i1' }
@@ -408,14 +410,14 @@ CSV(URL_LEADS, rows => {
   rows.shift();
   LEADS = rows.map(x => { const c = msBog(x[1]); return { id: String(x[0]||'').trim(), c, d: isNaN(c) ? '' : isoBog(c), own: String(x[2]||'').trim() || '(Sin responsable)',
     fu: fuenteDe(String(x[3]||'').trim()), sede: sedeNm(String(x[4]||'').trim()), prog: String(x[5]||'').trim() || '(Sin programa)', niv: nivelDe(x[6]),
-    est: String(x[7]||'').trim(), det: String(x[8]||'').trim() } }).filter(r => r.d);
+    est: String(x[7]||'').trim(), det: String(x[8]||'').trim() } }).filter(r => r.d && r.niv);
   LEADS.forEach(r => { r.et = etapa(r.est, r.det); r.pk = pkey(r.prog) });
 }, () => fail('No se pudo leer CRM_POSIBLES_ASPIRANTES'));
 CSV(URL_CONV, rows => {
   rows.shift();
   // toDate() llega como "2026-9-1"
   CONV = rows.map(x => { const p = String(x[0]||'').match(/(\d{4})-(\d{1,2})-(\d{1,2})/), c = p ? Date.UTC(+p[1], +p[2]-1, +p[3], 5) : NaN; return { d: isNaN(c) ? '' : isoBog(c), own: String(x[1]||'').trim() || '(Sin responsable)', fu: fuenteDe(String(x[2]||'').trim()),
-    sede: sedeNm(String(x[3]||'').trim()), prog: String(x[4]||'').trim() || '(Sin programa)', niv: nivelDe(x[5]), n: +x[6] || 0 } }).filter(r => r.d);
+    sede: sedeNm(String(x[3]||'').trim()), prog: String(x[4]||'').trim() || '(Sin programa)', niv: nivelDe(x[5]), n: +x[6] || 0 } }).filter(r => r.d && r.niv);
   CONV.forEach(r => r.pk = pkey(r.prog));
 });
 CSV(URL_TAR, rows => {
@@ -431,7 +433,7 @@ CSV(URL_ADM, rows => {
   rows.shift();
   ADM = rows.map(x => { const c = msBog(x[1]); return { id: String(x[0]||'').trim(), c, d: isNaN(c) ? '' : isoBog(c), own: String(x[2]||'').trim() || '(Sin responsable)',
     fase: String(x[3]||'').trim(), res: String(x[4]||'').trim(), fu: fuenteDe(String(x[5]||'').trim()), sede: sedeNm(String(x[6]||'').trim()),
-    prog: String(x[7]||'').trim() || '(Sin programa)', niv: nivelDe(x[8]), m: msBog(x[9]) } }).filter(r => r.d);
+    prog: String(x[7]||'').trim() || '(Sin programa)', niv: nivelDe(x[8]), m: msBog(x[9]) } }).filter(r => r.d && r.niv);
   ADM.forEach(r => r.pk = pkey(r.prog));
 });
 CSV(URL_META, rows => {
