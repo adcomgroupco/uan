@@ -454,7 +454,11 @@ CSV(URL_CTRL, rows => {
 
 function prepare(){
   NOW = Date.now();
-  [...LEADS, ...CONV, ...ADM].forEach(r => r.fac = FAC_BY_PROG[r.pk] || '(Sin facultad)');
+  // Leads convertidos con el programa abreviado (Zoho no deja editar un convertido): se llevan al nombre oficial
+  const ALIAS = {};
+  [['ESP. ANALITICA DE DATOS', 'ESPECIALIZACIÓN EN ANALÍTICA DE DATOS'],
+   ['LIC. EN TECN E INFORM', 'LICENCIATURA EN TECNOLOGÍA E INFORMÁTICA']].forEach(([a, b]) => ALIAS[pkey(a)] = pkey(b));
+  [...LEADS, ...CONV, ...ADM].forEach(r => r.fac = FAC_BY_PROG[ALIAS[r.pk] || r.pk] || '(Sin facultad)');
   // Los convertidos traen la sede física ("NEIVA BUGANVILES", "BOGOTÁ - SUR"): se lleva a la ciudad que usan los demás leads
   const sedes = [...new Set(LEADS.map(r => r.sede))], porNorm = Object.fromEntries(sedes.map(s => [norm(s), s]));
   [...CONV, ...ADM].forEach(r => { const t = norm(r.sede); if(porNorm[t]) { r.sede = porNorm[t]; return }
