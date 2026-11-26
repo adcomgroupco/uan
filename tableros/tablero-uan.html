@@ -47,6 +47,16 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 
 /* KPIs */
 .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.med-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:-8px 0 20px}
+.med-card{padding:14px}
+.med-head{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--gray-600);margin-bottom:4px}
+.med-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.med-inv{font-size:20px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.med-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;padding:5px 0;border-top:1px solid var(--gray-200);font-variant-numeric:tabular-nums}
+.med-row:first-of-type{margin-top:10px}
+.med-row span{color:var(--gray-600)}
+.med-row b{font-weight:600;text-align:right}
+.med-row i{font-style:normal;color:var(--gray-400);font-size:11px;font-weight:400;margin-left:6px}
 .kpi-card{padding:14px}
 .kpi-label{font-size:12px;color:var(--gray-600);font-weight:600;margin-bottom:3px}
 .kpi-value{font-size:20px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
@@ -123,8 +133,8 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 @keyframes spin{to{transform:rotate(360deg)}}
 #ld-msg{color:var(--fg-muted);font-size:12px}
 
-@media(max-width:1300px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.nm-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.f-row{grid-template-columns:90px 1fr 120px 130px}.f-cost span{display:none}.content{padding:14px 16px}}
+@media(max-width:1300px){.med-grid{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:repeat(3,1fr)}.nm-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.med-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.f-row{grid-template-columns:90px 1fr 120px 130px}.f-cost span{display:none}.content{padding:14px 16px}}
 .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
 .tag-pau{background:#FFF3B0;color:#7A5B00} .tag-org{background:#E0F2FE;color:#075985} .tag-otr{background:var(--gray-100);color:var(--gray-600)}
 @media(max-width:1300px){.three-col{grid-template-columns:1fr}}
@@ -193,6 +203,7 @@ tr.nv-det td{background:var(--gray-50);padding:10px 14px}
   <div class="content">
     <div class="sec-title" id="sec-kpi"><span></span>Resumen del rango<span class="sec-note" id="rango-note"></span></div>
     <div class="kpi-grid" id="kpi-grid"></div>
+    <div class="med-grid" id="med-grid"></div>
 
     <div class="sec-title" id="sec-embudo"><span></span>Embudo<span class="sec-note">matrículas contadas en la fecha en que entró el lead</span></div>
     <div class="card funnel" id="funnel"></div>
@@ -439,8 +450,25 @@ function render(){
   document.getElementById('rango-note').textContent = `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
   const nac = RAW.filter(r => r.d >= f.desde && r.d <= f.hasta && r.prog === GENERAL && (r.ciu === 'COLOMBIA' || r.niv === 'General') && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio)).reduce((a, r) => (a.inv += r.inv, a.lp += r.lp, a), {inv:0, lp:0});
   document.getElementById('nac-note').textContent = nac.inv ? `Campañas generales nacionales: ${fCOP(nac.inv)} y ${fN(nac.lp)} leads plataforma, en la fila "Nacional"` : '';
-  renderKPIs(T); renderFunnel(T); renderFuentes(f, (r, f) => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
+  renderKPIs(T); renderMedios(f); renderFunnel(T); renderFuentes(f, (r, f) => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
 }
+
+// Tarjetas por medio del resumen: mismas filas y reglas que la tabla "Por nivel y medio" (medios con datos en el rango)
+const MEDIO_CARD = [['Facebook','Meta','#1877F2'],['Google','Google','#EA4335'],['TikTok','TikTok','#111111'],['LinkedIn','LinkedIn','#0A66C2']];
+const T_SHARE = (inv, g) => { const t = Object.values(g).reduce((a, x) => a + x.inv, 0); return t ? ' · ' + fP(inv / t) + ' del total' : '' };
+function renderMedios(f){
+  const g = groupRows(filasRango(f), r => r.medio);
+  const cards = MEDIO_CARD.filter(([k]) => f.medio === k || (g[k] && ['inv','lp','lc','adm','mat'].some(x => g[k][x])));
+  const row = (l, v, sub) => `<div class="med-row"><span>${l}</span><b>${v}${sub ? `<i>${sub}</i>` : ''}</b></div>`;
+  document.getElementById('med-grid').innerHTML = cards.map(([k, lbl, col]) => {
+    const e = M(g[k] || Z());
+    return `<div class="card med-card"><div class="med-head"><span class="med-dot" style="background:${col}"></span>${lbl}</div>
+      <div class="med-inv">${fCOP(e.inv)}</div><div class="kpi-sub">inversión${T_SHARE(e.inv, g)}</div>
+      ${row('Leads plataforma', fN(e.lp), 'CPL ' + fCOP(e.cplP))}
+      ${row('Leads CRM', fN(e.lc), 'CPL ' + fCOP(e.cplC))}
+      ${row('Admisiones', fN(e.adm), fP(div(e.adm, e.lc)) + ' de leads')}
+      ${row('Matrículas', fN(e.mat), fP(div(e.mat, e.adm)) + ' de admisiones')}
+      ${row('Lead → matrícula', fP(e.conv))}</div>` }).join('') }
 
 function bar(p, lbl){ if(p === null) return '';
   return `<div class="kpi-bwrap"><div class="kpi-brow"><span>${lbl}</span><span class="${cls(p)}">${fP(p)}</span></div><div class="kpi-bar"><div class="kpi-bfill ${bgc(p)}" style="width:${Math.min(p*100,100)}%"></div></div></div>` }
@@ -519,7 +547,7 @@ function setMedioVista(k){ MEDIO_VISTA = k; document.querySelectorAll('[data-mv]
 function renderMedio(f){
   const rows = filasRango(f);
   const lbl = {Landing:'Landing (CRM)', Otro:'Otros canales (CRM)'};
-  const orden = (a, b) => (['Facebook','Google','LinkedIn','Landing','Otro'].indexOf(a) + 1 || 9) - (['Facebook','Google','LinkedIn','Landing','Otro'].indexOf(b) + 1 || 9);
+  const orden = (a, b) => (['Facebook','Google','TikTok','LinkedIn','Landing','Otro'].indexOf(a) + 1 || 9) - (['Facebook','Google','TikTok','LinkedIn','Landing','Otro'].indexOf(b) + 1 || 9);
   const conDatos = g => k => Object.keys(Z()).some(x => g[k][x]);
   const cols = COLS_BASE;
   const porNivel = MEDIO_VISTA === 'niv';
